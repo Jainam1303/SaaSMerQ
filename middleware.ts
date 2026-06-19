@@ -28,7 +28,8 @@ export function middleware(request: NextRequest) {
     `connect-src 'self'`,
     `worker-src 'self' blob:`,
     `manifest-src 'self'`,
-    `upgrade-insecure-requests`,
+    // upgrade-insecure-requests omitted: only safe after HTTPS/SSL is set up.
+    // Re-add once Certbot is configured.
   ]
     .join("; ")
     .replace(/\s{2,}/g, " ")
