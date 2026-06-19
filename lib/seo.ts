@@ -14,6 +14,10 @@ interface BuildMetadataOptions {
   path: string;
   keywords?: string[];
   ogType?: "website" | "article";
+  /** When true, the title bypasses the layout-level title template. */
+  absoluteTitle?: boolean;
+  /** Optional override for the text rendered into the OG image. */
+  ogTitle?: string;
 }
 
 /**
@@ -26,12 +30,16 @@ export function buildMetadata({
   path,
   keywords,
   ogType = "website",
+  absoluteTitle = false,
+  ogTitle,
 }: BuildMetadataOptions): Metadata {
   const url = absoluteUrl(path);
-  const ogImage = `${siteConfig.url}/api/og?title=${encodeURIComponent(title)}`;
+  const ogImage = `${siteConfig.url}/api/og?title=${encodeURIComponent(
+    ogTitle ?? title,
+  )}`;
 
   return {
-    title,
+    title: absoluteTitle ? { absolute: title } : title,
     description,
     keywords,
     alternates: {

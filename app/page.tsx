@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -25,7 +26,27 @@ import { ToolCard } from "@/components/tool/tool-card";
 import { FaqSection } from "@/components/tool/faq-section";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { JsonLd } from "@/components/json-ld";
-import { faqJsonLd } from "@/lib/seo";
+import { buildMetadata, faqJsonLd } from "@/lib/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: `${siteConfig.name} — ${siteConfig.tagline}`,
+  description: siteConfig.description,
+  path: "/",
+  absoluteTitle: true,
+  ogTitle: siteConfig.name,
+  keywords: [
+    "free online tools",
+    "QR code generator",
+    "password generator",
+    "UUID generator",
+    "JSON formatter",
+    "Base64 encoder",
+    "GST calculator",
+    "UPI QR generator",
+    "image compressor",
+    "image resizer",
+  ],
+});
 
 const homeFaqs = [
   {

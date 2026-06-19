@@ -36,14 +36,28 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
+    images: [
+      {
+        url: `/api/og?title=${encodeURIComponent(siteConfig.name)}`,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     site: siteConfig.twitter,
     creator: siteConfig.twitter,
+    images: [`/api/og?title=${encodeURIComponent(siteConfig.name)}`],
   },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: ["/favicon.ico"],
+    apple: [{ url: "/icon.svg" }],
   },
   manifest: "/manifest.webmanifest",
 };
