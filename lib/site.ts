@@ -19,7 +19,13 @@ export const siteConfig = {
     enabled: false,
   },
   analytics: {
-    googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID ?? "",
+    // GA4 measurement ID (G-XXXXXXXXXX). NEXT_PUBLIC_GA_MEASUREMENT_ID is the
+    // canonical variable; NEXT_PUBLIC_GA_ID is kept as a backwards-compatible
+    // fallback. NEXT_PUBLIC_* vars are inlined at build time.
+    gaMeasurementId:
+      process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ??
+      process.env.NEXT_PUBLIC_GA_ID ??
+      "",
     plausibleDomain: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? "",
     googleSearchConsoleVerification:
       process.env.NEXT_PUBLIC_GSC_VERIFICATION ?? "",

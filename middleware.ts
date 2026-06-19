@@ -13,19 +13,31 @@ export function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
 
+  // Google Analytics 4 endpoints. `script-src` keeps the strict nonce +
+  // 'strict-dynamic' model (gtag.js loads via the nonced loader script and
+  // propagates trust); the googletagmanager host is a CSP2 fallback. GA's
+  // data transmission relies on connect-src / img-src, so those must be
+  // explicitly allowed or events would be silently blocked.
+  const ga = {
+    script: "https://www.googletagmanager.com",
+    connect:
+      "https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
+    img: "https://www.google-analytics.com https://www.googletagmanager.com",
+  };
+
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${ga.script} ${
       isDev ? "'unsafe-eval'" : ""
     }`,
     `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' blob: data:`,
+    `img-src 'self' blob: data: ${ga.img}`,
     `font-src 'self' data:`,
     `object-src 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,
     `frame-ancestors 'none'`,
-    `connect-src 'self'`,
+    `connect-src 'self' ${ga.connect}`,
     `worker-src 'self' blob:`,
     `manifest-src 'self'`,
     `upgrade-insecure-requests`,

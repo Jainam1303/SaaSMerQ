@@ -1,34 +1,31 @@
+import { Suspense } from "react";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteConfig } from "@/lib/site";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 /**
- * Analytics loader. Renders nothing unless the corresponding environment
- * variable is configured, so the platform ships clean and privacy-first by
- * default. Supports Google Analytics 4 and Plausible.
+ * Analytics loader. Renders nothing unless configured, so the platform ships
+ * clean and privacy-first by default. Google Analytics 4 is loaded via
+ * `@next/third-parties` (Next.js best practice) and only in production.
  *
- * Scripts use `afterInteractive` so they never block first paint.
+ * The GA scripts receive the per-request CSP nonce so they execute under the
+ * strict nonce + 'strict-dynamic' policy. The matching google-analytics /
+ * googletagmanager origins are allow-listed in middleware.ts.
  */
 export function Analytics({ nonce }: { nonce?: string }) {
-  const { googleAnalyticsId, plausibleDomain } = siteConfig.analytics;
+  const { gaMeasurementId, plausibleDomain } = siteConfig.analytics;
+  const isProduction = process.env.NODE_ENV === "production";
+  const gaEnabled = isProduction && Boolean(gaMeasurementId);
 
   return (
     <>
-      {googleAnalyticsId ? (
+      {gaEnabled ? (
         <>
-          <Script
-            id="ga-src"
-            strategy="afterInteractive"
-            nonce={nonce}
-            src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
-          />
-          <Script id="ga-init" strategy="afterInteractive" nonce={nonce}>
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${googleAnalyticsId}', { anonymize_ip: true });
-            `}
-          </Script>
+          <GoogleAnalytics gaId={gaMeasurementId} nonce={nonce} />
+          <Suspense fallback={null}>
+            <AnalyticsTracker gaId={gaMeasurementId} />
+          </Suspense>
         </>
       ) : null}
 
