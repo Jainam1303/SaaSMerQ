@@ -68,6 +68,29 @@ const registry: Record<string, ComponentType> = {
       ),
     { ssr: false, loading: Loading },
   ),
+  "emi-calculator": dynamic(
+    () => import("./impl/emi-calculator-tool").then((m) => m.EmiCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "sip-calculator": dynamic(
+    () => import("./impl/sip-calculator-tool").then((m) => m.SipCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "percentage-calculator": dynamic(
+    () =>
+      import("./impl/percentage-calculator-tool").then(
+        (m) => m.PercentageCalculatorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "age-calculator": dynamic(
+    () => import("./impl/age-calculator-tool").then((m) => m.AgeCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "unit-converter": dynamic(
+    () => import("./impl/unit-converter-tool").then((m) => m.UnitConverterTool),
+    { ssr: false, loading: Loading },
+  ),
 };
 
 export function ToolRunner({ slug }: { slug: string }) {

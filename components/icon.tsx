@@ -15,6 +15,10 @@ import {
   Scaling,
   ListTree,
   Wrench,
+  TrendingUp,
+  Percent,
+  Calendar,
+  ArrowLeftRight,
   type LucideIcon,
 } from "lucide-react";
 
@@ -39,6 +43,10 @@ const iconRegistry: Record<string, LucideIcon> = {
   "file-archive": FileArchive,
   scaling: Scaling,
   "list-tree": ListTree,
+  "trending-up": TrendingUp,
+  percent: Percent,
+  calendar: Calendar,
+  "arrow-left-right": ArrowLeftRight,
 };
 
 export interface IconProps {

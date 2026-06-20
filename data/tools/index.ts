@@ -9,6 +9,11 @@ import { upiQrGenerator } from "./definitions/upi-qr-generator";
 import { imageCompressor } from "./definitions/image-compressor";
 import { imageResizer } from "./definitions/image-resizer";
 import { sitemapGenerator } from "./definitions/sitemap-generator";
+import { emiCalculator } from "./definitions/emi-calculator";
+import { sipCalculator } from "./definitions/sip-calculator";
+import { percentageCalculator } from "./definitions/percentage-calculator";
+import { ageCalculator } from "./definitions/age-calculator";
+import { unitConverter } from "./definitions/unit-converter";
 
 /**
  * The single source of truth for every tool on the platform.
@@ -26,6 +31,11 @@ export const tools: ToolMeta[] = [
   imageCompressor,
   imageResizer,
   sitemapGenerator,
+  emiCalculator,
+  sipCalculator,
+  percentageCalculator,
+  ageCalculator,
+  unitConverter,
 ];
 
 const toolBySlug = new Map(tools.map((tool) => [tool.slug, tool]));
