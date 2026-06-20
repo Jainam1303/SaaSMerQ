@@ -18,8 +18,7 @@ export function SiteFooter() {
                 <Wrench className="size-4" />
               </span>
               <span className="tracking-tight">
-                {siteConfig.shortName}
-                <span className="text-muted-foreground">Prime</span>
+                MerQ<span className="text-muted-foreground">Prime</span>
               </span>
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">

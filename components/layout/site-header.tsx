@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, Wrench, X } from "lucide-react";
 import { categories } from "@/data/tools/categories";
-import { siteConfig } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -26,8 +25,7 @@ function Logo() {
         <Wrench className="size-4" />
       </span>
       <span className="text-[15px] tracking-tight">
-        {siteConfig.shortName}
-        <span className="text-muted-foreground">Prime</span>
+        MerQ<span className="text-muted-foreground">Prime</span>
       </span>
     </Link>
   );
@@ -46,7 +44,7 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between gap-4">
         <Logo />
 
-        <nav className="hidden items-center gap-0.5 md:flex">
+        <nav className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => {
             const active =
               link.href === "/tools"
@@ -82,7 +80,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -94,7 +92,7 @@ export function SiteHeader() {
 
       <div
         className={cn(
-          "border-t border-border/70 md:hidden",
+          "border-t border-border/70 lg:hidden",
           open ? "block" : "hidden",
         )}
       >

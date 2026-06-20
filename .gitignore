@@ -42,3 +42,6 @@ out
 dist
 coverage
 *.log
+
+# QA artifacts
+/qa-screenshots/

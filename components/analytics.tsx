@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Script from "next/script";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { siteConfig } from "@/lib/site";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 
@@ -22,7 +21,14 @@ export function Analytics({ nonce }: { nonce?: string }) {
     <>
       {gaEnabled ? (
         <>
-          <GoogleAnalytics gaId={gaMeasurementId} nonce={nonce} />
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+            strategy="lazyOnload"
+            nonce={nonce}
+          />
+          <Script id="ga-init" strategy="lazyOnload" nonce={nonce}>
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaMeasurementId}');`}
+          </Script>
           <Suspense fallback={null}>
             <AnalyticsTracker gaId={gaMeasurementId} />
           </Suspense>
