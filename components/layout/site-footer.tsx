@@ -74,6 +74,38 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
+                  href="/finance-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Finance Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/investment-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Investment Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/gst-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  GST Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/business-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Business Tools
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/tools"
                   className="transition-colors hover:text-foreground"
                 >

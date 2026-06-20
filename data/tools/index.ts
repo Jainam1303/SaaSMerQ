@@ -92,7 +92,7 @@ export function getRecentlyAddedTools(limit = 6): ToolMeta[] {
 /**
  * Related tools: prefer same-category tools, then fill from other categories.
  */
-export function getRelatedTools(slug: string, limit = 4): ToolMeta[] {
+export function getRelatedTools(slug: string, limit = 5): ToolMeta[] {
   const current = getToolBySlug(slug);
   if (!current) return [];
 

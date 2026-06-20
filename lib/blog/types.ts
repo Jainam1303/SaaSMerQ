@@ -7,6 +7,8 @@ export interface BlogPostFrontmatter {
   keywords: string[];
   /** Primary tool to promote in the article CTA. */
   toolSlug: string;
+  /** Optional explicit related tool slugs (shown besides primary tool). */
+  relatedToolSlugs?: string[];
   /** Optional explicit related article slugs. */
   relatedSlugs?: string[];
 }

@@ -3,6 +3,7 @@ import { CheckCircle2 } from "lucide-react";
 import type { ToolMeta } from "@/data/tools/types";
 import { categoryMap } from "@/data/tools/categories";
 import { getRelatedTools } from "@/data/tools";
+import { getPostsForTool } from "@/lib/internal-links";
 import {
   absoluteUrl,
   breadcrumbJsonLd,
@@ -14,13 +15,18 @@ import { Badge } from "@/components/ui/badge";
 import { Breadcrumbs } from "@/components/tool/breadcrumbs";
 import { FaqSection } from "@/components/tool/faq-section";
 import { RelatedTools } from "@/components/tool/related-tools";
+import { RelatedBlogPosts } from "@/components/tool/related-blog-posts";
 import { JsonLd } from "@/components/json-ld";
 import { AdSlot } from "@/components/ads/ad-slot";
+import { getHubsForTool } from "@/lib/hubs";
+import { HubLinks } from "@/components/hub/hub-links";
 import { ToolRunner } from "@/components/tools/tool-runner";
 
 export function ToolPage({ tool }: { tool: ToolMeta }) {
   const category = categoryMap[tool.category];
-  const related = getRelatedTools(tool.slug);
+  const related = getRelatedTools(tool.slug, 5);
+  const relatedPosts = getPostsForTool(tool.slug, 2);
+  const hubs = getHubsForTool(tool.slug);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -119,7 +125,10 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
 
         <FaqSection faqs={tool.faqs} />
 
+        {hubs.length > 0 && <HubLinks hubs={hubs} />}
+
         <RelatedTools tools={related} />
+        <RelatedBlogPosts posts={relatedPosts} />
       </div>
     </article>
   );

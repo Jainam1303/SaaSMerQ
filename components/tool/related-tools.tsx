@@ -15,7 +15,7 @@ export function RelatedTools({ tools }: { tools: ToolMeta[] }) {
           Related tools
         </h2>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {tools.map((tool) => (
           <ToolCard key={tool.slug} tool={tool} />
         ))}

@@ -45,3 +45,6 @@ coverage
 
 # QA artifacts
 /qa-screenshots/
+
+# Generated reports
+/reports/

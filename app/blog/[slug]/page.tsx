@@ -5,9 +5,13 @@ import {
   extractToc,
   getAllPostSlugs,
   getPostBySlug,
-  getRelatedPosts,
 } from "@/lib/blog";
 import { getToolBySlug } from "@/data/tools";
+import {
+  getRelatedPostsForBlog,
+  getRelatedToolsForPost,
+} from "@/lib/internal-links";
+import { getHubsForBlog, getHubsForTool } from "@/lib/hubs";
 import {
   absoluteUrl,
   articleJsonLd,
@@ -22,6 +26,8 @@ import {
   RelatedPosts,
   ToolCta,
 } from "@/components/blog/related-posts";
+import { RelatedTools } from "@/components/tool/related-tools";
+import { HubLinks } from "@/components/hub/hub-links";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -63,7 +69,12 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const tool = getToolBySlug(post.toolSlug);
   const toc = extractToc(post.content);
-  const related = getRelatedPosts(slug, 3);
+  const relatedTools = getRelatedToolsForPost(slug, 3);
+  const related = getRelatedPostsForBlog(slug, 2);
+  const hubs = [
+    ...getHubsForBlog(slug),
+    ...(tool ? getHubsForTool(tool.slug) : []),
+  ].filter((h, i, arr) => arr.findIndex((x) => x.slug === h.slug) === i);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -127,7 +138,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       )}
 
-      <div className="mt-16 border-t border-border/80 pt-16">
+      <div className="mt-16 space-y-16 border-t border-border/80 pt-16">
+        {hubs.length > 0 && <HubLinks hubs={hubs} />}
+        {relatedTools.length > 0 && (
+          <RelatedTools tools={relatedTools} />
+        )}
         <RelatedPosts posts={related} />
       </div>
     </article>

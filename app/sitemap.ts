@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
+import { getAllHubs } from "@/lib/hubs";
 import { tools } from "@/data/tools";
 import { categories } from "@/data/tools/categories";
 import { siteConfig } from "@/lib/site";
@@ -35,6 +36,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  const hubRoutes: MetadataRoute.Sitemap = getAllHubs().map((hub) => ({
+    url: `${siteConfig.url}${hub.path}`,
+    lastModified: now,
+    changeFrequency: "weekly",
+    priority: 0.88,
+  }));
+
   const categoryRoutes: MetadataRoute.Sitemap = categories.map((category) => ({
     url: `${siteConfig.url}/category/${category.slug}`,
     lastModified: now,
@@ -56,5 +64,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...toolRoutes, ...blogRoutes];
+  return [
+    ...staticRoutes,
+    ...hubRoutes,
+    ...categoryRoutes,
+    ...toolRoutes,
+    ...blogRoutes,
+  ];
 }

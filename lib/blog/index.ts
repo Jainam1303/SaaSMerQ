@@ -41,6 +41,7 @@ function parseFile(slug: string): BlogPost {
     category: data.category as string,
     keywords: (data.keywords as string[]) ?? [],
     toolSlug: data.toolSlug as string,
+    relatedToolSlugs: data.relatedToolSlugs as string[] | undefined,
     relatedSlugs: data.relatedSlugs as string[] | undefined,
     content,
   };
@@ -64,6 +65,7 @@ function toMeta(post: BlogPost): BlogPostMeta {
     category: post.category,
     keywords: post.keywords,
     toolSlug: post.toolSlug,
+    relatedToolSlugs: post.relatedToolSlugs,
     relatedSlugs: post.relatedSlugs,
   };
 }
@@ -102,3 +104,5 @@ export function getRelatedPosts(slug: string, limit = 3): BlogPostMeta[] {
 
   return [...explicit, ...sameCategory].slice(0, limit);
 }
+
+export type { BlogPost, BlogPostMeta, TocItem } from "./types";
