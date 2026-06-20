@@ -12,6 +12,7 @@ toolSlug: gst-calculator
 relatedSlugs:
   - percentage-calculation-guide
   - how-to-calculate-emi
+  - gst-invoice-guide
 ---
 
 Goods and Services Tax (GST) unified many indirect taxes in India. Businesses and consumers still need to calculate tax on invoices, reverse tax from gross prices and split CGST/SGST or IGST correctly.

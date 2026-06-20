@@ -14,11 +14,21 @@ import { sipCalculator } from "./definitions/sip-calculator";
 import { percentageCalculator } from "./definitions/percentage-calculator";
 import { ageCalculator } from "./definitions/age-calculator";
 import { unitConverter } from "./definitions/unit-converter";
+import { fdCalculator } from "./definitions/fd-calculator";
+import { rdCalculator } from "./definitions/rd-calculator";
+import { ppfCalculator } from "./definitions/ppf-calculator";
+import { hraCalculator } from "./definitions/hra-calculator";
+import { loanCalculator } from "./definitions/loan-calculator";
+import { discountCalculator } from "./definitions/discount-calculator";
+import { profitMarginCalculator } from "./definitions/profit-margin-calculator";
+import { breakEvenCalculator } from "./definitions/break-even-calculator";
+import { invoiceGenerator } from "./definitions/invoice-generator";
+import { gstInvoiceGenerator } from "./definitions/gst-invoice-generator";
 
 /**
  * The single source of truth for every tool on the platform.
  * To add a tool: create its metadata definition, import it here, and add the
- * matching client component in `components/tools/registry.tsx`.
+ * matching client component in `components/tools/tool-runner.tsx`.
  */
 export const tools: ToolMeta[] = [
   qrGenerator,
@@ -36,6 +46,16 @@ export const tools: ToolMeta[] = [
   percentageCalculator,
   ageCalculator,
   unitConverter,
+  fdCalculator,
+  rdCalculator,
+  ppfCalculator,
+  hraCalculator,
+  loanCalculator,
+  discountCalculator,
+  profitMarginCalculator,
+  breakEvenCalculator,
+  invoiceGenerator,
+  gstInvoiceGenerator,
 ];
 
 const toolBySlug = new Map(tools.map((tool) => [tool.slug, tool]));

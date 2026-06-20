@@ -222,3 +222,29 @@
     @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
   }
 }
+
+@media print {
+  header,
+  footer,
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  .invoice-print-area {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  .tool-surface {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}

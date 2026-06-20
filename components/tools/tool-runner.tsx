@@ -91,6 +91,59 @@ const registry: Record<string, ComponentType> = {
     () => import("./impl/unit-converter-tool").then((m) => m.UnitConverterTool),
     { ssr: false, loading: Loading },
   ),
+  "fd-calculator": dynamic(
+    () => import("./impl/fd-calculator-tool").then((m) => m.FdCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "rd-calculator": dynamic(
+    () => import("./impl/rd-calculator-tool").then((m) => m.RdCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "ppf-calculator": dynamic(
+    () => import("./impl/ppf-calculator-tool").then((m) => m.PpfCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "hra-calculator": dynamic(
+    () => import("./impl/hra-calculator-tool").then((m) => m.HraCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "loan-calculator": dynamic(
+    () => import("./impl/loan-calculator-tool").then((m) => m.LoanCalculatorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "discount-calculator": dynamic(
+    () =>
+      import("./impl/discount-calculator-tool").then(
+        (m) => m.DiscountCalculatorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "profit-margin-calculator": dynamic(
+    () =>
+      import("./impl/profit-margin-calculator-tool").then(
+        (m) => m.ProfitMarginCalculatorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "break-even-calculator": dynamic(
+    () =>
+      import("./impl/break-even-calculator-tool").then(
+        (m) => m.BreakEvenCalculatorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "invoice-generator": dynamic(
+    () =>
+      import("./impl/invoice-generator-tool").then((m) => m.InvoiceGeneratorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "gst-invoice-generator": dynamic(
+    () =>
+      import("./impl/gst-invoice-generator-tool").then(
+        (m) => m.GstInvoiceGeneratorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
 };
 
 export function ToolRunner({ slug }: { slug: string }) {

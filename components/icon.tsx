@@ -19,6 +19,14 @@ import {
   Percent,
   Calendar,
   ArrowLeftRight,
+  PiggyBank,
+  Landmark,
+  Wallet,
+  FileText,
+  Receipt,
+  Scale,
+  BadgePercent,
+  ChartLine,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,6 +55,14 @@ const iconRegistry: Record<string, LucideIcon> = {
   percent: Percent,
   calendar: Calendar,
   "arrow-left-right": ArrowLeftRight,
+  "piggy-bank": PiggyBank,
+  landmark: Landmark,
+  wallet: Wallet,
+  "file-text": FileText,
+  receipt: Receipt,
+  scale: Scale,
+  "badge-percent": BadgePercent,
+  "chart-line": ChartLine,
 };
 
 export interface IconProps {
