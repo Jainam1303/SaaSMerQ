@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 
 function Loading() {
   return (
-    <div className="flex min-h-[280px] items-center justify-center rounded-xl border border-border bg-card">
+    <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-dashed border-border/80 bg-muted/20">
       <Loader2 className="size-6 animate-spin text-muted-foreground" />
       <span className="sr-only">Loading tool…</span>
     </div>

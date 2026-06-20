@@ -1,10 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ResultActions } from "@/components/tools/result-actions";
+import { ResultPanel } from "@/components/tools/result-panel";
+import {
+  ToolInputs,
+  ToolResults,
+  ToolWorkspace,
+} from "@/components/tools/tool-workspace";
 
 function toDateInput(d: Date): string {
   const y = d.getFullYear();
@@ -86,9 +91,8 @@ export function AgeCalculatorTool() {
       ].join("\n");
 
   return (
-    <Card>
-      <CardContent className="grid gap-6 p-6 md:grid-cols-2">
-        <div className="space-y-4">
+    <ToolWorkspace>
+      <ToolInputs>
           <div className="space-y-2">
             <Label htmlFor="age-dob">Date of birth</Label>
             <Input
@@ -115,41 +119,47 @@ export function AgeCalculatorTool() {
               Enter a valid birth date on or before the reference date.
             </p>
           )}
-        </div>
+      </ToolInputs>
 
-        <div className="space-y-4">
-          <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-5">
-            <h3 className="font-semibold">Your age</h3>
-            {age && !invalid ? (
-              <>
-                <p className="text-2xl font-bold tracking-tight">{exactLabel}</p>
-                <div className="grid grid-cols-3 gap-3 pt-2 text-center">
-                  <div className="rounded-lg border border-border bg-background p-3">
-                    <p className="text-2xl font-bold">{age.years}</p>
-                    <p className="text-xs text-muted-foreground">Years</p>
-                  </div>
-                  <div className="rounded-lg border border-border bg-background p-3">
-                    <p className="text-2xl font-bold">{age.months}</p>
-                    <p className="text-xs text-muted-foreground">Months</p>
-                  </div>
-                  <div className="rounded-lg border border-border bg-background p-3">
-                    <p className="text-2xl font-bold">{age.days}</p>
-                    <p className="text-xs text-muted-foreground">Days</p>
-                  </div>
+      <ToolResults>
+        <ResultPanel
+          title="Your age"
+          highlight={age && !invalid ? exactLabel : undefined}
+        >
+          {age && !invalid ? (
+            <>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="rounded-xl border border-border/80 bg-background p-4">
+                  <p className="text-2xl font-bold tabular-nums">{age.years}</p>
+                  <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+                    Years
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {age.totalDays.toLocaleString("en-IN")} days total
-                </p>
-              </>
-            ) : (
+                <div className="rounded-xl border border-border/80 bg-background p-4">
+                  <p className="text-2xl font-bold tabular-nums">{age.months}</p>
+                  <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+                    Months
+                  </p>
+                </div>
+                <div className="rounded-xl border border-border/80 bg-background p-4">
+                  <p className="text-2xl font-bold tabular-nums">{age.days}</p>
+                  <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+                    Days
+                  </p>
+                </div>
+              </div>
               <p className="text-sm text-muted-foreground">
-                Enter dates to calculate age.
+                {age.totalDays.toLocaleString("en-IN")} days total
               </p>
-            )}
-          </div>
-          <ResultActions text={shareText} />
-        </div>
-      </CardContent>
-    </Card>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Enter dates to calculate age.
+            </p>
+          )}
+        </ResultPanel>
+        <ResultActions text={shareText} />
+      </ToolResults>
+    </ToolWorkspace>
   );
 }

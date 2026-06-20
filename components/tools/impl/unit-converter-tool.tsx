@@ -1,13 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatNumber } from "@/lib/format";
 import { ResultActions } from "@/components/tools/result-actions";
+import { ResultPanel } from "@/components/tools/result-panel";
+import {
+  ToolInputs,
+  ToolResults,
+  ToolWorkspace,
+} from "@/components/tools/tool-workspace";
 
 type Category = "length" | "weight" | "temperature" | "area" | "volume" | "speed";
 
@@ -240,23 +245,19 @@ export function UnitConverterTool() {
     : `${formatNumber(value)} ${fromLabel} = ${formatNumber(result)} ${toLabel}`;
 
   return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
-        <Tabs
-          value={category}
-          onValueChange={(v) => setCategory(v as Category)}
-        >
-          <TabsList className="grid w-full grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-6">
-            {(Object.keys(CATEGORIES) as Category[]).map((key) => (
-              <TabsTrigger key={key} value={key} className="text-xs sm:text-sm">
-                {CATEGORIES[key].label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+    <div className="space-y-6">
+      <Tabs value={category} onValueChange={(v) => setCategory(v as Category)}>
+        <TabsList className="grid w-full grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-6">
+          {(Object.keys(CATEGORIES) as Category[]).map((key) => (
+            <TabsTrigger key={key} value={key} className="text-xs sm:text-sm">
+              {CATEGORIES[key].label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-4">
+      <ToolWorkspace>
+        <ToolInputs>
             <div className="space-y-2">
               <Label htmlFor="unit-value">Value</Label>
               <Input
@@ -292,23 +293,18 @@ export function UnitConverterTool() {
                 ))}
               </Select>
             </div>
-          </div>
+        </ToolInputs>
 
-          <div className="space-y-4">
-            <div className="rounded-lg border border-border bg-muted/30 p-5">
-              <h3 className="font-semibold">Result</h3>
-              <p className="mt-2 text-3xl font-bold tracking-tight">
-                {formatNumber(result)}
-              </p>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {formatNumber(value)} {fromLabel} = {formatNumber(result)}{" "}
-                {toLabel}
-              </p>
-            </div>
-            <ResultActions text={shareText} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        <ToolResults>
+          <ResultPanel title="Result" highlight={formatNumber(result)}>
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              {formatNumber(value)} {fromLabel} = {formatNumber(result)}{" "}
+              {toLabel}
+            </p>
+          </ResultPanel>
+          <ResultActions text={shareText} />
+        </ToolResults>
+      </ToolWorkspace>
+    </div>
   );
 }

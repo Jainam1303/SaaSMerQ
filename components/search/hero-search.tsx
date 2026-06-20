@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const suggestions = ["QR Code", "Password", "JSON", "GST", "Base64"];
+const suggestions = [
+  "EMI",
+  "SIP",
+  "GST",
+  "QR Code",
+  "Password",
+  "Percentage",
+];
 
 export function HeroSearch() {
   const router = useRouter();
@@ -17,43 +24,43 @@ export function HeroSearch() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div className="mx-auto w-full max-w-2xl">
       <form
         onSubmit={(e) => {
           e.preventDefault();
           go(query);
         }}
         role="search"
-        className="group flex items-center gap-2 rounded-2xl border border-border/70 bg-card p-2 shadow-premium-lg transition-colors focus-within:border-primary/50"
+        className="group flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-2 rounded-2xl border border-border bg-card p-3 shadow-premium-lg transition-shadow focus-within:border-accent-link focus-within:shadow-premium-lg sm:rounded-2xl"
       >
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search tools — QR, password, JSON, GST…"
+            placeholder="Search 15+ free tools — EMI, SIP, GST, QR…"
             aria-label="Search tools"
-            className="h-11 w-full rounded-xl bg-transparent pl-9 pr-2 text-base outline-none placeholder:text-muted-foreground"
+            className="h-14 w-full rounded-xl bg-transparent pl-12 pr-3 text-base outline-none placeholder:text-muted-foreground md:text-lg"
           />
         </div>
         <Button
           type="submit"
           size="lg"
-          className="h-11 bg-brand-gradient text-primary-foreground shadow-premium hover:opacity-90"
+          className="h-12 shrink-0 bg-primary px-8 text-primary-foreground hover:bg-primary/90 sm:h-14"
         >
           Search
         </Button>
       </form>
 
-      <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-        <span>Popular:</span>
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-sm text-muted-foreground">
+        <span className="font-medium">Try:</span>
         {suggestions.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => go(s)}
-            className="rounded-full border border-border/70 bg-background/60 px-2.5 py-1 font-medium transition-colors hover:border-primary/40 hover:text-foreground"
+            className="rounded-full border border-border bg-background px-3 py-1.5 font-medium transition-colors hover:border-foreground/30 hover:bg-muted hover:text-foreground"
           >
             {s}
           </button>

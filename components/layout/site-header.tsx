@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/tools", label: "All Tools" },
+  { href: "/blog", label: "Blog" },
   ...categories.map((c) => ({
     href: `/category/${c.slug}`,
     label: c.name.replace(" Tools", ""),
@@ -21,12 +22,12 @@ const navLinks = [
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5 font-semibold">
-      <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-primary-foreground shadow-premium">
+      <span className="flex size-9 items-center justify-center rounded-lg border border-border bg-muted/50">
         <Wrench className="size-4" />
       </span>
       <span className="text-[15px] tracking-tight">
         {siteConfig.shortName}
-        <span className="text-gradient">Prime</span>
+        <span className="text-muted-foreground">Prime</span>
       </span>
     </Link>
   );
@@ -41,7 +42,7 @@ export function SiteHeader() {
   }, [pathname]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between gap-4">
         <Logo />
 
@@ -50,7 +51,9 @@ export function SiteHeader() {
             const active =
               link.href === "/tools"
                 ? pathname === "/tools"
-                : pathname.startsWith(link.href);
+                : link.href === "/blog"
+                  ? pathname === "/blog" || pathname.startsWith("/blog/")
+                  : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
@@ -70,13 +73,9 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-1.5">
           <ThemeToggle />
-          <Button
-            size="sm"
-            asChild
-            className="hidden bg-brand-gradient text-primary-foreground shadow-premium hover:opacity-90 sm:inline-flex"
-          >
+          <Button size="sm" asChild className="hidden sm:inline-flex">
             <Link href="/tools">
-              Explore tools
+              All tools
               <ArrowRight className="size-4" />
             </Link>
           </Button>
@@ -109,12 +108,9 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
-          <Button
-            asChild
-            className="mt-2 bg-brand-gradient text-primary-foreground hover:opacity-90"
-          >
+          <Button asChild className="mt-2">
             <Link href="/tools">
-              Explore tools
+              All tools
               <ArrowRight className="size-4" />
             </Link>
           </Button>

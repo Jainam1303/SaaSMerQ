@@ -29,7 +29,7 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
   ];
 
   return (
-    <article className="container max-w-5xl py-8 md:py-12">
+    <article className="container max-w-6xl py-8 md:py-12 lg:py-14">
       <JsonLd data={softwareApplicationJsonLd(tool)} />
       <JsonLd
         data={breadcrumbJsonLd(
@@ -40,15 +40,17 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
 
       <Breadcrumbs items={crumbs} />
 
-      <header className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-start">
-        <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-brand-gradient text-primary-foreground shadow-premium">
-          <Icon name={tool.icon} className="size-7" />
+      <header className="mt-8 flex flex-col gap-6 border-b border-border/80 pb-8 sm:flex-row sm:items-start">
+        <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-border/80 bg-muted/40 shadow-sm">
+          <Icon name={tool.icon} className="size-8" />
         </span>
         <div className="space-y-3">
           <Link href={`/category/${category.slug}`}>
-            <Badge variant="secondary">{category.name}</Badge>
+            <Badge variant="secondary" className="font-medium">
+              {category.name}
+            </Badge>
           </Link>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
             {tool.name}
           </h1>
           <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground">
@@ -59,34 +61,38 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
 
       <AdSlot format="leaderboard" className="my-8" />
 
-      {/* Interactive tool */}
-      <section aria-label={`${tool.name} tool`} className="mt-8">
+      {/* Interactive tool — larger workspace card */}
+      <section
+        aria-label={`${tool.name} tool`}
+        className="tool-surface p-6 md:p-8 lg:p-10"
+      >
         <ToolRunner slug={tool.slug} />
       </section>
 
       {/* Long-form content for SEO + users */}
-      <div className="mt-12 space-y-12">
-        <section className="space-y-3">
-          <h2 className="text-2xl font-semibold tracking-tight">
+      <div className="mt-16 space-y-16 md:mt-20">
+        <section className="space-y-4 max-w-3xl">
+          <p className="section-eyebrow">Overview</p>
+          <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
             About the {tool.name}
           </h2>
-          <p className="max-w-3xl leading-relaxed text-muted-foreground">
+          <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
             {tool.intro}
           </p>
         </section>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          <section className="space-y-5 rounded-2xl border border-border/80 bg-card p-6">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <section className="rounded-2xl border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <h2 className="text-xl font-semibold tracking-tight">
               How it works
             </h2>
-            <ol className="space-y-4">
+            <ol className="mt-6 space-y-5">
               {tool.howItWorks.map((step, index) => (
-                <li key={index} className="flex gap-3">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-brand-gradient text-xs font-semibold text-primary-foreground">
+                <li key={index} className="flex gap-4">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/50 text-xs font-semibold tabular-nums">
                     {index + 1}
                   </span>
-                  <span className="pt-0.5 text-sm leading-relaxed text-muted-foreground">
+                  <span className="pt-0.5 text-sm leading-relaxed text-muted-foreground md:text-base">
                     {step}
                   </span>
                 </li>
@@ -94,13 +100,13 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
             </ol>
           </section>
 
-          <section className="space-y-5 rounded-2xl border border-border/80 bg-card p-6">
+          <section className="rounded-2xl border border-border/80 bg-card p-6 shadow-sm md:p-8">
             <h2 className="text-xl font-semibold tracking-tight">Use cases</h2>
-            <ul className="space-y-4">
+            <ul className="mt-6 space-y-5">
               {tool.useCases.map((useCase, index) => (
                 <li key={index} className="flex gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-primary" />
-                  <span className="text-sm leading-relaxed text-muted-foreground">
+                  <CheckCircle2 className="size-5 shrink-0 text-muted-foreground" />
+                  <span className="text-sm leading-relaxed text-muted-foreground md:text-base">
                     {useCase}
                   </span>
                 </li>

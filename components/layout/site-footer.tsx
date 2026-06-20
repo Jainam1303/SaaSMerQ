@@ -9,25 +9,24 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border/70 bg-muted/30">
+    <footer className="border-t border-border/80 bg-muted/20">
       <div className="container py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
           <div className="space-y-4 lg:col-span-4">
             <Link href="/" className="flex items-center gap-2.5 font-semibold">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-brand-gradient text-primary-foreground shadow-premium">
+              <span className="flex size-9 items-center justify-center rounded-lg border border-border bg-muted/50">
                 <Wrench className="size-4" />
               </span>
               <span className="tracking-tight">
                 {siteConfig.shortName}
-                <span className="text-gradient">Prime</span>
+                <span className="text-muted-foreground">Prime</span>
               </span>
             </Link>
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {siteConfig.description}
             </p>
-            <p className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-              <Lock className="size-3.5 text-primary" /> Private &amp;
-              in-browser by default
+            <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
+              <Lock className="size-3.5" /> Private &amp; in-browser
             </p>
           </div>
 
@@ -66,6 +65,14 @@ export function SiteFooter() {
           <div className="lg:col-span-3">
             <h2 className="mb-3 text-sm font-semibold">Resources</h2>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
+              <li>
+                <Link
+                  href="/blog"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Blog
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/tools"

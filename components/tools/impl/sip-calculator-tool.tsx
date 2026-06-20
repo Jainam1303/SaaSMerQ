@@ -1,11 +1,16 @@
 "use client";
 
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatINR } from "@/lib/format";
 import { ResultActions } from "@/components/tools/result-actions";
+import { ResultPanel, ResultRow } from "@/components/tools/result-panel";
+import {
+  ToolInputs,
+  ToolResults,
+  ToolWorkspace,
+} from "@/components/tools/tool-workspace";
 
 function computeSip(
   monthly: number,
@@ -27,25 +32,6 @@ function computeSip(
   }
   const returns = futureValue - invested;
   return { invested, futureValue, returns };
-}
-
-function ResultRow({
-  label,
-  value,
-  emphasize,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-4 text-sm">
-      <span className="text-muted-foreground">{label}</span>
-      <span className={emphasize ? "text-lg font-bold" : "font-medium"}>
-        {value}
-      </span>
-    </div>
-  );
 }
 
 export function SipCalculatorTool() {
@@ -82,9 +68,8 @@ export function SipCalculatorTool() {
   ].join("\n");
 
   return (
-    <Card>
-      <CardContent className="grid gap-6 p-6 md:grid-cols-2">
-        <div className="space-y-4">
+    <ToolWorkspace>
+      <ToolInputs>
           <div className="space-y-2">
             <Label htmlFor="sip-monthly">Monthly investment (₹)</Label>
             <Input
@@ -139,35 +124,24 @@ export function SipCalculatorTool() {
               </p>
             )}
           </div>
-        </div>
+      </ToolInputs>
 
-        <div className="space-y-4">
-          <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-5">
-            <h3 className="font-semibold">SIP summary</h3>
-            <ResultRow
-              label="Invested amount"
-              value={formatINR(invested)}
-            />
-            <ResultRow
-              label="Estimated returns"
-              value={formatINR(returns)}
-            />
-            <ResultRow
-              label="Future value"
-              value={formatINR(futureValue)}
-              emphasize
-            />
-            <ResultRow label="Duration" value={`${months} months`} />
-          </div>
-
-          <p className="text-xs text-muted-foreground">
-            Estimates assume monthly investments at the start of each month.
-            Actual mutual fund returns are not guaranteed.
-          </p>
-
-          <ResultActions text={shareText} />
-        </div>
-      </CardContent>
-    </Card>
+      <ToolResults>
+        <ResultPanel
+          title="SIP summary"
+          highlight={formatINR(futureValue)}
+          highlightLabel="Future value"
+        >
+          <ResultRow label="Invested amount" value={formatINR(invested)} />
+          <ResultRow label="Estimated returns" value={formatINR(returns)} />
+          <ResultRow label="Duration" value={`${months} months`} />
+        </ResultPanel>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Estimates assume monthly investments at the start of each month.
+          Actual mutual fund returns are not guaranteed.
+        </p>
+        <ResultActions text={shareText} />
+      </ToolResults>
+    </ToolWorkspace>
   );
 }

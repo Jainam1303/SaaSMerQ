@@ -1,12 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatNumber } from "@/lib/format";
 import { ResultActions } from "@/components/tools/result-actions";
+import { ResultPanel } from "@/components/tools/result-panel";
+import {
+  ToolInputs,
+  ToolResults,
+  ToolWorkspace,
+} from "@/components/tools/tool-workspace";
 
 type Mode = "of" | "increase" | "decrease" | "difference";
 
@@ -85,20 +90,22 @@ export function PercentageCalculatorTool() {
 
   const shareText = `Percentage Calculator\n${explanation}\nResult: ${formatNumber(result)}`;
 
-  return (
-    <Card>
-      <CardContent className="space-y-6 p-6">
-        <Tabs value={mode} onValueChange={(v) => setMode(v as Mode)}>
-          <TabsList className="grid w-full grid-cols-2 gap-1 sm:grid-cols-4">
-            <TabsTrigger value="of">X% of Y</TabsTrigger>
-            <TabsTrigger value="increase">Increase</TabsTrigger>
-            <TabsTrigger value="decrease">Decrease</TabsTrigger>
-            <TabsTrigger value="difference">Difference</TabsTrigger>
-          </TabsList>
-        </Tabs>
+  const displayResult =
+    mode === "of" ? formatNumber(result) : `${formatNumber(result)}%`;
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="space-y-4">
+  return (
+    <div className="space-y-6">
+      <Tabs value={mode} onValueChange={(v) => setMode(v as Mode)}>
+        <TabsList className="grid w-full grid-cols-2 gap-1 sm:grid-cols-4">
+          <TabsTrigger value="of">X% of Y</TabsTrigger>
+          <TabsTrigger value="increase">Increase</TabsTrigger>
+          <TabsTrigger value="decrease">Decrease</TabsTrigger>
+          <TabsTrigger value="difference">Difference</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
+      <ToolWorkspace>
+        <ToolInputs>
             {mode === "of" && (
               <>
                 <div className="space-y-2">
@@ -173,26 +180,19 @@ export function PercentageCalculatorTool() {
                 </div>
               </>
             )}
-          </div>
+        </ToolInputs>
 
-          <div className="space-y-4">
-            <div className="rounded-lg border border-border bg-muted/30 p-5">
-              <h3 className="font-semibold">Result</h3>
-              <p className="mt-2 text-3xl font-bold tracking-tight">
-                {mode === "of"
-                  ? formatNumber(result)
-                  : `${formatNumber(result)}%`}
+        <ToolResults>
+          <ResultPanel title="Result" highlight={displayResult}>
+            {explanation && (
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {explanation}
               </p>
-              {explanation && (
-                <p className="mt-2 text-sm text-muted-foreground">
-                  {explanation}
-                </p>
-              )}
-            </div>
-            <ResultActions text={shareText} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+            )}
+          </ResultPanel>
+          <ResultActions text={shareText} />
+        </ToolResults>
+      </ToolWorkspace>
+    </div>
   );
 }

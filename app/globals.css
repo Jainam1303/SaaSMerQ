@@ -37,6 +37,9 @@
     --input: 0 0% 90%;
     --ring: 0 0% 9%;
 
+    /* Minimal accent — links, search focus, active nav only */
+    --accent-link: 221 83% 53%;
+
     --radius: 0.75rem;
 
     /* Monochrome "brand" gradient stops (dark charcoal in light mode) */
@@ -74,6 +77,8 @@
     --input: 0 0% 22%;
     --ring: 0 0% 83%;
 
+    --accent-link: 217 91% 60%;
+
     /* Light grayscale gradient in dark mode */
     --brand-from: 0 0% 98%;
     --brand-via: 0 0% 86%;
@@ -99,7 +104,12 @@
   h2,
   h3,
   h4 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+
+  h1 {
+    letter-spacing: -0.03em;
   }
 
   ::selection {
@@ -181,13 +191,34 @@
 
   .shadow-premium {
     box-shadow:
-      0 1px 2px hsl(220 40% 20% / 0.04),
-      0 8px 24px -8px hsl(220 40% 20% / 0.12);
+      0 1px 2px hsl(0 0% 0% / 0.04),
+      0 4px 16px -4px hsl(0 0% 0% / 0.08);
   }
 
   .shadow-premium-lg {
     box-shadow:
-      0 1px 2px hsl(220 40% 20% / 0.05),
-      0 18px 40px -12px hsl(245 60% 40% / 0.22);
+      0 1px 2px hsl(0 0% 0% / 0.05),
+      0 12px 40px -8px hsl(0 0% 0% / 0.12);
+  }
+
+  .text-accent-link {
+    color: hsl(var(--accent-link));
+  }
+
+  .border-accent-link {
+    border-color: hsl(var(--accent-link) / 0.4);
+  }
+
+  .ring-accent-link {
+    --tw-ring-color: hsl(var(--accent-link) / 0.35);
+  }
+
+  /* Premium tool surface */
+  .tool-surface {
+    @apply rounded-2xl border border-border/80 bg-card shadow-premium;
+  }
+
+  .section-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
   }
 }

@@ -1,12 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { formatINR } from "@/lib/format";
 import { ResultActions } from "@/components/tools/result-actions";
+import { ResultPanel, ResultRow } from "@/components/tools/result-panel";
+import {
+  ToolInputs,
+  ToolResults,
+  ToolWorkspace,
+} from "@/components/tools/tool-workspace";
 
 interface AmortRow {
   month: number;
@@ -55,25 +60,6 @@ function computeEmi(principal: number, annualRate: number, months: number) {
   };
 }
 
-function ResultRow({
-  label,
-  value,
-  emphasize,
-}: {
-  label: string;
-  value: string;
-  emphasize?: boolean;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-4 text-sm">
-      <span className="text-muted-foreground">{label}</span>
-      <span className={emphasize ? "text-lg font-bold" : "font-medium"}>
-        {value}
-      </span>
-    </div>
-  );
-}
-
 export function EmiCalculatorTool() {
   const [amount, setAmount] = React.useState("2500000");
   const [rate, setRate] = React.useState("8.5");
@@ -113,9 +99,9 @@ export function EmiCalculatorTool() {
   ].join("\n");
 
   return (
-    <Card>
-      <CardContent className="grid gap-6 p-6 lg:grid-cols-2">
-        <div className="space-y-4">
+    <div className="space-y-8">
+      <ToolWorkspace>
+        <ToolInputs>
           <div className="space-y-2">
             <Label htmlFor="emi-amount">Loan amount (₹)</Label>
             <Input
@@ -185,12 +171,14 @@ export function EmiCalculatorTool() {
               </Select>
             </div>
           </div>
-        </div>
+        </ToolInputs>
 
-        <div className="space-y-4">
-          <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-5">
-            <h3 className="font-semibold">Loan summary</h3>
-            <ResultRow label="Monthly EMI" value={formatINR(emi)} emphasize />
+        <ToolResults>
+          <ResultPanel
+            title="Loan summary"
+            highlight={formatINR(emi)}
+            highlightLabel="Monthly EMI"
+          >
             <ResultRow
               label="Principal (loan amount)"
               value={formatINR(principal)}
@@ -205,43 +193,48 @@ export function EmiCalculatorTool() {
               emphasize
             />
             <ResultRow label="Tenure" value={`${months} months`} />
-          </div>
-
+          </ResultPanel>
           <ResultActions text={shareText} />
-        </div>
+        </ToolResults>
+      </ToolWorkspace>
 
-        {schedule.length > 0 && (
-          <div className="space-y-3 lg:col-span-2">
-            <h3 className="font-semibold">Amortization summary</h3>
-            <div className="max-h-72 overflow-auto rounded-lg border border-border">
-              <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-muted/80 text-left">
-                  <tr>
-                    <th className="px-3 py-2 font-medium">Month</th>
-                    <th className="px-3 py-2 font-medium">EMI</th>
-                    <th className="px-3 py-2 font-medium">Principal</th>
-                    <th className="px-3 py-2 font-medium">Interest</th>
-                    <th className="px-3 py-2 font-medium">Balance</th>
+      {schedule.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="font-semibold tracking-tight">Amortization summary</h3>
+          <div className="max-h-80 overflow-auto rounded-2xl border border-border/80">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-muted/90 text-left">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Month</th>
+                  <th className="px-4 py-3 font-medium">EMI</th>
+                  <th className="px-4 py-3 font-medium">Principal</th>
+                  <th className="px-4 py-3 font-medium">Interest</th>
+                  <th className="px-4 py-3 font-medium">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {schedule.map((row) => (
+                  <tr key={row.month} className="border-t border-border/60">
+                    <td className="px-4 py-2.5 tabular-nums">{row.month}</td>
+                    <td className="px-4 py-2.5 tabular-nums">
+                      {formatINR(row.emi)}
+                    </td>
+                    <td className="px-4 py-2.5 tabular-nums">
+                      {formatINR(row.principal)}
+                    </td>
+                    <td className="px-4 py-2.5 tabular-nums">
+                      {formatINR(row.interest)}
+                    </td>
+                    <td className="px-4 py-2.5 tabular-nums">
+                      {formatINR(row.balance)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {schedule.map((row) => (
-                    <tr key={row.month} className="border-t border-border/60">
-                      <td className="px-3 py-2">{row.month}</td>
-                      <td className="px-3 py-2">{formatINR(row.emi)}</td>
-                      <td className="px-3 py-2">
-                        {formatINR(row.principal)}
-                      </td>
-                      <td className="px-3 py-2">{formatINR(row.interest)}</td>
-                      <td className="px-3 py-2">{formatINR(row.balance)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </div>
   );
 }

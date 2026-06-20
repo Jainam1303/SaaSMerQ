@@ -10,29 +10,26 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
   return (
     <Link
       href={`/tools/${tool.slug}`}
-      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-border/80 bg-card p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-premium-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl border border-border/80 bg-card p-5 shadow-sm transition-all duration-200 hover:border-foreground/20 hover:shadow-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      {/* subtle gradient wash on hover */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-      />
-      <div className="relative flex items-center justify-between">
-        <span className="flex size-11 items-center justify-center rounded-xl border border-border/70 bg-secondary/60 text-primary transition-colors group-hover:border-primary/30 group-hover:bg-primary/10">
+      <div className="flex items-start justify-between gap-3">
+        <span className="flex size-12 items-center justify-center rounded-xl border border-border/80 bg-muted/50 text-foreground transition-colors group-hover:bg-muted">
           <Icon name={tool.icon} className="size-5" />
         </span>
-        <ArrowUpRight className="size-5 text-muted-foreground/50 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
+        <ArrowUpRight
+          className="size-4 shrink-0 text-muted-foreground/40 transition-all duration-200 group-hover:text-foreground"
+        />
       </div>
-      <div className="relative space-y-1.5">
-        <h3 className="font-semibold leading-tight tracking-tight">
+      <div className="space-y-2">
+        <h3 className="font-semibold leading-snug tracking-tight">
           {tool.name}
         </h3>
-        <p className="text-sm leading-relaxed text-muted-foreground">
+        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">
           {tool.shortDescription}
         </p>
       </div>
-      <div className="relative mt-auto pt-1">
-        <span className="text-xs font-medium text-muted-foreground/80">
+      <div className="mt-auto pt-2">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
           {category.name.replace(" Tools", "")}
         </span>
       </div>
