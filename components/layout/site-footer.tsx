@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Wrench, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { SiteLogo } from "@/components/brand/site-logo";
 import { categories } from "@/data/tools/categories";
 import { getPopularTools } from "@/data/tools";
 import { siteConfig } from "@/lib/site";
@@ -13,14 +14,7 @@ export function SiteFooter() {
       <div className="container py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
           <div className="space-y-4 lg:col-span-4">
-            <Link href="/" className="flex items-center gap-2.5 font-semibold">
-              <span className="flex size-9 items-center justify-center rounded-lg border border-border bg-muted/50">
-                <Wrench className="size-4" />
-              </span>
-              <span className="tracking-tight">
-                MerQ<span className="text-muted-foreground">Prime</span>
-              </span>
-            </Link>
+            <SiteLogo />
             <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
               {siteConfig.description}
             </p>

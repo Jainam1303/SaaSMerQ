@@ -25,23 +25,16 @@ export function GET(request: Request) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 16,
-              background: "linear-gradient(135deg, #fafafa, #d4d4d4)",
-              color: "#0a0a0a",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 36,
-            }}
-          >
-            🔧
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={siteConfig.logo.url}
+            alt={siteConfig.brandName}
+            width={72}
+            height={72}
+            style={{ borderRadius: 16 }}
+          />
           <div style={{ color: "#d4d4d4", fontSize: 30, fontWeight: 600 }}>
-            {siteConfig.name}
+            {siteConfig.brandName}
           </div>
         </div>
         <div

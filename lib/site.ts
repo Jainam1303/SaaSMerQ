@@ -4,9 +4,17 @@
  */
 export const siteConfig = {
   name: "MerQPrime Tools",
+  /** Canonical brand name for schema.org and social previews. */
+  brandName: "MerQPrime",
   shortName: "MerQPrime",
   domain: "merqprime.in",
   url: "https://merqprime.in",
+  logo: {
+    path: "/logo.png",
+    url: "https://merqprime.in/logo.png",
+    width: 512,
+    height: 512,
+  },
   tagline: "Fast, free & secure online tools",
   description:
     "MerQPrime Tools is a fast, secure and privacy-first collection of free online utilities for developers, businesses and creators. QR codes, password & UUID generators, JSON & Base64 tools, GST & UPI utilities, image compression and more.",

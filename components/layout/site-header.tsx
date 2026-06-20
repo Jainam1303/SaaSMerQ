@@ -3,7 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Menu, Wrench, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { SiteLogo } from "@/components/brand/site-logo";
 import { categories } from "@/data/tools/categories";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -18,19 +19,6 @@ const navLinks = [
   })),
 ];
 
-function Logo() {
-  return (
-    <Link href="/" className="flex items-center gap-2.5 font-semibold">
-      <span className="flex size-9 items-center justify-center rounded-lg border border-border bg-muted/50">
-        <Wrench className="size-4" />
-      </span>
-      <span className="text-[15px] tracking-tight">
-        MerQ<span className="text-muted-foreground">Prime</span>
-      </span>
-    </Link>
-  );
-}
-
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
@@ -42,7 +30,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between gap-4">
-        <Logo />
+        <SiteLogo />
 
         <nav className="hidden items-center gap-0.5 lg:flex">
           {navLinks.map((link) => {

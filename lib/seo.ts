@@ -73,14 +73,8 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: siteConfig.name,
+    name: siteConfig.brandName,
     url: siteConfig.url,
-    description: siteConfig.description,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${siteConfig.url}/tools?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
@@ -88,9 +82,9 @@ export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: siteConfig.name,
+    name: siteConfig.brandName,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/icon.svg`,
+    logo: siteConfig.logo.url,
   };
 }
 
@@ -171,10 +165,10 @@ export function articleJsonLd({
     },
     publisher: {
       "@type": "Organization",
-      name: siteConfig.name,
+      name: siteConfig.brandName,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/icon.svg`,
+        url: siteConfig.logo.url,
       },
     },
     mainEntityOfPage: {

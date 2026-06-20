@@ -66,7 +66,7 @@ export const config = {
      */
     {
       source:
-        "/((?!api/og|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|icon.svg).*)",
+        "/((?!api/og|_next/static|_next/image|favicon.ico|favicon-16x16.png|favicon-32x32.png|apple-touch-icon.png|logo.png|logo-192.png|logo-512.png|robots.txt|sitemap.xml|manifest.webmanifest|icon.svg).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },
