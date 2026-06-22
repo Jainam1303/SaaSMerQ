@@ -30,6 +30,8 @@ relatedHubSlugs:
   - finance-tools
   - gst-tools
   - business-tools
+  - developer-tools
+  - seo-tools
 categorySummaries:
   - slug: business
     summary: Business category tools include GST, invoicing, break-even analysis and payment QR generators for Indian SMBs.

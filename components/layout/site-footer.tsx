@@ -100,6 +100,22 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
+                  href="/developer-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Developer Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/seo-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  SEO Tools
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/tools"
                   className="transition-colors hover:text-foreground"
                 >

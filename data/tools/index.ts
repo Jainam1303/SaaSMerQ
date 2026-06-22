@@ -24,6 +24,26 @@ import { profitMarginCalculator } from "./definitions/profit-margin-calculator";
 import { breakEvenCalculator } from "./definitions/break-even-calculator";
 import { invoiceGenerator } from "./definitions/invoice-generator";
 import { gstInvoiceGenerator } from "./definitions/gst-invoice-generator";
+import { wordCounter } from "./definitions/word-counter";
+import { caseConverter } from "./definitions/case-converter";
+import { loremIpsumGenerator } from "./definitions/lorem-ipsum-generator";
+import { slugGenerator } from "./definitions/slug-generator";
+import { timestampConverter } from "./definitions/timestamp-converter";
+import { regexTester } from "./definitions/regex-tester";
+import { urlEncoder } from "./definitions/url-encoder";
+import { urlDecoder } from "./definitions/url-decoder";
+import { md5Generator } from "./definitions/md5-generator";
+import { sha256Generator } from "./definitions/sha256-generator";
+import { jwtDecoder } from "./definitions/jwt-decoder";
+import { sqlFormatter } from "./definitions/sql-formatter";
+import { xmlFormatter } from "./definitions/xml-formatter";
+import { csvToJsonConverter } from "./definitions/csv-to-json-converter";
+import { jsonToCsvConverter } from "./definitions/json-to-csv-converter";
+import { textDiffChecker } from "./definitions/text-diff-checker";
+import { metaTagGenerator } from "./definitions/meta-tag-generator";
+import { openGraphGenerator } from "./definitions/open-graph-generator";
+import { schemaMarkupGenerator } from "./definitions/schema-markup-generator";
+import { colorConverter } from "./definitions/color-converter";
 
 /**
  * The single source of truth for every tool on the platform.
@@ -56,6 +76,26 @@ export const tools: ToolMeta[] = [
   breakEvenCalculator,
   invoiceGenerator,
   gstInvoiceGenerator,
+  wordCounter,
+  caseConverter,
+  loremIpsumGenerator,
+  slugGenerator,
+  timestampConverter,
+  regexTester,
+  urlEncoder,
+  urlDecoder,
+  md5Generator,
+  sha256Generator,
+  jwtDecoder,
+  sqlFormatter,
+  xmlFormatter,
+  csvToJsonConverter,
+  jsonToCsvConverter,
+  textDiffChecker,
+  metaTagGenerator,
+  openGraphGenerator,
+  schemaMarkupGenerator,
+  colorConverter,
 ];
 
 const toolBySlug = new Map(tools.map((tool) => [tool.slug, tool]));

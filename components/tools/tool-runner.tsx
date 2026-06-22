@@ -144,6 +144,108 @@ const registry: Record<string, ComponentType> = {
       ),
     { ssr: false, loading: Loading },
   ),
+  "word-counter": dynamic(
+    () => import("./impl/word-counter-tool").then((m) => m.WordCounterTool),
+    { ssr: false, loading: Loading },
+  ),
+  "case-converter": dynamic(
+    () => import("./impl/case-converter-tool").then((m) => m.CaseConverterTool),
+    { ssr: false, loading: Loading },
+  ),
+  "lorem-ipsum-generator": dynamic(
+    () =>
+      import("./impl/lorem-ipsum-generator-tool").then(
+        (m) => m.LoremIpsumGeneratorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "slug-generator": dynamic(
+    () => import("./impl/slug-generator-tool").then((m) => m.SlugGeneratorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "timestamp-converter": dynamic(
+    () =>
+      import("./impl/timestamp-converter-tool").then(
+        (m) => m.TimestampConverterTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "regex-tester": dynamic(
+    () => import("./impl/regex-tester-tool").then((m) => m.RegexTesterTool),
+    { ssr: false, loading: Loading },
+  ),
+  "url-encoder": dynamic(
+    () => import("./impl/url-encoder-tool").then((m) => m.UrlEncoderTool),
+    { ssr: false, loading: Loading },
+  ),
+  "url-decoder": dynamic(
+    () => import("./impl/url-decoder-tool").then((m) => m.UrlDecoderTool),
+    { ssr: false, loading: Loading },
+  ),
+  "md5-generator": dynamic(
+    () => import("./impl/md5-generator-tool").then((m) => m.Md5GeneratorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "sha256-generator": dynamic(
+    () =>
+      import("./impl/sha256-generator-tool").then((m) => m.Sha256GeneratorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "jwt-decoder": dynamic(
+    () => import("./impl/jwt-decoder-tool").then((m) => m.JwtDecoderTool),
+    { ssr: false, loading: Loading },
+  ),
+  "sql-formatter": dynamic(
+    () => import("./impl/sql-formatter-tool").then((m) => m.SqlFormatterTool),
+    { ssr: false, loading: Loading },
+  ),
+  "xml-formatter": dynamic(
+    () => import("./impl/xml-formatter-tool").then((m) => m.XmlFormatterTool),
+    { ssr: false, loading: Loading },
+  ),
+  "csv-to-json-converter": dynamic(
+    () =>
+      import("./impl/csv-to-json-converter-tool").then(
+        (m) => m.CsvToJsonConverterTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "json-to-csv-converter": dynamic(
+    () =>
+      import("./impl/json-to-csv-converter-tool").then(
+        (m) => m.JsonToCsvConverterTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "text-diff-checker": dynamic(
+    () =>
+      import("./impl/text-diff-checker-tool").then((m) => m.TextDiffCheckerTool),
+    { ssr: false, loading: Loading },
+  ),
+  "meta-tag-generator": dynamic(
+    () =>
+      import("./impl/meta-tag-generator-tool").then((m) => m.MetaTagGeneratorTool),
+    { ssr: false, loading: Loading },
+  ),
+  "open-graph-generator": dynamic(
+    () =>
+      import("./impl/open-graph-generator-tool").then(
+        (m) => m.OpenGraphGeneratorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "schema-markup-generator": dynamic(
+    () =>
+      import("./impl/schema-markup-generator-tool").then(
+        (m) => m.SchemaMarkupGeneratorTool,
+      ),
+    { ssr: false, loading: Loading },
+  ),
+  "color-converter": dynamic(
+    () =>
+      import("./impl/color-converter-tool").then((m) => m.ColorConverterTool),
+    { ssr: false, loading: Loading },
+  ),
 };
 
 export function ToolRunner({ slug }: { slug: string }) {

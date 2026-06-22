@@ -10,13 +10,17 @@ export const hubPaths = [
   "/investment-tools",
   "/gst-tools",
   "/business-tools",
+  "/developer-tools",
+  "/seo-tools",
 ] as const;
 
 export type HubSlug =
   | "finance-tools"
   | "investment-tools"
   | "gst-tools"
-  | "business-tools";
+  | "business-tools"
+  | "developer-tools"
+  | "seo-tools";
 
 function parseHub(slug: string): Hub {
   const filePath = path.join(HUBS_DIR, `${slug}.md`);

@@ -26,6 +26,8 @@ relatedHubSlugs:
   - finance-tools
   - investment-tools
   - business-tools
+  - developer-tools
+  - seo-tools
 categorySummaries:
   - slug: business
     summary: The business category hosts margins, break-even, QR and UPI tools alongside GST utilities for Indian companies.

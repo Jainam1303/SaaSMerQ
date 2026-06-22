@@ -27,6 +27,13 @@ import {
   Scale,
   BadgePercent,
   ChartLine,
+  AlignLeft,
+  Link,
+  Clock,
+  Hash,
+  GitCompare,
+  Share2,
+  Palette,
   type LucideIcon,
 } from "lucide-react";
 
@@ -63,6 +70,13 @@ const iconRegistry: Record<string, LucideIcon> = {
   scale: Scale,
   "badge-percent": BadgePercent,
   "chart-line": ChartLine,
+  "align-left": AlignLeft,
+  link: Link,
+  clock: Clock,
+  hash: Hash,
+  "git-compare": GitCompare,
+  "share-2": Share2,
+  palette: Palette,
 };
 
 export interface IconProps {

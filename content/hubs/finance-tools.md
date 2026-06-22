@@ -33,6 +33,8 @@ relatedHubSlugs:
   - investment-tools
   - gst-tools
   - business-tools
+  - developer-tools
+  - seo-tools
 categorySummaries:
   - slug: business
     summary: Business tools cover GST, invoicing, margins, QR payments and calculators used daily by Indian companies and freelancers.

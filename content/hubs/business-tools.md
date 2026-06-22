@@ -33,6 +33,8 @@ relatedHubSlugs:
   - finance-tools
   - investment-tools
   - gst-tools
+  - developer-tools
+  - seo-tools
 categorySummaries:
   - slug: developer
     summary: Developer tools help technical teams with JSON, Base64, UUIDs and secure passwords alongside business utilities.
