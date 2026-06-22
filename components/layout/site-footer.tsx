@@ -124,6 +124,30 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
+                  href="/free-online-tools"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Free Online Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/editorial-policy"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Editorial Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/methodology"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Methodology
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/about"
                   className="transition-colors hover:text-foreground"
                 >

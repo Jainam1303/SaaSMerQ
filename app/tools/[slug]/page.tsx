@@ -4,6 +4,7 @@ import {
   getAllToolSlugs,
   getToolBySlug,
 } from "@/data/tools";
+import { getToolCtrMetadata } from "@/data/seo/ctr-metadata";
 import { buildMetadata } from "@/lib/seo";
 import { ToolPage } from "@/components/tool/tool-page";
 
@@ -26,12 +27,15 @@ export async function generateMetadata({
   const tool = getToolBySlug(slug);
   if (!tool) return {};
 
+  const ctr = getToolCtrMetadata(slug);
+
   return buildMetadata({
-    title: tool.seoTitle ?? tool.name,
-    description: tool.metaDescription,
+    title: ctr?.seoTitle ?? tool.seoTitle ?? tool.name,
+    description: ctr?.metaDescription ?? tool.metaDescription,
     path: `/tools/${tool.slug}`,
     keywords: tool.keywords,
     ogType: "article",
+    absoluteTitle: Boolean(ctr),
   });
 }
 

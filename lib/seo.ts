@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/lib/site";
+import { editorialConfig } from "@/lib/editorial";
 import type { FaqItem, ToolMeta } from "@/data/tools/types";
 
 /** Absolute URL helper that always resolves against the canonical domain. */
@@ -161,7 +162,7 @@ export function articleJsonLd({
     dateModified: updatedAt ?? publishedAt,
     author: {
       "@type": "Organization",
-      name: siteConfig.author,
+      name: editorialConfig.author,
     },
     publisher: {
       "@type": "Organization",
@@ -207,11 +208,13 @@ export function guideArticleJsonLd({
   description,
   slug,
   publishedAt,
+  updatedAt,
 }: {
   title: string;
   description: string;
   slug: string;
   publishedAt: string;
+  updatedAt?: string;
 }) {
   const url = absoluteUrl(`/guides/${slug}`);
   return {
@@ -221,10 +224,10 @@ export function guideArticleJsonLd({
     description,
     url,
     datePublished: publishedAt,
-    dateModified: publishedAt,
+    dateModified: updatedAt ?? editorialConfig.lastUpdated,
     author: {
       "@type": "Organization",
-      name: siteConfig.brandName,
+      name: editorialConfig.author,
     },
     publisher: {
       "@type": "Organization",

@@ -18,6 +18,9 @@ import { FaqSection } from "@/components/tool/faq-section";
 import { JsonLd } from "@/components/json-ld";
 import { ProgrammaticLinks } from "@/components/programmatic/programmatic-links";
 import { BlogContent } from "@/components/blog/blog-content";
+import { getRelatedContentForGuide } from "@/lib/related-content";
+import { RelatedContentSection } from "@/components/seo/related-content-section";
+import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { AdSlot } from "@/components/ads/ad-slot";
 
 export function generateStaticParams() {
@@ -53,6 +56,8 @@ export default async function GuidePage({
   if (!page) notFound();
 
   const related = getRelatedGuides(slug);
+  const relatedContent = getRelatedContentForGuide(slug);
+
   const crumbs = [
     { name: "Home", href: "/" },
     { name: "Guides", href: "/guides/how-to-calculate-emi" },
@@ -74,6 +79,7 @@ export default async function GuidePage({
           description: page.description,
           slug: page.slug,
           publishedAt: page.publishedAt,
+          updatedAt: page.lastUpdated,
         })}
       />
       <JsonLd
@@ -95,6 +101,10 @@ export default async function GuidePage({
         <p className="max-w-2xl text-lg text-muted-foreground">
           {page.description}
         </p>
+        <EditorialMeta
+          lastUpdated={page.lastUpdated}
+          lastReviewed={page.lastReviewed}
+        />
       </header>
 
       <AdSlot format="leaderboard" className="my-8" />
@@ -114,6 +124,7 @@ export default async function GuidePage({
           toolSlugs={page.toolSlugs}
           hubSlug={page.hubSlug}
         />
+        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

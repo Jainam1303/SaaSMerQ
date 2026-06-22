@@ -27,6 +27,9 @@ import {
   ToolCta,
 } from "@/components/blog/related-posts";
 import { RelatedTools } from "@/components/tool/related-tools";
+import { getRelatedContentForBlog } from "@/lib/related-content";
+import { RelatedContentSection } from "@/components/seo/related-content-section";
+import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { HubLinks } from "@/components/hub/hub-links";
 
 interface PageProps {
@@ -76,6 +79,8 @@ export default async function BlogPostPage({ params }: PageProps) {
     ...(tool ? getHubsForTool(tool.slug) : []),
   ].filter((h, i, arr) => arr.findIndex((x) => x.slug === h.slug) === i);
 
+  const relatedContent = getRelatedContentForBlog(slug);
+
   const crumbs = [
     { name: "Home", href: "/" },
     { name: "Blog", href: "/blog" },
@@ -115,6 +120,9 @@ export default async function BlogPostPage({ params }: PageProps) {
             Published {formatDate(post.publishedAt)}
           </time>
         </div>
+        <EditorialMeta
+          lastUpdated={post.updatedAt ?? post.publishedAt}
+        />
       </header>
 
       <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_240px] lg:gap-12">
@@ -144,6 +152,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <RelatedTools tools={relatedTools} />
         )}
         <RelatedPosts posts={related} />
+        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

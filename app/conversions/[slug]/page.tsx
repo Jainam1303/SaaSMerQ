@@ -11,6 +11,7 @@ import {
   breadcrumbJsonLd,
   buildMetadata,
   faqJsonLd,
+  programmaticSoftwareJsonLd,
   webPageJsonLd,
 } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/tool/breadcrumbs";
@@ -18,6 +19,9 @@ import { FaqSection } from "@/components/tool/faq-section";
 import { JsonLd } from "@/components/json-ld";
 import { ProgrammaticLinks } from "@/components/programmatic/programmatic-links";
 import { AdSlot } from "@/components/ads/ad-slot";
+import { getRelatedContentForConversion } from "@/lib/related-content";
+import { RelatedContentSection } from "@/components/seo/related-content-section";
+import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { ConversionTool } from "@/components/programmatic/conversion-tool";
 
 export function generateStaticParams() {
@@ -52,6 +56,7 @@ export default async function ConversionPage({
   if (!page) notFound();
 
   const related = getRelatedConversions(slug);
+  const relatedContent = getRelatedContentForConversion(slug);
   const crumbs = [
     { name: "Home", href: "/" },
     { name: "Conversions", href: "/conversions/km-to-miles" },
@@ -67,6 +72,13 @@ export default async function ConversionPage({
         )}
       />
       <JsonLd data={faqJsonLd(page.faqs)} />
+      <JsonLd
+        data={programmaticSoftwareJsonLd({
+          name: page.title,
+          description: page.metaDescription,
+          url: absoluteUrl(page.path),
+        })}
+      />
 
       <Breadcrumbs items={crumbs} />
 
@@ -80,6 +92,7 @@ export default async function ConversionPage({
         <p className="max-w-2xl text-lg text-muted-foreground">
           {page.description}
         </p>
+        <EditorialMeta />
       </header>
 
       <AdSlot format="leaderboard" className="my-8" />
@@ -143,6 +156,7 @@ export default async function ConversionPage({
           toolSlugs={page.toolSlugs}
           hubSlug={page.hubSlug}
         />
+        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

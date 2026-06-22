@@ -28,6 +28,8 @@ function parseGuide(slug: string): GuidePage {
     keywords: (data.keywords as string[]) ?? [],
     category: data.category as string,
     publishedAt: data.publishedAt as string,
+    lastUpdated: (data.lastUpdated as string) ?? (data.publishedAt as string),
+    lastReviewed: (data.lastReviewed as string) ?? (data.publishedAt as string),
     toolSlugs,
     hubSlug: data.hubSlug as string,
     relatedSlugs: (data.relatedPageSlugs as string[]) ??

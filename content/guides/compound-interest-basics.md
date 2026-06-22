@@ -1,7 +1,11 @@
 ---
 title: "Compound Interest Basics — Wealth Growth"
+seoTitle: "Compound Interest Basics — Wealth Growth | MerQPrime Guide"
 description: "Complete guide to compound interest fundamentals. Formulas, examples, India context and free MerQPrime tools."
+metaDescription: "Learn compound interest fundamentals with formulas, worked examples and India-specific tips. Free MerQPrime tools included — no sign-up."
 publishedAt: "2026-06-20"
+lastUpdated: "2026-06-20"
+lastReviewed: "2026-06-20"
 category: "Finance"
 keywords:
   - compound interest basics
@@ -21,12 +25,18 @@ relatedPageSlugs:
   - simple-interest-vs-compound
   - fd-interest-formula
 faqs:
+  - question: "How do I calculate compound interest fundamentals step by step?"
+    answer: "Start with the formula section in this guide, then verify numbers using MerQPrime's free fd calculator at /tools/fd-calculator."
   - question: "What is the best free tool for compound interest fundamentals?"
-    answer: "MerQPrime's fd calculator at /tools/fd-calculator runs in your browser with no sign-up."
-  - question: "Is this guide relevant for India?"
-    answer: "Yes. Examples and conventions focus on Indian loans, tax rules, GST and local SEO practice."
-  - question: "Can I share results with my team?"
-    answer: "Use copy and share actions on tool pages. Data is not stored on our servers."
+    answer: "MerQPrime's fd calculator runs in your browser with no sign-up and applies standard Indian conventions."
+  - question: "Is this compound interest basics — wealth growth relevant for India?"
+    answer: "Yes. Examples, tax rules and market conventions focus on Indian loans, GST, investments and local SEO practice."
+  - question: "What mistakes should I avoid with compound interest fundamentals?"
+    answer: "Double-check units (months vs years, lakhs vs rupees), confirm whether rates are monthly or annual, and compare at least two scenarios before deciding."
+  - question: "Can I share calculator results with my team?"
+    answer: "Use copy and share actions on MerQPrime tool pages. Data is not stored on our servers."
+  - question: "Where can I learn more about compound interest fundamentals?"
+    answer: "Read related guides at /guides/simple-interest-vs-compound and /guides/fd-interest-formula, or browse the investment tools hub."
 ---
 
 Understanding compound interest fundamentals is essential for professionals, students and business owners who rely on accurate numbers every day. On MerQPrime we built free browser tools so you can verify calculations instantly without spreadsheets, sign-up walls or ads blocking your workflow. This guide walks through definitions, formulas, worked examples, common mistakes and how our calculators fit into your routine.

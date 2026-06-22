@@ -21,6 +21,9 @@ import { FaqSection } from "@/components/tool/faq-section";
 import { JsonLd } from "@/components/json-ld";
 import { ProgrammaticLinks } from "@/components/programmatic/programmatic-links";
 import { ToolRunner } from "@/components/tools/tool-runner";
+import { getRelatedContentForCalculator } from "@/lib/related-content";
+import { RelatedContentSection } from "@/components/seo/related-content-section";
+import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { AdSlot } from "@/components/ads/ad-slot";
 
 export function generateStaticParams() {
@@ -59,6 +62,8 @@ export default async function CalculatorLandingPage({
   const guideLinks = page.relatedGuideSlugs
     .map((s) => getGuideBySlug(s))
     .filter((g): g is NonNullable<typeof g> => Boolean(g));
+
+  const relatedContent = getRelatedContentForCalculator(slug);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -101,6 +106,7 @@ export default async function CalculatorLandingPage({
         <p className="max-w-2xl text-lg text-muted-foreground">
           {page.description}
         </p>
+        <EditorialMeta />
       </header>
 
       <AdSlot format="leaderboard" className="my-8" />
@@ -174,6 +180,7 @@ export default async function CalculatorLandingPage({
           toolSlugs={page.toolSlugs}
           hubSlug={page.hubSlug}
         />
+        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

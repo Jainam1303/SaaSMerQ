@@ -1,7 +1,11 @@
 ---
 title: "GST Invoice Format — Mandatory Fields"
+seoTitle: "GST Invoice Format — Mandatory Fields | MerQPrime Guide"
 description: "Complete guide to GST tax invoice structure. Formulas, examples, India context and free MerQPrime tools."
+metaDescription: "Learn GST tax invoice structure with formulas, worked examples and India-specific tips. Free MerQPrime tools included — no sign-up."
 publishedAt: "2026-06-20"
+lastUpdated: "2026-06-20"
+lastReviewed: "2026-06-20"
 category: "Business"
 keywords:
   - gst invoice format
@@ -21,12 +25,18 @@ relatedPageSlugs:
   - gst-formula
   - invoice-numbering-rules
 faqs:
+  - question: "How do I calculate GST tax invoice structure step by step?"
+    answer: "Start with the formula section in this guide, then verify numbers using MerQPrime's free gst invoice generator at /tools/gst-invoice-generator."
   - question: "What is the best free tool for GST tax invoice structure?"
-    answer: "MerQPrime's gst invoice generator at /tools/gst-invoice-generator runs in your browser with no sign-up."
-  - question: "Is this guide relevant for India?"
-    answer: "Yes. Examples and conventions focus on Indian loans, tax rules, GST and local SEO practice."
-  - question: "Can I share results with my team?"
-    answer: "Use copy and share actions on tool pages. Data is not stored on our servers."
+    answer: "MerQPrime's gst invoice generator runs in your browser with no sign-up and applies standard Indian conventions."
+  - question: "Is this gst invoice format — mandatory fields relevant for India?"
+    answer: "Yes. Examples, tax rules and market conventions focus on Indian loans, GST, investments and local SEO practice."
+  - question: "What mistakes should I avoid with GST tax invoice structure?"
+    answer: "Double-check units (months vs years, lakhs vs rupees), confirm whether rates are monthly or annual, and compare at least two scenarios before deciding."
+  - question: "Can I share calculator results with my team?"
+    answer: "Use copy and share actions on MerQPrime tool pages. Data is not stored on our servers."
+  - question: "Where can I learn more about GST tax invoice structure?"
+    answer: "Read related guides at /guides/gst-formula and /guides/invoice-numbering-rules, or browse the gst tools hub."
 ---
 
 Understanding GST tax invoice structure is essential for professionals, students and business owners who rely on accurate numbers every day. On MerQPrime we built free browser tools so you can verify calculations instantly without spreadsheets, sign-up walls or ads blocking your workflow. This guide walks through definitions, formulas, worked examples, common mistakes and how our calculators fit into your routine.

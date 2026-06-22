@@ -60,6 +60,8 @@ export interface GuidePage {
   keywords: string[];
   category: string;
   publishedAt: string;
+  lastUpdated: string;
+  lastReviewed: string;
   toolSlugs: [string, string];
   hubSlug: string;
   relatedSlugs: string[];

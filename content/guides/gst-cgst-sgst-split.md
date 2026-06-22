@@ -1,7 +1,11 @@
 ---
 title: "CGST SGST IGST Split — Interstate vs Intrastate"
+seoTitle: "CGST SGST IGST Split — Interstate vs Intrastate | MerQPrime Guide"
 description: "Complete guide to GST component split. Formulas, examples, India context and free MerQPrime tools."
+metaDescription: "Learn GST component split with formulas, worked examples and India-specific tips. Free MerQPrime tools included — no sign-up."
 publishedAt: "2026-06-20"
+lastUpdated: "2026-06-20"
+lastReviewed: "2026-06-20"
 category: "Business"
 keywords:
   - gst cgst sgst split
@@ -21,12 +25,18 @@ relatedPageSlugs:
   - gst-formula
   - gst-rate-slabs-india
 faqs:
+  - question: "How do I calculate GST component split step by step?"
+    answer: "Start with the formula section in this guide, then verify numbers using MerQPrime's free gst calculator at /tools/gst-calculator."
   - question: "What is the best free tool for GST component split?"
-    answer: "MerQPrime's gst calculator at /tools/gst-calculator runs in your browser with no sign-up."
-  - question: "Is this guide relevant for India?"
-    answer: "Yes. Examples and conventions focus on Indian loans, tax rules, GST and local SEO practice."
-  - question: "Can I share results with my team?"
-    answer: "Use copy and share actions on tool pages. Data is not stored on our servers."
+    answer: "MerQPrime's gst calculator runs in your browser with no sign-up and applies standard Indian conventions."
+  - question: "Is this cgst sgst igst split — interstate vs intrastate relevant for India?"
+    answer: "Yes. Examples, tax rules and market conventions focus on Indian loans, GST, investments and local SEO practice."
+  - question: "What mistakes should I avoid with GST component split?"
+    answer: "Double-check units (months vs years, lakhs vs rupees), confirm whether rates are monthly or annual, and compare at least two scenarios before deciding."
+  - question: "Can I share calculator results with my team?"
+    answer: "Use copy and share actions on MerQPrime tool pages. Data is not stored on our servers."
+  - question: "Where can I learn more about GST component split?"
+    answer: "Read related guides at /guides/gst-formula and /guides/gst-rate-slabs-india, or browse the gst tools hub."
 ---
 
 Understanding GST component split is essential for professionals, students and business owners who rely on accurate numbers every day. On MerQPrime we built free browser tools so you can verify calculations instantly without spreadsheets, sign-up walls or ads blocking your workflow. This guide walks through definitions, formulas, worked examples, common mistakes and how our calculators fit into your routine.

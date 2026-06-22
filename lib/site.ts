@@ -2,6 +2,8 @@
  * Central site configuration. Update domain / branding here once and it
  * propagates across SEO metadata, sitemaps, schema markup and the UI.
  */
+import { editorialConfig } from "@/lib/editorial";
+
 export const siteConfig = {
   name: "MerQPrime Tools",
   /** Canonical brand name for schema.org and social previews. */
@@ -20,7 +22,7 @@ export const siteConfig = {
     "MerQPrime Tools is a fast, secure and privacy-first collection of free online utilities for developers, businesses and creators. QR codes, password & UUID generators, JSON & Base64 tools, GST & UPI utilities, image compression and more.",
   locale: "en_IN",
   twitter: "@merqprime",
-  author: "MerQPrime",
+  author: editorialConfig.author,
   // Toggle once ad/analytics integrations are configured. Kept false so the
   // platform ships clean, with reserved slots ready but nothing rendered.
   ads: {

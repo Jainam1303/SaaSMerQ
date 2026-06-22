@@ -26,6 +26,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${siteConfig.url}/free-online-tools`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.92,
+    },
+    {
+      url: `${siteConfig.url}/editorial-policy`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
+    {
+      url: `${siteConfig.url}/methodology`,
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: 0.35,
+    },
+    {
       url: `${siteConfig.url}/about`,
       lastModified: now,
       changeFrequency: "monthly",

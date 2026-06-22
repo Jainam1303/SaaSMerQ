@@ -1,0 +1,17 @@
+{
+  "lastUpdated": null,
+  "notes": "Paste Search Console export figures here via /admin/seo",
+  "indexing": {
+    "indexedUrls": 0,
+    "notIndexedUrls": 0,
+    "sitemapUrls": 299
+  },
+  "totals": {
+    "clicks": 0,
+    "impressions": 0,
+    "ctr": 0,
+    "avgPosition": 0
+  },
+  "topPages": [],
+  "topQueries": []
+}

@@ -127,10 +127,32 @@ function buildBody(g) {
 }
 
 function buildFaqs(g) {
+  const toolName = g.toolSlug.replace(/-/g, " ");
   return [
-    { q: `What is the best free tool for ${g.topic}?`, a: `MerQPrime's ${g.toolSlug.replace(/-/g, " ")} at /tools/${g.toolSlug} runs in your browser with no sign-up.` },
-    { q: `Is this guide relevant for India?`, a: "Yes. Examples and conventions focus on Indian loans, tax rules, GST and local SEO practice." },
-    { q: `Can I share results with my team?`, a: "Use copy and share actions on tool pages. Data is not stored on our servers." },
+    {
+      q: `How do I calculate ${g.topic} step by step?`,
+      a: `Start with the formula section in this guide, then verify numbers using MerQPrime's free ${toolName} at /tools/${g.toolSlug}.`,
+    },
+    {
+      q: `What is the best free tool for ${g.topic}?`,
+      a: `MerQPrime's ${toolName} runs in your browser with no sign-up and applies standard Indian conventions.`,
+    },
+    {
+      q: `Is this ${g.title.toLowerCase()} relevant for India?`,
+      a: "Yes. Examples, tax rules and market conventions focus on Indian loans, GST, investments and local SEO practice.",
+    },
+    {
+      q: `What mistakes should I avoid with ${g.topic}?`,
+      a: "Double-check units (months vs years, lakhs vs rupees), confirm whether rates are monthly or annual, and compare at least two scenarios before deciding.",
+    },
+    {
+      q: `Can I share calculator results with my team?`,
+      a: "Use copy and share actions on MerQPrime tool pages. Data is not stored on our servers.",
+    },
+    {
+      q: `Where can I learn more about ${g.topic}?`,
+      a: `Read related guides at /guides/${g.related[0]} and /guides/${g.related[1]}, or browse the ${g.hub.replace(/-/g, " ")} hub.`,
+    },
   ];
 }
 
@@ -140,8 +162,12 @@ for (const g of GUIDES) {
   const faqs = buildFaqs(g);
   const fm = `---
 title: "${g.title}"
+seoTitle: "${g.title} | MerQPrime Guide"
 description: "Complete guide to ${g.topic}. Formulas, examples, India context and free MerQPrime tools."
+metaDescription: "Learn ${g.topic} with formulas, worked examples and India-specific tips. Free MerQPrime tools included — no sign-up."
 publishedAt: "2026-06-20"
+lastUpdated: "2026-06-20"
+lastReviewed: "2026-06-20"
 category: "${g.category}"
 keywords:
   - ${g.slug.replace(/-/g, " ")}

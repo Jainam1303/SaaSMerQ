@@ -20,6 +20,9 @@ import { JsonLd } from "@/components/json-ld";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { getHubsForTool } from "@/lib/hubs";
 import { HubLinks } from "@/components/hub/hub-links";
+import { getRelatedContentForTool } from "@/lib/related-content";
+import { RelatedContentSection } from "@/components/seo/related-content-section";
+import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { ToolRunner } from "@/components/tools/tool-runner";
 
 export function ToolPage({ tool }: { tool: ToolMeta }) {
@@ -27,6 +30,8 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
   const related = getRelatedTools(tool.slug, 5);
   const relatedPosts = getPostsForTool(tool.slug, 2);
   const hubs = getHubsForTool(tool.slug);
+
+  const relatedContent = getRelatedContentForTool(tool.slug);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -62,6 +67,7 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
           <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground">
             {tool.shortDescription}
           </p>
+          <EditorialMeta />
         </div>
       </header>
 
@@ -129,6 +135,7 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
 
         <RelatedTools tools={related} />
         <RelatedBlogPosts posts={relatedPosts} />
+        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

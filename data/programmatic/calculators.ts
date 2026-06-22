@@ -1,4 +1,5 @@
 import type { CalculatorLandingPage } from "@/lib/programmatic/types";
+import { ensureMinFaqs } from "@/lib/programmatic/faqs";
 
 const LOAN_PAGES: Omit<
   CalculatorLandingPage,
@@ -157,9 +158,9 @@ const MORE_CALCULATORS: typeof LOAN_PAGES = [
   {
     slug: "fd-calculator-india",
     title: "FD Calculator India",
-    seoTitle: "FD Calculator India — Fixed Deposit Maturity",
+    seoTitle: "FD Calculator India – Calculate Fixed Deposit Returns Online",
     description: "Calculate fixed deposit maturity with compounding options.",
-    metaDescription: "FD maturity calculator for Indian banks. Quarterly, monthly and annual compounding.",
+    metaDescription: "Free FD calculator for India. Calculate fixed deposit maturity, interest earned and effective yield with quarterly or monthly compounding.",
     keywords: ["fd calculator india", "fixed deposit calculator", "fd maturity calculator"],
     toolSlug: "fd-calculator",
     hubSlug: "investment-tools",
@@ -442,6 +443,63 @@ const MORE_CALCULATORS: typeof LOAN_PAGES = [
   },
 ];
 
+function expandCalculatorFaqs(
+  page: Omit<CalculatorLandingPage, "relatedSlugs" | "path" | "toolSlugs" | "relatedGuideSlugs">,
+): CalculatorLandingPage["faqs"] {
+  const extras = [
+    {
+      question: `Is this ${page.title.split(" — ")[0]} free to use?`,
+      answer:
+        "Yes. MerQPrime calculators run in your browser with no sign-up. Enter your numbers and get instant results.",
+    },
+    {
+      question: `Are results accurate for Indian ${page.hubSlug.replace(/-/g, " ")} scenarios?`,
+      answer:
+        "Calculators use standard formulas accepted by Indian banks and businesses. Always confirm final figures with your lender, CA or advisor before committing.",
+    },
+    {
+      question: `Can I use this on mobile?`,
+      answer:
+        "Yes. All MerQPrime calculators are mobile-friendly and work on any modern phone or tablet browser.",
+    },
+    {
+      question: `Is my financial data stored on MerQPrime servers?`,
+      answer:
+        "No. Calculations run locally in your browser. Loan amounts, rates and other inputs are never uploaded.",
+    },
+    {
+      question: `Which MerQPrime tool powers this calculator?`,
+      answer: `This landing page embeds our free ${page.toolSlug.replace(/-/g, " ")} at /tools/${page.toolSlug} for live calculations.`,
+    },
+  ];
+  return ensureMinFaqs(page.faqs, extras, 5);
+}
+
+function pickRelatedCalculators(
+  all: CalculatorLandingPage[],
+  page: CalculatorLandingPage,
+  count = 5,
+): string[] {
+  const sameHub = all.filter(
+    (p) => p.hubSlug === page.hubSlug && p.slug !== page.slug,
+  );
+  const sameTool = all.filter(
+    (p) =>
+      p.toolSlug === page.toolSlug &&
+      p.slug !== page.slug &&
+      p.hubSlug !== page.hubSlug,
+  );
+  const others = all.filter(
+    (p) =>
+      p.slug !== page.slug &&
+      p.hubSlug !== page.hubSlug &&
+      p.toolSlug !== page.toolSlug,
+  );
+  return [...sameHub, ...sameTool, ...others]
+    .slice(0, count)
+    .map((p) => p.slug);
+}
+
 function enrich(
   pages: Omit<
     CalculatorLandingPage,
@@ -457,12 +515,8 @@ function enrich(
   }));
   return full.map((page) => ({
     ...page,
-    relatedSlugs: full
-      .filter((p) => p.slug !== page.slug)
-      .slice(0, 6)
-      .map((p) => p.slug)
-      .sort()
-      .slice(0, 3),
+    faqs: expandCalculatorFaqs(page),
+    relatedSlugs: pickRelatedCalculators(full, page, 5),
   }));
 }
 
@@ -522,7 +576,7 @@ export function getAllCalculatorSlugs(): string[] {
   return calculatorPages.map((p) => p.slug);
 }
 
-export function getRelatedCalculators(slug: string): CalculatorLandingPage[] {
+export function getRelatedCalculators(slug: string, limit = 5): CalculatorLandingPage[] {
   const page = bySlug.get(slug);
   if (!page) return [];
   return page.relatedSlugs

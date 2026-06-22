@@ -13,6 +13,7 @@ function buildFaqs(
   fromShort: string,
   toShort: string,
   formula: string,
+  category: ConversionPage["category"],
 ): ConversionPage["faqs"] {
   return [
     {
@@ -20,9 +21,21 @@ function buildFaqs(
       answer: `Multiply your ${fromShort} value by the conversion factor, or use the formula: ${formula}. Our calculator applies this instantly in your browser.`,
     },
     {
+      question: `What is the formula for ${fromShort} to ${toShort}?`,
+      answer: `The standard conversion is: ${formula}. Enter any ${fromShort} value above and the calculator returns the equivalent in ${toShort} immediately.`,
+    },
+    {
+      question: `How do I convert ${toShort} back to ${fromShort}?`,
+      answer: `Reverse the conversion by swapping the units in the calculator, or visit our dedicated ${toShort}-to-${fromShort} page for the inverse formula and examples.`,
+    },
+    {
       question: `Is this ${fromShort} to ${toShort} converter accurate?`,
       answer:
         "Yes. Conversions use standard international factors and precise floating-point math. Results are suitable for everyday, engineering and travel use.",
+    },
+    {
+      question: `When would I need a ${category} conversion like ${fromShort} to ${toShort}?`,
+      answer: `Common uses include travel planning, shipping labels, school coursework, recipe scaling and reading international product specs. Bookmark this page for quick ${fromShort} to ${toShort} lookups.`,
     },
     {
       question: `Is my data sent to a server?`,
@@ -55,11 +68,27 @@ function buildExamples(
   });
 }
 
+function categoryHub(_category: ConversionPage["category"]): string {
+  return "business-tools";
+}
+
+function categoryTools(
+  category: ConversionPage["category"],
+): [string, string] {
+  if (category === "length" || category === "weight" || category === "area") {
+    return ["unit-converter", "percentage-calculator"];
+  }
+  if (category === "temperature" || category === "volume") {
+    return ["unit-converter", "age-calculator"];
+  }
+  return ["unit-converter", "percentage-calculator"];
+}
+
 function pickRelated(
   all: ConversionPage[],
   current: string,
   category: ConversionPage["category"],
-  count = 3,
+  count = 5,
 ): string[] {
   const same = all.filter(
     (p) => p.category === category && p.slug !== current,
@@ -92,9 +121,9 @@ function buildPage(
     fromShort: from.short,
     toShort: to.short,
     title,
-    seoTitle: `${from.short} to ${to.short} — Free Online Converter`,
+    seoTitle: `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter (Instant & Free) | MerQPrime`,
     description,
-    metaDescription: `Free ${from.short} to ${to.short} converter. Formula, examples and instant results. Private, browser-based conversion on MerQPrime.`,
+    metaDescription: `Convert ${from.short} to ${to.short} instantly — free online converter with formula, examples and FAQs. Private, browser-based tool on MerQPrime.`,
     keywords: [
       `${from.short} to ${to.short}`,
       `convert ${from.short} to ${to.short}`,
@@ -104,10 +133,10 @@ function buildPage(
     ],
     formula,
     examples: buildExamples(category, from.id, to.id, from.short, to.short),
-    faqs: buildFaqs(from.short, to.short, formula),
+    faqs: buildFaqs(from.short, to.short, formula, category),
     relatedSlugs: [],
-    toolSlugs: ["unit-converter", "percentage-calculator"],
-    hubSlug: "business-tools",
+    toolSlugs: categoryTools(category),
+    hubSlug: categoryHub(category),
     intro: `Need to convert ${from.short} to ${to.short}? This page gives you an instant calculator, the exact conversion formula, worked examples and answers to common questions. Whether you are studying, travelling, shipping goods or checking specifications, accurate unit conversion saves costly mistakes.`,
   };
 }
@@ -141,7 +170,7 @@ export function getAllConversionSlugs(): string[] {
   return conversionPages.map((p) => p.slug);
 }
 
-export function getRelatedConversions(slug: string, limit = 3): ConversionPage[] {
+export function getRelatedConversions(slug: string, limit = 5): ConversionPage[] {
   const page = bySlug.get(slug);
   if (!page) return [];
   return page.relatedSlugs

@@ -1,7 +1,11 @@
 ---
 title: "HRA Metro vs Non-Metro City Rules"
+seoTitle: "HRA Metro vs Non-Metro City Rules | MerQPrime Guide"
 description: "Complete guide to HRA 50% vs 40% rule. Formulas, examples, India context and free MerQPrime tools."
+metaDescription: "Learn HRA 50% vs 40% rule with formulas, worked examples and India-specific tips. Free MerQPrime tools included — no sign-up."
 publishedAt: "2026-06-20"
+lastUpdated: "2026-06-20"
+lastReviewed: "2026-06-20"
 category: "Finance"
 keywords:
   - hra metro non metro rules
@@ -21,12 +25,18 @@ relatedPageSlugs:
   - hra-exemption-rules
   - how-to-calculate-emi
 faqs:
+  - question: "How do I calculate HRA 50% vs 40% rule step by step?"
+    answer: "Start with the formula section in this guide, then verify numbers using MerQPrime's free hra calculator at /tools/hra-calculator."
   - question: "What is the best free tool for HRA 50% vs 40% rule?"
-    answer: "MerQPrime's hra calculator at /tools/hra-calculator runs in your browser with no sign-up."
-  - question: "Is this guide relevant for India?"
-    answer: "Yes. Examples and conventions focus on Indian loans, tax rules, GST and local SEO practice."
-  - question: "Can I share results with my team?"
-    answer: "Use copy and share actions on tool pages. Data is not stored on our servers."
+    answer: "MerQPrime's hra calculator runs in your browser with no sign-up and applies standard Indian conventions."
+  - question: "Is this hra metro vs non-metro city rules relevant for India?"
+    answer: "Yes. Examples, tax rules and market conventions focus on Indian loans, GST, investments and local SEO practice."
+  - question: "What mistakes should I avoid with HRA 50% vs 40% rule?"
+    answer: "Double-check units (months vs years, lakhs vs rupees), confirm whether rates are monthly or annual, and compare at least two scenarios before deciding."
+  - question: "Can I share calculator results with my team?"
+    answer: "Use copy and share actions on MerQPrime tool pages. Data is not stored on our servers."
+  - question: "Where can I learn more about HRA 50% vs 40% rule?"
+    answer: "Read related guides at /guides/hra-exemption-rules and /guides/how-to-calculate-emi, or browse the finance tools hub."
 ---
 
 Understanding HRA 50% vs 40% rule is essential for professionals, students and business owners who rely on accurate numbers every day. On MerQPrime we built free browser tools so you can verify calculations instantly without spreadsheets, sign-up walls or ads blocking your workflow. This guide walks through definitions, formulas, worked examples, common mistakes and how our calculators fit into your routine.
