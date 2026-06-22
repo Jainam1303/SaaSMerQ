@@ -124,6 +124,14 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
+                  href="/launch"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Launch Hub
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/free-online-tools"
                   className="transition-colors hover:text-foreground"
                 >

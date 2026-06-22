@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-22T05:59:19.605Z",
+  "submissions": [
+    {
+      "id": "product-hunt",
+      "websiteName": "Product Hunt",
+      "url": "https://www.producthunt.com/posts/new",
+      "category": "Launch platform",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "alternativeto",
+      "websiteName": "AlternativeTo",
+      "url": "https://alternativeto.net/software/merqprime/about/",
+      "category": "SaaS directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "saashub",
+      "websiteName": "SaaSHub",
+      "url": "https://www.saashub.com/submit",
+      "category": "SaaS directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "startup-stash",
+      "websiteName": "Startup Stash",
+      "url": "https://startupstash.com/add-startup/",
+      "category": "Startup directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "betalist",
+      "websiteName": "BetaList",
+      "url": "https://betalist.com/submit",
+      "category": "Launch platform",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "uneed",
+      "websiteName": "Uneed",
+      "url": "https://uneed.best/submit-a-tool",
+      "category": "Tool directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "microlaunch",
+      "websiteName": "Microlaunch",
+      "url": "https://microlaunch.net/submit",
+      "category": "Launch platform",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "futurepedia",
+      "websiteName": "Futurepedia",
+      "url": "https://www.futurepedia.io/submit-tool",
+      "category": "AI & tool directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "toolify",
+      "websiteName": "Toolify",
+      "url": "https://www.toolify.ai/submit",
+      "category": "Tool directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "topai-tools",
+      "websiteName": "TopAI.tools",
+      "url": "https://topai.tools/submit",
+      "category": "Tool directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "dev-hunt",
+      "websiteName": "Dev Hunt",
+      "url": "https://devhunt.org/submit",
+      "category": "Developer directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "hacker-news-show-hn",
+      "websiteName": "Hacker News (Show HN)",
+      "url": "https://news.ycombinator.com/submit",
+      "category": "Developer community",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "indie-hackers",
+      "websiteName": "Indie Hackers",
+      "url": "https://www.indiehackers.com/products",
+      "category": "Startup community",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "free-for-dev",
+      "websiteName": "Free-for.dev",
+      "url": "https://github.com/ripienaar/free-for-dev",
+      "category": "Developer directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "awesome-selfhosted",
+      "websiteName": "Awesome Selfhosted",
+      "url": "https://github.com/awesome-selfhosted/awesome-selfhosted",
+      "category": "Developer directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "saas-genius",
+      "websiteName": "SaaS Genius",
+      "url": "https://www.saasgenius.com/submit-your-saas/",
+      "category": "SaaS directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "capterra",
+      "websiteName": "Capterra",
+      "url": "https://www.capterra.com/vendors/sign-up",
+      "category": "SaaS directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "g2",
+      "websiteName": "G2",
+      "url": "https://www.g2.com/products/new",
+      "category": "SaaS directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "slant",
+      "websiteName": "Slant",
+      "url": "https://www.slant.co/",
+      "category": "Tool directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    },
+    {
+      "id": "stackshare",
+      "websiteName": "StackShare",
+      "url": "https://stackshare.io/submit",
+      "category": "Developer directory",
+      "submittedDate": null,
+      "status": "pending",
+      "backlinkUrl": null
+    }
+  ]
+}

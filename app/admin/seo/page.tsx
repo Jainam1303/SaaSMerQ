@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { buildMetadata } from "@/lib/seo";
 import { getDashboardData } from "@/lib/gsc/sync";
@@ -17,7 +18,13 @@ export default async function AdminSeoPage() {
   return (
     <div className="container max-w-6xl space-y-6 py-8 md:py-12">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-muted-foreground">Internal</p>
+        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+          <span>Internal</span>
+          <span aria-hidden>·</span>
+          <Link href="/admin/launch" className="hover:text-foreground">
+            Launch Tracker
+          </Link>
+        </div>
         <h1 className="text-3xl font-bold tracking-tight">
           Search Console Dashboard
         </h1>
