@@ -155,6 +155,18 @@ export function GscDashboardPanel({
               Connect Google
             </a>
           )}
+          {data.connected && (
+            <button
+              type="button"
+              onClick={async () => {
+                await fetch("/api/admin/gsc/disconnect", { method: "POST" });
+                window.location.reload();
+              }}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted/50"
+            >
+              Reconnect Google
+            </button>
+          )}
           <button
             type="button"
             onClick={() => load(true)}

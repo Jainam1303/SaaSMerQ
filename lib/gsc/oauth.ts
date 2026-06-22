@@ -1,4 +1,4 @@
-import { getGscConfig } from "./config";
+import { getGscConfig, hasGscScope } from "./config";
 import { readOAuthTokens, writeOAuthTokens } from "./storage";
 import type { GscOAuthTokens } from "./types";
 
@@ -61,6 +61,12 @@ export async function exchangeCodeForTokens(
     throw new Error("No refresh token received. Revoke app access and reconnect.");
   }
 
+  if (!hasGscScope(tokens.scope)) {
+    throw new Error(
+      "Search Console permission was not granted. Add the webmasters.readonly scope in Google Cloud OAuth consent screen, then reconnect.",
+    );
+  }
+
   writeOAuthTokens(tokens);
   return tokens;
 }
@@ -107,5 +113,5 @@ export async function getValidAccessToken(): Promise<string | null> {
 
 export function isGoogleConnected(): boolean {
   const tokens = readOAuthTokens();
-  return Boolean(tokens?.refresh_token);
+  return Boolean(tokens?.refresh_token && hasGscScope(tokens.scope));
 }

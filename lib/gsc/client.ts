@@ -149,7 +149,10 @@ export async function resolveSiteUrl(): Promise<string> {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to list Search Console properties");
+    const err = await res.text();
+    throw new Error(
+      `Failed to list Search Console properties (${res.status}): ${err.slice(0, 200)}`,
+    );
   }
 
   const data = (await res.json()) as {
