@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { getAllHubs } from "@/lib/hubs";
+import { getAllConversionSlugs } from "@/lib/programmatic/conversions";
+import { getAllCalculatorSlugs } from "@/data/programmatic/calculators";
+import { getAllGuideSlugs } from "@/lib/programmatic/guides";
 import { tools } from "@/data/tools";
 import { categories } from "@/data/tools/categories";
 import { siteConfig } from "@/lib/site";
@@ -64,11 +67,39 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
+  const conversionRoutes: MetadataRoute.Sitemap = getAllConversionSlugs().map(
+    (slug) => ({
+      url: `${siteConfig.url}/conversions/${slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.72,
+    }),
+  );
+
+  const calculatorRoutes: MetadataRoute.Sitemap = getAllCalculatorSlugs().map(
+    (slug) => ({
+      url: `${siteConfig.url}/calculators/${slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.74,
+    }),
+  );
+
+  const guideRoutes: MetadataRoute.Sitemap = getAllGuideSlugs().map((slug) => ({
+    url: `${siteConfig.url}/guides/${slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.73,
+  }));
+
   return [
     ...staticRoutes,
     ...hubRoutes,
     ...categoryRoutes,
     ...toolRoutes,
     ...blogRoutes,
+    ...conversionRoutes,
+    ...calculatorRoutes,
+    ...guideRoutes,
   ];
 }

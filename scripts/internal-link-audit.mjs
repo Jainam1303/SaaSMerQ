@@ -80,6 +80,41 @@ function getHubsForBlog(blogSlug, hubs) {
   return hubs.filter((h) => h.blogSlugs.includes(blogSlug));
 }
 
+function countProgrammaticUrls() {
+  let conversions = 0;
+  try {
+    const units = fs.readFileSync(
+      path.join(ROOT, "lib/programmatic/units.ts"),
+      "utf8",
+    );
+    for (const cat of ["length", "weight", "temperature", "volume", "area", "speed"]) {
+      const block = units.match(
+        new RegExp(`${cat}:\\s*\\{[\\s\\S]*?units:\\s*\\[([\\s\\S]*?)\\]`, "m"),
+      );
+      if (!block) continue;
+      const n = [...block[1].matchAll(/id:\s*"/g)].length;
+      conversions += n * (n - 1);
+    }
+  } catch {
+    conversions = 0;
+  }
+  let calculators = 0;
+  try {
+    const calc = fs.readFileSync(
+      path.join(ROOT, "data/programmatic/calculators.ts"),
+      "utf8",
+    );
+    calculators = [...calc.matchAll(/slug:\s*"/g)].length;
+  } catch {
+    calculators = 0;
+  }
+  const guidesDir = path.join(ROOT, "content/guides");
+  const guides = fs.existsSync(guidesDir)
+    ? fs.readdirSync(guidesDir).filter((f) => f.endsWith(".md")).length
+    : 0;
+  return { conversions, calculators, guides };
+}
+
 function getRelatedTools(slug, tools, limit = 5) {
   const current = tools.find((t) => t.slug === slug);
   if (!current) return [];
@@ -370,6 +405,8 @@ const issues = audit(graph);
 const stats = edgeStats(graph);
 const hubAuthority = buildHubAuthority(graph, stats.inbound);
 
+const prog = countProgrammaticUrls();
+
 const report = {
   generatedAt: new Date().toISOString(),
   requirements: REQUIRED,
@@ -377,8 +414,18 @@ const report = {
     hubPages: graph.hubs?.length ?? 0,
     toolPages: graph.tools.length,
     blogPages: graph.blogs.length,
+    conversionPages: prog.conversions,
+    calculatorPages: prog.calculators,
+    guidePages: prog.guides,
     sitemapUrls:
-      5 + (graph.hubs?.length ?? 0) + 5 + tools.length + posts.length,
+      5 +
+      (graph.hubs?.length ?? 0) +
+      5 +
+      tools.length +
+      posts.length +
+      prog.conversions +
+      prog.calculators +
+      prog.guides,
     totalInternalEdges: stats.totalEdges,
     issuesFound: issues.length,
     pass: issues.length === 0,

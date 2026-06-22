@@ -177,3 +177,91 @@ export function articleJsonLd({
     },
   };
 }
+
+export function webPageJsonLd({
+  title,
+  description,
+  path,
+}: {
+  title: string;
+  description: string;
+  path: string;
+}) {
+  const url = absoluteUrl(path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.brandName,
+      url: siteConfig.url,
+    },
+  };
+}
+
+export function guideArticleJsonLd({
+  title,
+  description,
+  slug,
+  publishedAt,
+}: {
+  title: string;
+  description: string;
+  slug: string;
+  publishedAt: string;
+}) {
+  const url = absoluteUrl(`/guides/${slug}`);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url,
+    datePublished: publishedAt,
+    dateModified: publishedAt,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.brandName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.brandName,
+      logo: {
+        "@type": "ImageObject",
+        url: siteConfig.logo.url,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+  };
+}
+
+export function programmaticSoftwareJsonLd({
+  name,
+  description,
+  url,
+}: {
+  name: string;
+  description: string;
+  url: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    description,
+    url,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any (Web)",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "INR",
+    },
+  };
+}

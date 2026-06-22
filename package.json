@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "audit:links": "node scripts/internal-link-audit.mjs",
     "audit:hubs": "node scripts/internal-link-audit.mjs",
-    "generate:brand": "node scripts/generate-brand-assets.mjs"
+    "generate:brand": "node scripts/generate-brand-assets.mjs",
+    "generate:guides": "node scripts/generate-programmatic-guides.mjs",
+    "audit:programmatic": "node scripts/programmatic-seo-report.mjs"
   },
   "dependencies": {
     "@next/third-parties": "^15.5.19",
