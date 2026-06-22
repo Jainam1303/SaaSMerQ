@@ -1,4 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  enforceAdminAuth,
+  isAdminRoute,
+  withAdminRobotsHeader,
+} from "@/lib/admin-auth";
 
 /**
  * Generates a per-request nonce and applies a strict Content-Security-Policy.
@@ -10,6 +15,15 @@ import { NextRequest, NextResponse } from "next/server";
  * here. Everything else is locked down.
  */
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (isAdminRoute(pathname)) {
+    const authFailure = enforceAdminAuth(request);
+    if (authFailure) {
+      return authFailure;
+    }
+  }
+
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const isDev = process.env.NODE_ENV === "development";
 
@@ -54,6 +68,10 @@ export function middleware(request: NextRequest) {
     request: { headers: requestHeaders },
   });
   response.headers.set("Content-Security-Policy", csp);
+
+  if (isAdminRoute(pathname)) {
+    return withAdminRobotsHeader(response);
+  }
 
   return response;
 }
