@@ -8,6 +8,7 @@ export interface GscDashboardData {
   lastSyncedAt: string | null;
   cacheExpiresAt: string | null;
   connected: boolean;
+  oauthConfigured: boolean;
   property: string | null;
   indexing: {
     indexedUrls: number;
@@ -142,8 +143,13 @@ export function GscDashboardPanel({
         <div className="flex flex-wrap gap-3">
           {!data.connected && (
             <a
-              href="/api/admin/gsc/oauth/start"
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted/50"
+              href={data.oauthConfigured ? "/api/admin/gsc/oauth/start" : undefined}
+              aria-disabled={!data.oauthConfigured}
+              className={`inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors ${
+                data.oauthConfigured
+                  ? "hover:bg-muted/50"
+                  : "pointer-events-none opacity-50"
+              }`}
             >
               <Link2 className="size-4" />
               Connect Google
@@ -165,6 +171,41 @@ export function GscDashboardPanel({
         <p className="text-sm text-muted-foreground" role="status">
           {status}
         </p>
+      )}
+
+      {!data.oauthConfigured && (
+        <section className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-6 text-sm">
+          <h2 className="mb-2 font-semibold">Google OAuth setup required</h2>
+          <p className="mb-4 text-muted-foreground">
+            Server env vars <code className="text-foreground">GOOGLE_CLIENT_ID</code> and{" "}
+            <code className="text-foreground">GOOGLE_CLIENT_SECRET</code> are missing.
+            Create them in Google Cloud Console, then add to production and rebuild.
+          </p>
+          <ol className="list-decimal space-y-2 pl-5 text-muted-foreground">
+            <li>
+              Open{" "}
+              <a
+                href="https://console.cloud.google.com/apis/library/searchconsole.googleapis.com"
+                className="underline hover:text-foreground"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Search Console API
+              </a>{" "}
+              and enable it for your project.
+            </li>
+            <li>
+              Create an OAuth 2.0 Web Client with redirect URI:{" "}
+              <code className="text-foreground">
+                https://merqprime.in/api/admin/gsc/oauth/callback
+              </code>
+            </li>
+            <li>
+              Add to <code className="text-foreground">~/SaaSMerQ/.env.production</code> on the
+              server, then run <code className="text-foreground">npm run build && pm2 restart merqprime</code>.
+            </li>
+          </ol>
+        </section>
       )}
 
       <GscStats data={data} />

@@ -11,11 +11,13 @@ import { readCache, writeCache } from "./storage";
 import type { GscCacheFile, GscDashboardData } from "./types";
 
 function emptyDashboard(): GscDashboardData {
+  const { siteUrl, isConfigured } = getGscConfig();
   return {
     lastSyncedAt: null,
     cacheExpiresAt: null,
     connected: isGoogleConnected(),
-    property: getGscConfig().siteUrl,
+    oauthConfigured: isConfigured,
+    property: siteUrl,
     indexing: { indexedUrls: 0, notIndexedUrls: 0, sitemapUrls: 0 },
     totals: { clicks: 0, impressions: 0, ctr: 0, position: 0 },
     topPages: [],
@@ -30,6 +32,7 @@ function cacheToDashboard(cache: GscCacheFile): GscDashboardData {
     lastSyncedAt: cache.syncedAt,
     cacheExpiresAt: cache.expiresAt,
     connected: isGoogleConnected(),
+    oauthConfigured: getGscConfig().isConfigured,
     property: cache.data.property,
     syncError: null,
   };

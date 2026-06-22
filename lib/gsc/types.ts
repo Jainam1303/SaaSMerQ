@@ -17,6 +17,7 @@ export interface GscDashboardData {
   lastSyncedAt: string | null;
   cacheExpiresAt: string | null;
   connected: boolean;
+  oauthConfigured: boolean;
   property: string | null;
   indexing: {
     indexedUrls: number;
@@ -37,8 +38,16 @@ export interface GscOAuthTokens {
   token_type?: string;
 }
 
+export interface GscCachePayload {
+  property: string | null;
+  indexing: GscDashboardData["indexing"];
+  totals: GscRow;
+  topPages: GscTopPage[];
+  topQueries: GscTopQuery[];
+}
+
 export interface GscCacheFile {
   syncedAt: string;
   expiresAt: string;
-  data: Omit<GscDashboardData, "lastSyncedAt" | "cacheExpiresAt" | "connected">;
+  data: GscCachePayload;
 }

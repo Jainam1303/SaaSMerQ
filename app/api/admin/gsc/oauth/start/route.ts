@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { siteConfig } from "@/lib/site";
 import { requireAdmin } from "@/lib/admin-api";
 import { getGscConfig } from "@/lib/gsc/config";
 import { buildOAuthUrl } from "@/lib/gsc/oauth";
@@ -9,9 +10,8 @@ export async function GET(request: NextRequest) {
 
   const { isConfigured } = getGscConfig();
   if (!isConfigured) {
-    return NextResponse.json(
-      { error: "Google OAuth is not configured on the server." },
-      { status: 503 },
+    return NextResponse.redirect(
+      `${siteConfig.url}/admin/seo?error=${encodeURIComponent("Google OAuth is not configured on the server. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env.production, then rebuild.")}`,
     );
   }
 
