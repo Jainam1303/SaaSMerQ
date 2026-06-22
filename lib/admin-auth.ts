@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const ADMIN_USERNAME = "admin";
-
 export const ADMIN_ROBOTS_HEADER = "noindex, nofollow, noarchive";
 
 /** Paths protected by HTTP Basic Auth (pages and admin API). */
@@ -42,9 +40,10 @@ function adminNotFound(): NextResponse {
  * Returns a response to short-circuit the request, or null when auth passes.
  */
 export function enforceAdminAuth(request: NextRequest): NextResponse | null {
+  const username = process.env.ADMIN_USERNAME;
   const password = process.env.ADMIN_PASSWORD;
 
-  if (!password) {
+  if (!username || !password) {
     return adminNotFound();
   }
 
@@ -65,10 +64,10 @@ export function enforceAdminAuth(request: NextRequest): NextResponse | null {
     return unauthorized();
   }
 
-  const username = decoded.slice(0, colon);
+  const suppliedUsername = decoded.slice(0, colon);
   const suppliedPassword = decoded.slice(colon + 1);
 
-  if (username !== ADMIN_USERNAME || suppliedPassword !== password) {
+  if (suppliedUsername !== username || suppliedPassword !== password) {
     return unauthorized();
   }
 
