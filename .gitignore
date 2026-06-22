@@ -48,3 +48,7 @@ coverage
 
 # Generated reports
 /reports/
+
+# GSC OAuth tokens and sync cache (server-only secrets)
+data/gsc/oauth-tokens.json
+data/gsc/cache.json
