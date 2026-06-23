@@ -1,19 +1,31 @@
-# MerQPrime Tools
+# MerQPrime
 
-A fast, secure, SEO-optimized and mobile-first platform of free online utilities, built for [merqprime.in](https://merqprime.in).
+🌐 Website: https://merqprime.in
 
-Built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS** and hand-rolled **shadcn/ui-style** components. Designed to scale to hundreds of tools without architectural changes.
+MerQPrime is a collection of 45+ free online tools for developers, businesses, marketers and creators.
 
-## Features
+## Popular Tools
 
-- 10 production tools (QR, Password, UUID, JSON, Base64, GST, UPI QR, Image Compressor, Image Resizer, Sitemap)
-- Reusable tool framework — add a tool with one metadata file + one component
-- Per-tool SEO: dynamic metadata, Open Graph & Twitter cards, canonical URLs, JSON-LD (SoftwareApplication, Breadcrumb, FAQ)
-- Dynamic OG images, `sitemap.xml`, `robots.txt`, web manifest
-- Dark / light / system theme
-- Strict Content-Security-Policy with per-request nonce + hardened security headers
-- Privacy-first: every tool runs entirely in the browser — no uploads
-- Reserved (hidden) ad slots and pluggable analytics (GA4 / Plausible)
+- EMI Calculator
+- GST Calculator
+- SIP Calculator
+- FD Calculator
+- QR Code Generator
+- SHA256 Generator
+- JSON Formatter
+- Invoice Generator
+
+## Categories
+
+- Finance Calculators
+- GST Tools
+- Business Tools
+- Developer Utilities
+- SEO Tools
+- QR & Payment Tools
+- Image Tools
+
+Built with Next.js 15, TypeScript and Tailwind CSS.
 
 ## Getting started
 
