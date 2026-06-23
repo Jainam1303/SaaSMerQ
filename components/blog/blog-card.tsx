@@ -15,7 +15,7 @@ export function BlogCard({ post }: { post: BlogPostMeta }) {
       className="group flex h-full flex-col gap-4 rounded-2xl border border-border/80 bg-card p-6 shadow-sm transition-all hover:border-foreground/15 hover:shadow-premium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-card-secondary">
           {post.category}
         </span>
         <ArrowUpRight
@@ -26,7 +26,7 @@ export function BlogCard({ post }: { post: BlogPostMeta }) {
         <h2 className="text-lg font-semibold leading-snug tracking-tight group-hover:text-foreground">
           {post.title}
         </h2>
-        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">
+        <p className="text-sm leading-relaxed text-card-secondary line-clamp-3">
           {post.description}
         </p>
       </div>

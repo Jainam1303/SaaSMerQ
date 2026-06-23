@@ -24,12 +24,12 @@ export function ToolCard({ tool }: { tool: ToolMeta }) {
         <h3 className="font-semibold leading-snug tracking-tight">
           {tool.name}
         </h3>
-        <p className="text-sm leading-relaxed text-muted-foreground line-clamp-2">
+        <p className="text-sm leading-relaxed text-card-secondary line-clamp-2">
           {tool.shortDescription}
         </p>
       </div>
       <div className="mt-auto pt-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-card-secondary">
           {category.name.replace(" Tools", "")}
         </span>
       </div>

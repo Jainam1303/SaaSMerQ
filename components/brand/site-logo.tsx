@@ -17,11 +17,12 @@ export function SiteLogo({ className, iconOnly = false }: SiteLogoProps) {
     >
       <Image
         src={siteConfig.logo.path}
-        alt={siteConfig.brandName}
+        alt={iconOnly ? siteConfig.brandName : ""}
         width={siteConfig.logo.width}
         height={siteConfig.logo.height}
         className="size-9 shrink-0 rounded-lg"
         priority
+        aria-hidden={iconOnly ? undefined : true}
       />
       {!iconOnly && (
         <span className="text-[15px] tracking-tight">

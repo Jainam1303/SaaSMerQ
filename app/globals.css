@@ -65,7 +65,7 @@
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 64%;
+    --muted-foreground: 0 0% 72%;
 
     --accent: 0 0% 18%;
     --accent-foreground: 0 0% 98%;
@@ -220,6 +220,14 @@
 
   .section-eyebrow {
     @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .text-card-secondary {
+    @apply text-muted-foreground;
+  }
+
+  .dark .text-card-secondary {
+    color: hsl(0 0% 78%);
   }
 }
 
