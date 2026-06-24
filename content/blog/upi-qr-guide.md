@@ -12,6 +12,9 @@ toolSlug: upi-qr-generator
 relatedSlugs:
   - qr-code-guide
   - gst-calculation-guide
+  - how-to-create-upi-qr-code-online
+  - upi-id-to-qr-code-converter-guide
+  - static-vs-dynamic-upi-qr-codes
 ---
 
 UPI QR codes let customers pay by scanning with any UPI app — PhonePe, Google Pay, Paytm, BHIM and bank apps. For shops, freelancers and events, a printed UPI QR is often the fastest way to collect money.

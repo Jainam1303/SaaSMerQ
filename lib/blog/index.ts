@@ -43,6 +43,7 @@ function parseFile(slug: string): BlogPost {
     toolSlug: data.toolSlug as string,
     relatedToolSlugs: data.relatedToolSlugs as string[] | undefined,
     relatedSlugs: data.relatedSlugs as string[] | undefined,
+    faqs: data.faqs as BlogPost["faqs"],
     content,
   };
 }
@@ -67,6 +68,7 @@ function toMeta(post: BlogPost): BlogPostMeta {
     toolSlug: post.toolSlug,
     relatedToolSlugs: post.relatedToolSlugs,
     relatedSlugs: post.relatedSlugs,
+    faqs: post.faqs,
   };
 }
 

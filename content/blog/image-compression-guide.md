@@ -9,6 +9,10 @@ keywords:
   - reduce image size
   - optimize images for web
 toolSlug: image-compressor
+relatedToolSlugs:
+  - image-resizer
+  - qr-generator
+  - open-graph-generator
 relatedSlugs:
   - qr-code-guide
   - password-security-guide
@@ -57,4 +61,4 @@ Nothing is uploaded to a server — ideal for sensitive documents.
 - Print assets — use higher quality and CMYK-aware workflows.
 - Images with fine text — prefer PNG or higher JPEG quality.
 
-Pair compression with our [image resizer](/tools/image-resizer) when you need exact dimensions.
+Pair compression with our [image resizer](/tools/image-resizer) when you need exact dimensions. For marketing assets, compress Open Graph images before publishing — see the [Open Graph generator](/tools/open-graph-generator) for social meta tags, and use the [QR code generator](/tools/qr-generator) for scannable links on printed materials.

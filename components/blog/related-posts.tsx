@@ -33,7 +33,7 @@ export function ToolCta({
 }) {
   return (
     <aside
-      className="rounded-2xl border border-border/80 bg-muted/30 p-6 shadow-sm"
+      className="elevated-card rounded-2xl p-6"
       aria-label="Try the free tool"
     >
       <div className="flex items-start gap-4">

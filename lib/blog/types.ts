@@ -1,3 +1,8 @@
+export interface BlogFaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface BlogPostFrontmatter {
   title: string;
   description: string;
@@ -11,6 +16,8 @@ export interface BlogPostFrontmatter {
   relatedToolSlugs?: string[];
   /** Optional explicit related article slugs. */
   relatedSlugs?: string[];
+  /** Optional FAQs for on-page content and FAQ schema. */
+  faqs?: BlogFaqItem[];
 }
 
 export interface BlogPostMeta extends BlogPostFrontmatter {

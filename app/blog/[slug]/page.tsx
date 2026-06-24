@@ -17,6 +17,7 @@ import {
   articleJsonLd,
   breadcrumbJsonLd,
   buildMetadata,
+  faqJsonLd,
 } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/tool/breadcrumbs";
 import { JsonLd } from "@/components/json-ld";
@@ -31,6 +32,7 @@ import { getRelatedContentForBlog } from "@/lib/related-content";
 import { RelatedContentSection } from "@/components/seo/related-content-section";
 import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { HubLinks } from "@/components/hub/hub-links";
+import { FaqSection } from "@/components/tool/faq-section";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -103,6 +105,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           crumbs.map((c) => ({ name: c.name, url: absoluteUrl(c.href) })),
         )}
       />
+      {post.faqs?.length ? <JsonLd data={faqJsonLd(post.faqs)} /> : null}
 
       <Breadcrumbs items={crumbs} />
 
@@ -131,6 +134,9 @@ export default async function BlogPostPage({ params }: PageProps) {
             <ToolCta toolSlug={tool.slug} toolName={tool.name} />
           )}
           <BlogContent content={post.content} />
+          {post.faqs?.length ? (
+            <FaqSection faqs={post.faqs} title="Frequently asked questions" />
+          ) : null}
           {tool && (
             <ToolCta toolSlug={tool.slug} toolName={tool.name} />
           )}

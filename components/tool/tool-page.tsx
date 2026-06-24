@@ -24,15 +24,18 @@ import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { ToolRunner } from "@/components/tools/tool-runner";
 import { getRelatedTools } from "@/data/tools";
 import { getPostsForTool } from "@/lib/internal-links";
+import { getToolContent } from "@/lib/tool-content";
 import { TrustBadges } from "@/components/tool/trust-badges";
 import { FadeUp } from "@/components/motion/fade-up";
+import { BlogContent } from "@/components/blog/blog-content";
 
 export function ToolPage({ tool }: { tool: ToolMeta }) {
   const category = categoryMap[tool.category];
   const related = getRelatedTools(tool.slug, 5);
-  const relatedPosts = getPostsForTool(tool.slug, 2);
+  const relatedPosts = getPostsForTool(tool.slug, 4);
   const hubs = getHubsForTool(tool.slug);
   const relatedContent = getRelatedContentForTool(tool.slug);
+  const seoContent = getToolContent(tool.slug);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -99,6 +102,17 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
         </FadeUp>
 
         <div className="space-y-16 md:space-y-20">
+          {seoContent ? (
+            <FadeUp>
+              <section
+                className="prose-section max-w-3xl space-y-4"
+                aria-label="UPI QR guide"
+              >
+                <BlogContent content={seoContent} />
+              </section>
+            </FadeUp>
+          ) : null}
+
           <FadeUp>
             <section className="space-y-4 max-w-3xl">
               <p className="section-eyebrow">Overview</p>

@@ -9,6 +9,10 @@ keywords:
   - password generator
   - secure passwords
 toolSlug: password-generator
+relatedToolSlugs:
+  - sha256-generator
+  - jwt-decoder
+  - uuid-generator
 relatedSlugs:
   - qr-code-guide
   - image-compression-guide
@@ -50,6 +54,8 @@ Browser-based generators are fine when:
 ## Use MerQPrime’s generator
 
 Our [password generator](/tools/password-generator) creates cryptographically random passwords with configurable length and character sets — entirely in your browser.
+
+Developers verifying stored credentials can hash test strings with the [SHA-256 generator](/tools/sha256-generator). For API debugging, inspect token payloads with the [JWT decoder](/tools/jwt-decoder) — never paste production secrets into third-party sites.
 
 **Never** share generated passwords in chat or email. Store them in a password manager immediately.
 

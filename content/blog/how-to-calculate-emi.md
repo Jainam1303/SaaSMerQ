@@ -9,9 +9,14 @@ keywords:
   - home loan emi
   - car loan emi india
 toolSlug: emi-calculator
+relatedToolSlugs:
+  - sip-calculator
+  - loan-calculator
+  - profit-margin-calculator
 relatedSlugs:
   - what-is-sip-investment
   - gst-calculation-guide
+  - how-to-create-upi-qr-code-online
 ---
 
 Equated Monthly Instalment (EMI) is how most Indians repay loans — from home mortgages to car finance and personal credit. Understanding how EMI is calculated helps you compare offers, plan cash flow and avoid over-borrowing.
@@ -43,7 +48,19 @@ Suppose you borrow **₹25,00,000** at **8.5% per year** for **20 years** (240 m
 - Total repayment ≈ **₹52.07 lakh**
 - Total interest ≈ **₹27.07 lakh**
 
-Use our [free EMI calculator](/tools/emi-calculator) to try your own numbers instantly.
+Use our [free EMI calculator](/tools/emi-calculator) to try your own numbers instantly. For investment planning alongside loan repayment, model returns with the [SIP calculator](/tools/sip-calculator).
+
+## Step-by-step EMI calculation
+
+Here is how EMI is calculated step by step for a standard reducing-balance loan in India:
+
+1. **Convert annual rate to monthly** — Divide the annual interest rate by 12 and by 100. Example: 9% annual → 0.0075 monthly.
+2. **Set tenure in months** — Multiply loan years by 12. A 15-year home loan = 180 months.
+3. **Apply the EMI formula** — EMI = P × r × (1+r)^n ÷ ((1+r)^n − 1).
+4. **Round to currency** — Banks round to the nearest rupee on statements.
+5. **Verify total interest** — Multiply EMI by n and subtract principal P for lifetime interest.
+
+Walk through each step in MerQPrime’s [loan repayment calculator](/tools/emi-calculator) — it shows the full amortization schedule so you can see how each month splits principal and interest. If you run a business and need to price products after loan costs, pair EMI planning with the [profit margin calculator](/tools/profit-margin-calculator).
 
 ## What affects your EMI?
 

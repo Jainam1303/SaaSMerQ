@@ -9,6 +9,10 @@ keywords:
   - add gst
   - remove gst cgst sgst
 toolSlug: gst-calculator
+relatedToolSlugs:
+  - invoice-generator
+  - upi-qr-generator
+  - profit-margin-calculator
 relatedSlugs:
   - percentage-calculation-guide
   - how-to-calculate-emi
@@ -63,3 +67,5 @@ Always verify the applicable slab for your product or service.
 ## Free GST calculator
 
 MerQPrime’s [GST calculator](/tools/gst-calculator) adds or removes GST, supports all standard slabs plus custom rates, and shows CGST/SGST/IGST breakdown — instant and private.
+
+After invoicing, let customers pay via UPI using a [UPI QR code](/tools/upi-qr-generator) on the printed bill. Generate professional PDF invoices with the [invoice generator](/tools/invoice-generator), then add your QR image for faster collections.

@@ -39,9 +39,9 @@ export const toolCtrMetadata: Record<string, CtrMetadata> = {
       "Calculate GST inclusive and exclusive prices for India. Add or remove tax, split CGST/SGST/IGST — free and instant.",
   },
   "upi-qr-generator": {
-    seoTitle: "UPI QR Code Generator India – Accept Payments",
+    seoTitle: "UPI QR Generator — UPI ID to QR Code Online",
     metaDescription:
-      "Create UPI payment QR codes for Paytm, PhonePe and Google Pay. Free, instant and runs privately in your browser.",
+      "Create your UPI QR code free. Convert UPI ID to QR for GPay, PhonePe & Paytm. Download PNG payment QR online — instant, private, no sign-up.",
   },
   "image-compressor": {
     seoTitle: "Image Compressor (JPG, PNG & WebP) | MerQPrime",
