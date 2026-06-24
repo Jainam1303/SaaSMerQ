@@ -13,7 +13,7 @@ export function SiteLogo({ className, iconOnly = false }: SiteLogoProps) {
   return (
     <Link
       href="/"
-      className={cn("flex items-center gap-2.5 font-semibold", className)}
+      className={cn("flex items-center gap-2.5 font-heading font-semibold", className)}
     >
       <Image
         src={siteConfig.logo.path}
@@ -26,7 +26,7 @@ export function SiteLogo({ className, iconOnly = false }: SiteLogoProps) {
       />
       {!iconOnly && (
         <span className="text-[15px] tracking-tight">
-          MerQ<span className="text-muted-foreground">Prime</span>
+          MerQ<span className="text-brand-accent">Prime</span>
         </span>
       )}
     </Link>

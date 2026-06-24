@@ -1,3 +1,4 @@
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
@@ -8,6 +9,18 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Analytics } from "@/components/analytics";
 import { JsonLd } from "@/components/json-ld";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -72,8 +85,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#000000" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F8FC" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1020" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -87,13 +100,17 @@ export default async function RootLayout({
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.variable} ${plusJakarta.variable}`}
+    >
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={organizationJsonLd()} />
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
           nonce={nonce}
@@ -106,7 +123,7 @@ export default async function RootLayout({
           </a>
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
-            <main id="main" className="flex-1">
+            <main id="main" className="flex-1 pt-[5.5rem]">
               {children}
             </main>
             <SiteFooter />

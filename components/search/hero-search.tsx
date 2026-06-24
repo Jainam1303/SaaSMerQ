@@ -18,7 +18,7 @@ export function HeroSearch() {
         action="/tools"
         method="get"
         role="search"
-        className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-3 shadow-premium-lg transition-shadow focus-within:border-accent-link focus-within:shadow-premium-lg sm:flex-row sm:items-center sm:gap-2"
+        className="group flex flex-col gap-3 rounded-2xl elevated-card p-3 transition-[border-color,box-shadow] focus-within:border-primary/40 focus-within:shadow-card-hover sm:flex-row sm:items-center sm:gap-2"
       >
         <div className="relative flex-1">
           <Search className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
@@ -33,7 +33,7 @@ export function HeroSearch() {
         <Button
           type="submit"
           size="lg"
-          className="h-12 shrink-0 bg-primary px-8 text-primary-foreground hover:bg-primary/90 sm:h-14"
+          className="h-12 shrink-0 rounded-xl px-8 sm:h-14"
         >
           Search
         </Button>
@@ -45,7 +45,7 @@ export function HeroSearch() {
           <Link
             key={s.q}
             href={`/tools?q=${encodeURIComponent(s.q)}`}
-            className="rounded-full border border-border bg-background px-3 py-1.5 font-medium transition-colors hover:border-foreground/30 hover:bg-muted hover:text-foreground"
+            className="rounded-full border border-border bg-surface px-3.5 py-2 font-medium shadow-premium transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-foreground"
           >
             {s.label}
           </Link>
