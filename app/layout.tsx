@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Analytics } from "@/components/analytics";
+import { GoogleAnalyticsScripts } from "@/components/google-analytics-scripts";
+import { isAnalyticsEnabled, getMeasurementId } from "@/lib/analytics";
 import { JsonLd } from "@/components/json-ld";
 
 const inter = Inter({
@@ -98,6 +100,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const gaEnabled = isAnalyticsEnabled();
+  const gaId = getMeasurementId();
 
   return (
     <html
@@ -105,6 +109,11 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${plusJakarta.variable}`}
     >
+      <head>
+        {gaEnabled ? (
+          <GoogleAnalyticsScripts gaId={gaId} nonce={nonce} />
+        ) : null}
+      </head>
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={organizationJsonLd()} />
@@ -129,7 +138,7 @@ export default async function RootLayout({
             <SiteFooter />
           </div>
         </ThemeProvider>
-        <Analytics nonce={nonce} />
+        {gaEnabled ? <Analytics gaId={gaId} /> : null}
       </body>
     </html>
   );

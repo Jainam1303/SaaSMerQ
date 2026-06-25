@@ -33,10 +33,11 @@ export function middleware(request: NextRequest) {
   // data transmission relies on connect-src / img-src, so those must be
   // explicitly allowed or events would be silently blocked.
   const ga = {
-    script: "https://www.googletagmanager.com",
+    script:
+      "https://www.googletagmanager.com https://*.googletagmanager.com",
     connect:
-      "https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
-    img: "https://www.google-analytics.com https://www.googletagmanager.com",
+      "https://www.google.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com",
+    img: "https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com https://*.googletagmanager.com",
   };
 
   const csp = [
