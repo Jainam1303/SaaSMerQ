@@ -28,6 +28,7 @@ import { getToolContent } from "@/lib/tool-content";
 import { TrustBadges } from "@/components/tool/trust-badges";
 import { FadeUp } from "@/components/motion/fade-up";
 import { BlogContent } from "@/components/blog/blog-content";
+import { ToolInteractionTracker } from "@/components/tool/tool-interaction-tracker";
 
 export function ToolPage({ tool }: { tool: ToolMeta }) {
   const category = categoryMap[tool.category];
@@ -97,7 +98,9 @@ export function ToolPage({ tool }: { tool: ToolMeta }) {
             aria-label={`${tool.name} tool`}
             className="tool-surface p-6 md:p-8 lg:p-10"
           >
-            <ToolRunner slug={tool.slug} />
+            <ToolInteractionTracker toolSlug={tool.slug}>
+              <ToolRunner slug={tool.slug} />
+            </ToolInteractionTracker>
           </section>
         </FadeUp>
 

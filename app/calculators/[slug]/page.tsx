@@ -21,6 +21,7 @@ import { FaqSection } from "@/components/tool/faq-section";
 import { JsonLd } from "@/components/json-ld";
 import { ProgrammaticLinks } from "@/components/programmatic/programmatic-links";
 import { ToolRunner } from "@/components/tools/tool-runner";
+import { ToolInteractionTracker } from "@/components/tool/tool-interaction-tracker";
 import { getRelatedContentForCalculator } from "@/lib/related-content";
 import { RelatedContentSection } from "@/components/seo/related-content-section";
 import { EditorialMeta } from "@/components/editorial/editorial-meta";
@@ -112,7 +113,9 @@ export default async function CalculatorLandingPage({
       <AdSlot format="leaderboard" className="my-8" />
 
       <section className="tool-surface p-6 md:p-8">
-        <ToolRunner slug={page.toolSlug} />
+        <ToolInteractionTracker toolSlug={page.toolSlug}>
+          <ToolRunner slug={page.toolSlug} />
+        </ToolInteractionTracker>
       </section>
 
       <div className="mt-16 space-y-12">

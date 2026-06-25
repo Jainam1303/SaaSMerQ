@@ -2,34 +2,18 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-  }
-}
-
-/** Pushes a gtag event, ensuring the dataLayer/gtag shim exists. */
-function gtagEvent(name: string, params: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer || [];
-  if (typeof window.gtag !== "function") {
-    window.gtag = function gtag() {
-      // eslint-disable-next-line prefer-rest-params
-      window.dataLayer!.push(arguments);
-    };
-  }
-  window.gtag("event", name, params);
-}
+import {
+  pageView,
+  trackEvent,
+  trackOutboundLink,
+} from "@/lib/analytics";
 
 /**
  * Client-side route tracker for GA4 in the App Router.
  *
- * `gtag('config')` (rendered by <GoogleAnalytics />) emits the initial
- * page_view, so we only emit page_view on subsequent client-side navigations
- * to avoid double counting. Tool and category landings additionally emit
- * dedicated funnel events on every visit, including direct landings.
+ * Initial page_view is sent by gtag('config') in <GoogleAnalytics />.
+ * Subsequent navigations call gtag('config', …, { page_path }) per GA4 SPA guidance.
+ * Tool, category, and blog landings additionally emit dedicated funnel events.
  */
 export function AnalyticsTracker({ gaId }: { gaId: string }) {
   const pathname = usePathname();
@@ -41,33 +25,60 @@ export function AnalyticsTracker({ gaId }: { gaId: string }) {
 
     const query = searchParams.toString();
     const path = query ? `${pathname}?${query}` : pathname;
-    const url = `${window.location.origin}${path}`;
 
     if (isFirstRender.current) {
       isFirstRender.current = false;
     } else {
-      gtagEvent("page_view", {
-        page_path: path,
-        page_location: url,
-        page_title: document.title,
-        send_to: gaId,
-      });
+      pageView(path);
     }
 
     const toolMatch = pathname.match(/^\/tools\/([^/]+)$/);
     if (toolMatch) {
-      gtagEvent("tool_view", { tool_slug: toolMatch[1], page_path: path });
+      trackEvent("tool_view", {
+        tool_slug: toolMatch[1],
+        page_path: path,
+        send_to: gaId,
+      });
       return;
     }
 
     const categoryMatch = pathname.match(/^\/category\/([^/]+)$/);
     if (categoryMatch) {
-      gtagEvent("category_view", {
+      trackEvent("category_view", {
         category_slug: categoryMatch[1],
         page_path: path,
+        send_to: gaId,
+      });
+      return;
+    }
+
+    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+      const slug = pathname.startsWith("/blog/")
+        ? pathname.slice("/blog/".length)
+        : undefined;
+      trackEvent("blog_view", {
+        blog_slug: slug,
+        page_path: path,
+        send_to: gaId,
       });
     }
   }, [pathname, searchParams, gaId]);
+
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const anchor = (event.target as HTMLElement).closest("a");
+      if (!anchor || !anchor.href) return;
+
+      const url = new URL(anchor.href, window.location.origin);
+      if (url.origin === window.location.origin) return;
+      if (url.protocol !== "http:" && url.protocol !== "https:") return;
+
+      trackOutboundLink(url.href, anchor.textContent?.trim() || undefined);
+    };
+
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
 
   return null;
 }

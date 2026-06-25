@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { NotFoundAnalytics } from "@/components/not-found-analytics";
 
 export default function NotFound() {
   return (
     <div className="container flex min-h-[60vh] flex-col items-center justify-center gap-4 py-16 text-center">
+      <NotFoundAnalytics />
       <p className="text-7xl font-bold text-primary">404</p>
       <h1 className="text-2xl font-semibold tracking-tight">
         Page not found

@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { trackSearch } from "@/lib/analytics";
 
 const suggestions = [
   { label: "EMI", q: "EMI" },
@@ -12,12 +15,21 @@ const suggestions = [
 ];
 
 export function HeroSearch() {
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const form = event.currentTarget;
+    const input = form.elements.namedItem("q");
+    if (input instanceof HTMLInputElement) {
+      trackSearch(input.value, "hero");
+    }
+  }
+
   return (
     <div className="mx-auto w-full max-w-2xl">
       <form
         action="/tools"
         method="get"
         role="search"
+        onSubmit={onSubmit}
         className="group flex flex-col gap-3 rounded-2xl elevated-card p-3 transition-[border-color,box-shadow] focus-within:border-primary/40 focus-within:shadow-card-hover sm:flex-row sm:items-center sm:gap-2"
       >
         <div className="relative flex-1">
@@ -45,6 +57,7 @@ export function HeroSearch() {
           <Link
             key={s.q}
             href={`/tools?q=${encodeURIComponent(s.q)}`}
+            onClick={() => trackSearch(s.q, "hero_suggestion")}
             className="rounded-full border border-border bg-surface px-3.5 py-2 font-medium shadow-premium transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-foreground"
           >
             {s.label}

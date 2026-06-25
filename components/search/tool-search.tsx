@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import type { ToolMeta } from "@/data/tools/types";
 import { Input } from "@/components/ui/input";
 import { ToolCard } from "@/components/tool/tool-card";
+import { trackSearch } from "@/lib/analytics";
 
 function filterTools(tools: ToolMeta[], query: string): ToolMeta[] {
   const q = query.trim().toLowerCase();
@@ -29,6 +30,13 @@ export function ToolSearch({
     () => filterTools(tools, query),
     [tools, query],
   );
+
+  React.useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 2) return;
+    const timer = setTimeout(() => trackSearch(trimmed, "tools_page"), 600);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   return (
     <div className="space-y-6">
