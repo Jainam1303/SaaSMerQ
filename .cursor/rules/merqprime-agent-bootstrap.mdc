@@ -1,0 +1,18 @@
+---
+description: MerQPrime agent bootstrap — read brain.md and AGENT.md before coding
+alwaysApply: true
+---
+
+# MerQPrime agent bootstrap
+
+Before editing this codebase:
+
+1. Read **`.cursor/AGENT.md`** and **`brain.md`** (repo root).
+2. Use only **relevant sections** of `brain.md` for the task — avoid full-repo scans when unnecessary.
+3. **Reuse** existing components and patterns (`brain.md` §3, §5).
+4. **Preserve** SEO metadata, JSON-LD schema, breadcrumbs, sitemap, and internal linking (`lib/seo.ts`, `lib/related-content.ts`).
+5. **Do not redesign UI** unless the user explicitly requests it.
+6. **Update `brain.md`** (and §20 changelog) after any architectural change.
+7. **Deploy** only when asked; follow `.cursor/AGENT.md` §6.
+
+Project: Next.js 15 App Router · `https://merqprime.in` · ~393 routes · AWS + PM2.
