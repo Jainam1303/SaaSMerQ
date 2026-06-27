@@ -25,7 +25,7 @@ If `brain.md` is outdated after your work, **update the affected sections and §
 | Deploy | AWS EC2, PM2 |
 | Repo | Public GitHub repository, branch `main` |
 | Data | No database — TypeScript data files + markdown in `content/` |
-| Routes | ~393 (tools, conversions, calculators, guides, blog, hubs) |
+| Routes | ~493 (tools, conversions + long-tail, calculators, guides, blog, hubs) |
 
 Full detail: `brain.md` §1–§4.
 
@@ -95,7 +95,7 @@ npm run typecheck
 npm run build
 ```
 
-Expect **~393 routes** after a full build (count may grow with new programmatic pages).
+Expect **~493 routes** after a full build (count may grow with new programmatic pages).
 
 ---
 
@@ -106,7 +106,7 @@ Only deploy when the user asks. Never force-push `main`.
 1. `git push origin main`
 2. On production server: `git pull`, `npm install`, `npm run build`
 3. Restart PM2 application process
-4. Verify build succeeds (~393 routes) and spot-check live URLs
+4. Verify build succeeds (~493 routes) and spot-check live URLs
 
 Production secrets use a server-side `.env.production` file (never in git). Do not document SSH keys, IPs, hostnames, or absolute server paths in this repository.
 

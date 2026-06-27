@@ -15,4 +15,4 @@ Before editing this codebase:
 6. **Update `brain.md`** (and §20 changelog) after any architectural change.
 7. **Deploy** only when asked; follow `.cursor/AGENT.md` §6.
 
-Project: Next.js 15 App Router · `https://merqprime.in` · ~393 routes · AWS + PM2.
+Project: Next.js 15 App Router · `https://merqprime.in` · ~493 routes · AWS + PM2.

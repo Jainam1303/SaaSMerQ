@@ -11,19 +11,20 @@
 
 | Metric | Count |
 |--------|-------|
-| **Total routes (build)** | 393 |
+| **Total routes (build)** | 493 |
 | **Tools** | 45 |
 | **Blog articles** | 27 |
 | **Guides** | 50 |
 | **Calculator landing pages** | 30 |
-| **Conversion pages** | 194 |
+| **Conversion pages (leaf converters)** | 194 |
+| **Long-tail quantity pages** | 100 |
 | **Conversion category hubs** | 8 |
 | **Authority hubs** | 6 |
 | **Categories** | 5 |
-| **Components (`components/`)** | ~105 |
-| **Lib modules (`lib/`)** | ~43 |
+| **Components (`components/`)** | ~106 |
+| **Lib modules (`lib/`)** | ~45 |
 | **Schema JSON-LD builders** | 11 |
-| **Programmatic content pages** | ~283 |
+| **Programmatic content pages** | ~383 |
 
 ---
 
@@ -165,6 +166,8 @@ tailwind.config.ts      # Design tokens extension
 | `data/programmatic/calculators.ts` | 30 calculator landing defs | `calculatorPages`, getters | `app/calculators/[slug]` |
 | `data/seo/ctr-metadata.ts` | SERP title/description overrides | `toolCtrMetadata` | Tool metadata merge |
 | `lib/programmatic/conversions.ts` | 194 conversion page generator | `conversionPages`, getters | `app/conversions/[slug]` |
+| `lib/programmatic/conversion-context.ts` | Per-unit editorial context (use cases, audiences, examples) → differentiates reverse pairs | `UNIT_CONTEXT`, `getUnitContext`, `buildConversionIntro/WhatIs/UseCases` | `conversions.ts` |
+| `lib/programmatic/quantity-conversions.ts` | 100 long-tail "N units to X" page generator (proven-query seeds) | `quantityConversionPages`, getters | `app/conversions/[slug]` |
 | `lib/programmatic/conversion-hubs.ts` | 8 category hub definitions | `CONVERSION_HUBS`, getters | Hub pages |
 | `lib/programmatic/units.ts` | Unit defs + convert math | `CONVERSION_CATEGORIES`, `convertUnits` | Conversions |
 | `lib/programmatic/guides.ts` | Guide markdown loader | `getGuideBySlug`, `getAllGuides` | `app/guides/[slug]` |
@@ -201,6 +204,7 @@ tailwind.config.ts      # Design tokens extension
 | `components/tools/tool-runner.tsx` | Dynamic import registry for 45 tools | Yes |
 | `components/hub/hub-page.tsx` | Authority hub layout | 6 hub routes |
 | `components/programmatic/conversion-hub-page.tsx` | Conversion category hub | 8 hubs |
+| `components/programmatic/quantity-conversion-page.tsx` | Long-tail "N units to X" instant-answer page | 100 quantity pages |
 | `components/programmatic/conversion-calculator.tsx` | Input/output converter UI | Conversion pages |
 | `components/seo/related-content-section.tsx` | Grouped internal links | Tools, conversions, blogs |
 | `components/google-analytics-scripts.tsx` | Server-rendered gtag in `<head>` | Root layout |
@@ -231,15 +235,18 @@ tailwind.config.ts      # Design tokens extension
 | `/tools` | `data/tools` | — |
 | `/tools/[slug]` | `data/tools/definitions/*` + optional `content/tools/*.md` | SoftwareApplication, FAQ, Breadcrumb |
 
-### Programmatic — conversions (202 SSG under `[slug]` + index)
+### Programmatic — conversions (302 SSG under `[slug]` + index)
 
 | Route | Type | Data source |
 |-------|------|-------------|
 | `/conversions` | Index | `getAllConversionHubs()` |
 | `/conversions/length` … `/conversions/data` | Category hub (8) | `lib/programmatic/conversion-hubs.ts` |
 | `/conversions/km-to-miles` etc. | Leaf converter (194) | `lib/programmatic/conversions.ts` |
+| `/conversions/64-acres-to-square-km` etc. | Long-tail quantity page (100) | `lib/programmatic/quantity-conversions.ts` |
 
 Hub slugs: `length`, `weight`, `temperature`, `volume`, `area`, `speed`, `time`, `data`
+
+**Slug routing in `[slug]`** (resolved in order): category hub → quantity page (`^\d`) → leaf converter. Quantity slugs always start with a digit, so they never collide with hub or leaf slugs.
 
 ### Programmatic — calculators (30 SSG)
 
@@ -473,10 +480,11 @@ content/tools/{slug}.md
 
 ### Programmatic SEO patterns
 
-- **Slug:** `{from-slug}-to-{to-slug}` (e.g. `km-to-miles`)
-- **FAQs:** Auto-generated 6 per conversion; `ensureMinFaqs` for calculators
+- **Slug:** `{from-slug}-to-{to-slug}` (e.g. `km-to-miles`); quantity pages `{n}-{from-slug}-to-{to-slug}` (e.g. `64-acres-to-square-km`)
+- **FAQs:** Auto-generated per conversion; `ensureMinFaqs` for calculators
 - **Examples:** Computed from `convertUnits()` at build time
-- **Enriched leaf content:** whatIs, formula, examples, conversion table, common mistakes
+- **Enriched leaf content:** intro, whatIs, use cases, formula, examples, conversion table, common mistakes
+- **Reverse-pair differentiation (`conversion-context.ts`):** intro, whatIs, use cases, examples and FAQs are driven by the **FROM unit's** editorial context (audience, real-world scenarios, example values) plus a deterministic per-slug variant index. This means `km-to-miles` and `miles-to-km` read very differently (different audience, examples, FAQs) — reducing duplicate-content risk on inverse pairs.
 
 ### GSC / admin
 
@@ -497,6 +505,7 @@ content/tools/{slug}.md
 | Generator | File | Output count | Route pattern |
 |-----------|------|--------------|---------------|
 | Conversions | `lib/programmatic/conversions.ts` | 194 | `/conversions/{from}-to-{to}` |
+| Quantity long-tail | `lib/programmatic/quantity-conversions.ts` | 100 | `/conversions/{n}-{from}-to-{to}` |
 | Conversion hubs | `lib/programmatic/conversion-hubs.ts` | 8 | `/conversions/{category}` |
 | Calculators | `data/programmatic/calculators.ts` | 30 | `/calculators/{slug}` |
 | Guides | `content/guides/*.md` | 50 | `/guides/{slug}` |
@@ -526,7 +535,15 @@ content/tools/{slug}.md
 
 1. Add units to `lib/programmatic/units.ts` (`CONVERSION_CATEGORIES` + `toBase`/`fromBase`)
 2. Add hub copy to `lib/programmatic/conversion-hubs.ts`
-3. Pages auto-generate via `generateAll()` in `conversions.ts`
+3. Add per-unit editorial context to `lib/programmatic/conversion-context.ts` (`UNIT_CONTEXT`, keyed `category:unitId`) — without it pages fall back to generic copy
+4. Pages auto-generate via `generateAll()` in `conversions.ts`
+
+### Adding long-tail quantity pages
+
+1. Add a `QuantitySeed` (`{ category, fromUnit, toUnit, quantities[], angle }`) to `SEEDS` in `lib/programmatic/quantity-conversions.ts`
+2. Pages auto-generate; route, sitemap, hub "exact conversions" block and leaf "popular amounts" block pick them up automatically
+3. Base conversion (`{from}-to-{to}`) must exist in `conversions.ts` (it always does for same-category unit pairs)
+4. Quantities should target proven Search Console queries (e.g. `64`, `120`)
 
 ### Adding a new tool
 
@@ -765,14 +782,18 @@ RelatedContentSection (per page type)
   └── lib/related-content.ts bundles cross-links
 ```
 
-**Conversion topical cluster (new):**
+**Conversion topical cluster:**
 
 ```
 /conversions
-  → /conversions/area
-    → /conversions/square-feet-to-acres (ranking query)
-    → siblings + popular block on every leaf
+  → /conversions/area (hub)
+    → /conversions/square-feet-to-acres (leaf converter)        [depth 3]
+    → /conversions/64-acres-to-square-km (long-tail quantity)    [depth 3 — linked from hub]
+      → sibling quantities + base converter + related (depth-safe)
+    → leaf pages also link DOWN to their quantity pages ("Popular amounts")
 ```
+
+**Click depth (≤ 3 maintained):** Home → /conversions → category hub → leaf converter (3). Quantity pages are surfaced directly on the category hub ("Popular exact conversions"), so they are also reachable in 3 clicks. Quantity → base converter and quantity → siblings stay within the same depth band.
 
 ---
 
@@ -797,8 +818,10 @@ RelatedContentSection (per page type)
 
 ### Programmatic scale
 
-- 194 conversion leaves — monitor GSC for thin/duplicate content on reverse pairs (e.g. `km-to-miles` vs `miles-to-km`)
-- Hub pages provide unique editorial layer above leaf pages
+- 194 conversion leaves + 100 long-tail quantity pages
+- Reverse pairs (`km-to-miles` vs `miles-to-km`) are differentiated via `conversion-context.ts` (FROM-unit-driven copy + per-slug variant), substantially reducing duplicate-content risk
+- Quantity pages give unique computed answers, examples and tables per amount (instant-answer intent)
+- Hub pages provide a unique editorial layer above leaf + quantity pages
 
 ### Pagination
 
@@ -817,14 +840,18 @@ RelatedContentSection (per page type)
 - [x] Conversion hub architecture (8 categories, enriched leaves, index)
 - [x] Time + data conversion categories
 - [x] 393 routes live on AWS
+- [x] Sprint 11: reverse-pair differentiation via `conversion-context.ts`
+- [x] Sprint 11: 100 long-tail quantity pages ("N units to X") from proven queries
+- [x] 493 routes (build)
 
 ### In progress / next sprint
 
-- [ ] Differentiate reverse conversion pairs (canonical or unique copy)
 - [ ] Homepage + `/tools` prominent links to `/conversions`
 - [ ] Category-specific guides for time/data
 - [ ] Expand units (fluid oz, nautical miles, metric tons)
-- [ ] GSC monitoring for new conversion hub indexing
+- [ ] Expand quantity seeds to more proven GSC queries (temperature, speed, time)
+- [ ] Add unit-context entries for any future categories (avoid generic fallback)
+- [ ] GSC monitoring for new quantity-page + hub indexing
 
 ### Future ideas
 
@@ -894,6 +921,15 @@ Use private runbooks or local notes for host access — do not store SSH keys, I
 ---
 
 # 20. Recent Changes Log
+
+### 2026-06-27 — Sprint 11: topical authority & long-tail SEO
+
+- **Reverse-pair differentiation:** added `lib/programmatic/conversion-context.ts` (`UNIT_CONTEXT` keyed `category:unitId`) with per-unit use cases, audiences, example values and unit-specific FAQs. `conversions.ts` now builds intro, whatIs, use cases, examples, mistakes and FAQs from the FROM unit + a deterministic per-slug variant, so inverse pairs (e.g. `km-to-miles` vs `miles-to-km`) no longer mirror each other.
+- **Use-cases section** rendered on every leaf converter page.
+- **Long-tail quantity pages:** added `lib/programmatic/quantity-conversions.ts` + `components/programmatic/quantity-conversion-page.tsx`. 100 "N units to X" instant-answer pages from 14 proven-query seeds (acres→sq km incl. 64, ml↔cups incl. 120, cup→ml, l→gal, kg↔lbs, cm/mm→inches, sq ft↔sq m, ha↔acre). Each has unique title, computed result, formula, worked example, nearby-values table, FAQs, JSON-LD and internal links.
+- **Routing:** `app/conversions/[slug]` resolves hub → quantity (`^\d`) → leaf; `generateStaticParams` + `app/sitemap.ts` include quantity slugs.
+- **Internal linking / depth ≤ 3:** category hubs gained a "Popular exact conversions" block (hub → quantity = depth 3); leaf pages link down to their quantity pages; quantity pages link to base converter, siblings and related conversions.
+- **Build:** 393 → **493 routes** (+100). Typecheck, lint and SEO audits clean (link issues 0, internal-linking score 100/100).
 
 ### 2026-06-27 — AI bootstrap + project brain
 

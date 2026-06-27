@@ -14,6 +14,16 @@ import {
   isConversionCategory,
 } from "@/lib/programmatic/conversion-hubs";
 import {
+  getAllQuantityConversionSlugs,
+  getQuantityConversionBySlug,
+  getQuantityPagesForConversion,
+  isQuantityConversionSlug,
+} from "@/lib/programmatic/quantity-conversions";
+import {
+  QuantityConversionView,
+  buildQuantityConversionMetadata,
+} from "@/components/programmatic/quantity-conversion-page";
+import {
   absoluteUrl,
   breadcrumbJsonLd,
   buildMetadata,
@@ -39,6 +49,7 @@ export function generateStaticParams() {
   return [
     ...getAllConversionHubSlugs().map((slug) => ({ slug })),
     ...getAllConversionSlugs().map((slug) => ({ slug })),
+    ...getAllQuantityConversionSlugs().map((slug) => ({ slug })),
   ];
 }
 
@@ -52,6 +63,11 @@ export async function generateMetadata({
   if (isConversionCategory(slug)) {
     const hub = getConversionHub(slug);
     if (hub) return buildConversionHubMetadata(hub);
+  }
+
+  if (isQuantityConversionSlug(slug)) {
+    const qty = getQuantityConversionBySlug(slug);
+    if (qty) return buildQuantityConversionMetadata(qty);
   }
 
   const page = getConversionBySlug(slug);
@@ -78,6 +94,11 @@ export default async function ConversionPage({
     if (hub) return <ConversionHubPage hub={hub} />;
   }
 
+  if (isQuantityConversionSlug(slug)) {
+    const qty = getQuantityConversionBySlug(slug);
+    if (qty) return <QuantityConversionView page={qty} />;
+  }
+
   const page = getConversionBySlug(slug);
   if (!page) notFound();
 
@@ -85,6 +106,7 @@ export default async function ConversionPage({
   const sameCategory = getSameCategoryConversions(slug, 8);
   const popular = getPopularConversions(8).filter((p) => p.slug !== slug);
   const relatedContent = getRelatedContentForConversion(slug);
+  const quantityPages = getQuantityPagesForConversion(slug);
   const categoryPath = `/conversions/${page.category}`;
 
   const crumbs = [
@@ -155,6 +177,22 @@ export default async function ConversionPage({
           <p className="leading-relaxed text-muted-foreground">{page.whatIs}</p>
         </section>
 
+        {page.useCases.length > 0 && (
+          <section className="max-w-3xl space-y-4">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Where you&apos;ll use {page.fromShort} to {page.toShort}
+            </h2>
+            <ul className="space-y-2 text-muted-foreground">
+              {page.useCases.map((useCase) => (
+                <li key={useCase} className="flex gap-2">
+                  <span className="text-foreground">•</span>
+                  {useCase}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="max-w-3xl space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">Formula</h2>
           <p className="rounded-lg border border-border bg-muted/30 px-4 py-3 font-mono text-sm">
@@ -218,6 +256,25 @@ export default async function ConversionPage({
             ))}
           </ul>
         </section>
+
+        {quantityPages.length > 0 && (
+          <section>
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">
+              Popular {page.fromShort} to {page.toShort} amounts
+            </h2>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {quantityPages.map((q) => (
+                <Link
+                  key={q.slug}
+                  href={q.path}
+                  className="rounded-md border border-border/70 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+                >
+                  {q.quantity} {q.fromShort} → {q.toShort}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {related.length > 0 && (
           <section>

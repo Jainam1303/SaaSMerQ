@@ -8,6 +8,14 @@ import {
   convertUnits,
   getConversionFormula,
 } from "./units";
+import {
+  buildConversionIntro,
+  buildConversionWhatIs,
+  buildUseCases,
+  getUnitContext,
+  variantIndex,
+  type UnitContext,
+} from "./conversion-context";
 
 function buildSlug(fromSlug: string, toSlug: string): string {
   return `${fromSlug}-to-${toSlug}`;
@@ -45,22 +53,11 @@ function buildConversionTable(
   }));
 }
 
-function buildWhatIs(
-  categoryLabel: string,
-  fromLabel: string,
-  toLabel: string,
-  fromShort: string,
-  toShort: string,
-  formula: string,
-): string {
-  const noun = categoryLabel.toLowerCase();
-  return `${fromLabel} and ${toLabel} are both units of ${noun}. Converting ${fromShort} to ${toShort} means expressing the same ${noun} measurement in a different unit without changing the underlying quantity. This is useful whenever a value is given in one system but you need it in another — for travel, study, engineering, cooking or international specifications. The relationship is fixed and linear, so a single conversion factor (${formula}) maps every ${fromShort} value to its exact ${toShort} equivalent.`;
-}
-
 function buildCommonMistakes(
   category: ConversionCategory,
   fromShort: string,
   toShort: string,
+  slug: string,
 ): string[] {
   const specific: Record<ConversionCategory, string> = {
     length:
@@ -81,9 +78,17 @@ function buildCommonMistakes(
       "Mixing bits and bytes — 1 byte = 8 bits, and storage is usually quoted in bytes while bandwidth is often in bits.",
   };
 
-  return [
+  const directionTips = [
     `Converting in the wrong direction — multiplying when you should divide (or vice versa). Sanity-check whether ${toShort} should come out larger or smaller than ${fromShort}.`,
+    `Reading the result the wrong way round. Confirm the answer is in ${toShort}, not ${fromShort}, before you rely on it.`,
+  ];
+  const precisionTips = [
     `Rounding too early. Keep full precision during the calculation and round only the final ${toShort} value.`,
+    `Truncating instead of rounding, which compounds error across larger ${fromShort} values.`,
+  ];
+  return [
+    directionTips[variantIndex(slug, directionTips.length)],
+    precisionTips[variantIndex(slug + "p", precisionTips.length)],
     specific[category],
   ];
 }
@@ -92,36 +97,41 @@ function buildFaqs(
   fromShort: string,
   toShort: string,
   formula: string,
-  category: ConversionPage["category"],
+  slug: string,
+  fromCtx: UnitContext,
 ): ConversionPage["faqs"] {
-  return [
+  const useCase = fromCtx.useCases[variantIndex(slug, fromCtx.useCases.length)];
+  const faqs: ConversionPage["faqs"] = [
     {
       question: `How do I convert ${fromShort} to ${toShort}?`,
-      answer: `Multiply your ${fromShort} value by the conversion factor, or use the formula: ${formula}. Our calculator applies this instantly in your browser.`,
+      answer: `Multiply your ${fromShort} value by the conversion factor, or use the formula: ${formula}. The calculator above applies this instantly in your browser.`,
     },
     {
       question: `What is the formula for ${fromShort} to ${toShort}?`,
       answer: `The standard conversion is: ${formula}. Enter any ${fromShort} value above and the calculator returns the equivalent in ${toShort} immediately.`,
     },
+  ];
+
+  // Unit-specific FAQ from the source unit's context (differs by direction).
+  if (fromCtx.faq) faqs.push(fromCtx.faq);
+
+  faqs.push(
     {
       question: `How do I convert ${toShort} back to ${fromShort}?`,
-      answer: `Reverse the conversion by swapping the units in the calculator, or visit our dedicated ${toShort}-to-${fromShort} page for the inverse formula and examples.`,
+      answer: `Swap the units in the calculator, or open our dedicated ${toShort}-to-${fromShort} page for the inverse formula, examples and table.`,
     },
     {
-      question: `Is this ${fromShort} to ${toShort} converter accurate?`,
+      question: `When would I need to convert ${fromShort} to ${toShort}?`,
+      answer: `A common situation is ${useCase}. It also helps ${fromCtx.audience}. Bookmark this page for quick ${fromShort} to ${toShort} lookups.`,
+    },
+    {
+      question: `Is this ${fromShort} to ${toShort} converter accurate, and is my data private?`,
       answer:
-        "Yes. Conversions use standard international factors and precise floating-point math. Results are suitable for everyday, engineering and travel use.",
+        "Yes on both counts. Conversions use standard international factors and precise floating-point math, and everything runs locally in your browser — nothing you type is uploaded.",
     },
-    {
-      question: `When would I need a ${category} conversion like ${fromShort} to ${toShort}?`,
-      answer: `Common uses include travel planning, shipping labels, school coursework, recipe scaling and reading international product specs. Bookmark this page for quick ${fromShort} to ${toShort} lookups.`,
-    },
-    {
-      question: `Is my data sent to a server?`,
-      answer:
-        "No. The conversion runs locally in your browser on MerQPrime. Values are never uploaded.",
-    },
-  ];
+  );
+
+  return faqs;
 }
 
 function buildExamples(
@@ -130,9 +140,9 @@ function buildExamples(
   toId: string,
   fromShort: string,
   toShort: string,
+  fromCtx: UnitContext,
 ): ConversionPage["examples"] {
-  const inputs =
-    category === "temperature" ? [0, 25, 100] : [1, 10, 100];
+  const inputs = fromCtx.exampleValues.slice(0, 3);
   return inputs.map((input) => {
     const output = convertUnits(category, fromId, toId, input);
     const rounded =
@@ -188,6 +198,8 @@ function buildPage(
   const slug = buildSlug(from.slug, to.slug);
   const formula = getConversionFormula(category, from, to);
   const categoryLabel = CONVERSION_CATEGORIES[category].label;
+  const fromCtx = getUnitContext(category, from.id);
+  const toCtx = getUnitContext(category, to.id);
   const title = `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter`;
   const description = `Convert ${from.short} to ${to.short} instantly. Free ${from.short} to ${to.short} calculator with formula, examples and FAQs.`;
   return {
@@ -213,22 +225,30 @@ function buildPage(
       `${category} converter`,
     ],
     formula,
-    whatIs: buildWhatIs(
+    whatIs: buildConversionWhatIs({
+      slug,
       categoryLabel,
-      from.label.split(" (")[0],
-      to.label.split(" (")[0],
-      from.short,
-      to.short,
+      fromLabel: from.label.split(" (")[0],
+      toLabel: to.label.split(" (")[0],
+      fromShort: from.short,
+      toShort: to.short,
       formula,
-    ),
-    examples: buildExamples(category, from.id, to.id, from.short, to.short),
+      fromCtx,
+    }),
+    useCases: buildUseCases({ fromCtx, toCtx, slug }),
+    examples: buildExamples(category, from.id, to.id, from.short, to.short, fromCtx),
     conversionTable: buildConversionTable(category, from.id, to.id),
-    commonMistakes: buildCommonMistakes(category, from.short, to.short),
-    faqs: buildFaqs(from.short, to.short, formula, category),
+    commonMistakes: buildCommonMistakes(category, from.short, to.short, slug),
+    faqs: buildFaqs(from.short, to.short, formula, slug, fromCtx),
     relatedSlugs: [],
     toolSlugs: categoryTools(category),
     hubSlug: categoryHub(),
-    intro: `Need to convert ${from.short} to ${to.short}? This page gives you an instant calculator, the exact conversion formula, a full conversion table, worked examples and answers to common questions. Whether you are studying, travelling, shipping goods or checking specifications, accurate unit conversion saves costly mistakes.`,
+    intro: buildConversionIntro({
+      slug,
+      fromShort: from.short,
+      toShort: to.short,
+      fromCtx,
+    }),
   };
 }
 

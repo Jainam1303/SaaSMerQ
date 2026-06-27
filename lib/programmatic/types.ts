@@ -33,6 +33,7 @@ export interface ConversionPage {
   keywords: string[];
   formula: string;
   whatIs: string;
+  useCases: string[];
   examples: { input: number; output: number; label: string }[];
   conversionTable: ConversionTableRow[];
   commonMistakes: string[];
@@ -41,6 +42,40 @@ export interface ConversionPage {
   toolSlugs: [string, string];
   hubSlug: string;
   intro: string;
+}
+
+/**
+ * A long-tail "N units to X" page (e.g. `64-acres-to-square-km`). Generated
+ * from curated proven-query seeds in `quantity-conversions.ts`. Each maps a
+ * specific quantity of a base conversion to an instant-answer page.
+ */
+export interface QuantityConversionPage {
+  slug: string;
+  path: string;
+  category: ConversionCategory;
+  categoryLabel: string;
+  baseSlug: string;
+  fromUnit: string;
+  toUnit: string;
+  fromShort: string;
+  toShort: string;
+  quantity: number;
+  result: number;
+  title: string;
+  heading: string;
+  seoTitle: string;
+  description: string;
+  metaDescription: string;
+  keywords: string[];
+  formula: string;
+  intro: string;
+  explanation: string;
+  example: string;
+  nearbyTable: ConversionTableRow[];
+  faqs: FaqItem[];
+  toolSlugs: [string, string];
+  hubSlug: string;
+  siblingQuantities: number[];
 }
 
 export interface ConversionHubFormula {

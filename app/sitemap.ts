@@ -3,6 +3,7 @@ import { getAllPosts } from "@/lib/blog";
 import { getAllHubs } from "@/lib/hubs";
 import { getAllConversionSlugs } from "@/lib/programmatic/conversions";
 import { getAllConversionHubSlugs } from "@/lib/programmatic/conversion-hubs";
+import { getAllQuantityConversionSlugs } from "@/lib/programmatic/quantity-conversions";
 import { getAllCalculatorSlugs } from "@/data/programmatic/calculators";
 import { getAllGuideSlugs } from "@/lib/programmatic/guides";
 import { tools } from "@/data/tools";
@@ -118,6 +119,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }),
   );
 
+  const quantityConversionRoutes: MetadataRoute.Sitemap =
+    getAllQuantityConversionSlugs().map((slug) => ({
+      url: `${siteConfig.url}/conversions/${slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.68,
+    }));
+
   const calculatorRoutes: MetadataRoute.Sitemap = getAllCalculatorSlugs().map(
     (slug) => ({
       url: `${siteConfig.url}/calculators/${slug}`,
@@ -143,6 +152,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...conversionIndexRoute,
     ...conversionHubRoutes,
     ...conversionRoutes,
+    ...quantityConversionRoutes,
     ...calculatorRoutes,
     ...guideRoutes,
   ];

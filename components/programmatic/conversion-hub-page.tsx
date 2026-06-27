@@ -6,6 +6,7 @@ import {
   getConversionBySlug,
   getConversionsByCategory,
 } from "@/lib/programmatic/conversions";
+import { getFeaturedQuantityPages } from "@/lib/programmatic/quantity-conversions";
 import { getToolBySlug } from "@/data/tools";
 import { getGuideBySlug } from "@/lib/programmatic/guides";
 import {
@@ -46,6 +47,8 @@ export function ConversionHubPage({ hub }: { hub: ConversionHub }) {
   const guides = hub.relatedGuideSlugs
     .map((slug) => getGuideBySlug(slug))
     .filter((g): g is NonNullable<typeof g> => Boolean(g));
+
+  const exactConversions = getFeaturedQuantityPages(hub.category, 12);
 
   const crumbs = [
     { name: "Home", href: "/" },
@@ -174,6 +177,28 @@ export function ConversionHubPage({ hub }: { hub: ConversionHub }) {
             ))}
           </div>
         </section>
+
+        {exactConversions.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Popular exact {hub.label.toLowerCase()} conversions
+            </h2>
+            <p className="max-w-3xl text-muted-foreground">
+              Instant answers for the specific amounts people search most.
+            </p>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {exactConversions.map((q) => (
+                <Link
+                  key={q.slug}
+                  href={q.path}
+                  className="rounded-md border border-border/70 px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+                >
+                  {q.quantity} {q.fromShort} to {q.toShort}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {(tools.length > 0 || guides.length > 0) && (
           <section className="grid gap-8 border-t border-border/60 pt-10 md:grid-cols-2">
