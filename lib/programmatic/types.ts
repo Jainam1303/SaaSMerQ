@@ -6,12 +6,20 @@ export type ConversionCategory =
   | "temperature"
   | "volume"
   | "area"
-  | "speed";
+  | "speed"
+  | "time"
+  | "data";
+
+export interface ConversionTableRow {
+  input: number;
+  output: number;
+}
 
 export interface ConversionPage {
   slug: string;
   path: string;
   category: ConversionCategory;
+  categoryLabel: string;
   fromUnit: string;
   toUnit: string;
   fromLabel: string;
@@ -24,12 +32,39 @@ export interface ConversionPage {
   metaDescription: string;
   keywords: string[];
   formula: string;
+  whatIs: string;
   examples: { input: number; output: number; label: string }[];
+  conversionTable: ConversionTableRow[];
+  commonMistakes: string[];
   faqs: FaqItem[];
   relatedSlugs: string[];
   toolSlugs: [string, string];
   hubSlug: string;
   intro: string;
+}
+
+export interface ConversionHubFormula {
+  label: string;
+  expression: string;
+}
+
+export interface ConversionHub {
+  category: ConversionCategory;
+  slug: string;
+  path: string;
+  label: string;
+  title: string;
+  seoTitle: string;
+  description: string;
+  metaDescription: string;
+  keywords: string[];
+  intro: string[];
+  formulas: ConversionHubFormula[];
+  examples: string[];
+  faqs: FaqItem[];
+  popularSlugs: string[];
+  relatedToolSlugs: string[];
+  relatedGuideSlugs: string[];
 }
 
 export interface CalculatorLandingPage {

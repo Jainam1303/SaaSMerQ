@@ -91,6 +91,28 @@ export const CONVERSION_CATEGORIES: Record<
       { id: "knot", label: "Knot", short: "knots", slug: "knots" },
     ],
   },
+  time: {
+    label: "Time",
+    units: [
+      { id: "ms", label: "Millisecond (ms)", short: "ms", slug: "milliseconds" },
+      { id: "s", label: "Second (s)", short: "seconds", slug: "seconds" },
+      { id: "min", label: "Minute (min)", short: "minutes", slug: "minutes" },
+      { id: "hr", label: "Hour (hr)", short: "hours", slug: "hours" },
+      { id: "day", label: "Day", short: "days", slug: "days" },
+      { id: "week", label: "Week", short: "weeks", slug: "weeks" },
+    ],
+  },
+  data: {
+    label: "Data",
+    units: [
+      { id: "bit", label: "Bit", short: "bits", slug: "bits" },
+      { id: "byte", label: "Byte (B)", short: "bytes", slug: "bytes" },
+      { id: "kb", label: "Kilobyte (KB)", short: "KB", slug: "kb" },
+      { id: "mb", label: "Megabyte (MB)", short: "MB", slug: "mb" },
+      { id: "gb", label: "Gigabyte (GB)", short: "GB", slug: "gb" },
+      { id: "tb", label: "Terabyte (TB)", short: "TB", slug: "tb" },
+    ],
+  },
 };
 
 function toBase(category: ConversionCategory, unit: string, value: number): number {
@@ -150,6 +172,28 @@ function toBase(category: ConversionCategory, unit: string, value: number): numb
         mph: 0.44704,
         ms: 1,
         knot: 0.514444,
+      };
+      return value * (f[unit] ?? 1);
+    }
+    case "time": {
+      const f: Record<string, number> = {
+        ms: 0.001,
+        s: 1,
+        min: 60,
+        hr: 3600,
+        day: 86400,
+        week: 604800,
+      };
+      return value * (f[unit] ?? 1);
+    }
+    case "data": {
+      const f: Record<string, number> = {
+        bit: 0.125,
+        byte: 1,
+        kb: 1e3,
+        mb: 1e6,
+        gb: 1e9,
+        tb: 1e12,
       };
       return value * (f[unit] ?? 1);
     }
@@ -216,6 +260,28 @@ function fromBase(category: ConversionCategory, unit: string, base: number): num
         mph: 0.44704,
         ms: 1,
         knot: 0.514444,
+      };
+      return base / (f[unit] ?? 1);
+    }
+    case "time": {
+      const f: Record<string, number> = {
+        ms: 0.001,
+        s: 1,
+        min: 60,
+        hr: 3600,
+        day: 86400,
+        week: 604800,
+      };
+      return base / (f[unit] ?? 1);
+    }
+    case "data": {
+      const f: Record<string, number> = {
+        bit: 0.125,
+        byte: 1,
+        kb: 1e3,
+        mb: 1e6,
+        gb: 1e9,
+        tb: 1e12,
       };
       return base / (f[unit] ?? 1);
     }

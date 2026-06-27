@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { getAllHubs } from "@/lib/hubs";
 import { getAllConversionSlugs } from "@/lib/programmatic/conversions";
+import { getAllConversionHubSlugs } from "@/lib/programmatic/conversion-hubs";
 import { getAllCalculatorSlugs } from "@/data/programmatic/calculators";
 import { getAllGuideSlugs } from "@/lib/programmatic/guides";
 import { tools } from "@/data/tools";
@@ -91,6 +92,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
+  const conversionIndexRoute: MetadataRoute.Sitemap = [
+    {
+      url: `${siteConfig.url}/conversions`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+  ];
+
+  const conversionHubRoutes: MetadataRoute.Sitemap =
+    getAllConversionHubSlugs().map((slug) => ({
+      url: `${siteConfig.url}/conversions/${slug}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
   const conversionRoutes: MetadataRoute.Sitemap = getAllConversionSlugs().map(
     (slug) => ({
       url: `${siteConfig.url}/conversions/${slug}`,
@@ -122,6 +140,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...categoryRoutes,
     ...toolRoutes,
     ...blogRoutes,
+    ...conversionIndexRoute,
+    ...conversionHubRoutes,
     ...conversionRoutes,
     ...calculatorRoutes,
     ...guideRoutes,

@@ -244,6 +244,48 @@ export function guideArticleJsonLd({
   };
 }
 
+export function collectionPageJsonLd({
+  title,
+  description,
+  path,
+}: {
+  title: string;
+  description: string;
+  path: string;
+}) {
+  const url = absoluteUrl(path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteConfig.brandName,
+      url: siteConfig.url,
+    },
+  };
+}
+
+export function itemListJsonLd(
+  items: { name: string; path: string }[],
+  listName?: string,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: listName,
+    numberOfItems: items.length,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(item.path),
+    })),
+  };
+}
+
 export function programmaticSoftwareJsonLd({
   name,
   description,

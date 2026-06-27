@@ -16,6 +16,7 @@ const resourceLinks = [
   { href: "/blog", label: "Blog" },
   { href: "/launch", label: "Launch Hub" },
   { href: "/free-online-tools", label: "Free Online Tools" },
+  { href: "/conversions", label: "Unit Converters" },
   { href: "/finance-tools", label: "Finance Tools" },
   { href: "/investment-tools", label: "Investment Tools" },
   { href: "/gst-tools", label: "GST Tools" },
