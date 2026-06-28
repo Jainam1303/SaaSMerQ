@@ -21,6 +21,8 @@ relatedSlugs:
 
 Equated Monthly Instalment (EMI) is how most Indians repay loans — from home mortgages to car finance and personal credit. Understanding how EMI is calculated helps you compare offers, plan cash flow and avoid over-borrowing.
 
+> **Quick answer:** EMI = P × r × (1+r)^n ÷ ((1+r)^n − 1), where P is the loan amount, r is the monthly interest rate (annual ÷ 12) and n is the number of months. For example, ₹25,00,000 at 8.5% for 20 years works out to an EMI of about ₹21,696 per month.
+
 ## What is EMI?
 
 EMI is a fixed monthly payment that includes both principal repayment and interest. Early in the loan, a larger share goes to interest; over time, more goes toward principal. This is called a reducing-balance schedule.

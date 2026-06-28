@@ -48,6 +48,8 @@ export interface ConversionPage {
   commonQuestions: FaqItem[];
   howCalculated: { steps: string[]; precision: string };
   unitHistory: { name: string; system: string; text: string }[];
+  // Sprint 12 Phase 2 — featured-snippet answer block (40–60 words)
+  quickAnswer: string;
 }
 
 /**

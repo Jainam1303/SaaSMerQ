@@ -50,5 +50,20 @@ export const gstCalculator: ToolMeta = {
       answer:
         "The standard Indian slabs of 5%, 12%, 18% and 28% are built in, and you can also enter a custom rate.",
     },
+    {
+      question: "How do I remove GST from an inclusive price?",
+      answer:
+        "Use base price = gross price × 100 ÷ (100 + GST rate). For example, ₹1,180 inclusive of 18% GST gives a base price of ₹1,000 and ₹180 GST. This is also called the reverse GST or GST back-calculation method.",
+    },
+    {
+      question: "When is IGST charged instead of CGST and SGST?",
+      answer:
+        "IGST applies to inter-state supplies — where the supplier and place of supply are in different states (or for imports). For intra-state supplies within the same state, the same total tax is split equally into CGST and SGST.",
+    },
+    {
+      question: "Which GST rate applies to my product?",
+      answer:
+        "Essentials are often 0% or 5%, standard goods and services fall under 12% or 18%, and luxury or sin goods attract 28%. Confirm the exact rate using your product's HSN code (goods) or SAC code (services).",
+    },
   ],
 };

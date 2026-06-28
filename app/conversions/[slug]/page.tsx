@@ -156,6 +156,16 @@ export default async function ConversionPage({
         <EditorialMeta />
       </header>
 
+      <section
+        aria-label={`Quick answer: ${page.fromShort} to ${page.toShort}`}
+        className="mt-8 rounded-2xl border border-primary/30 bg-primary/5 p-5 md:p-6"
+      >
+        <p className="section-eyebrow text-primary">Quick answer</p>
+        <p className="mt-2 max-w-3xl text-base leading-relaxed text-foreground md:text-lg">
+          {page.quickAnswer}
+        </p>
+      </section>
+
       <AdSlot format="leaderboard" className="my-8" />
 
       <section className="tool-surface p-6 md:p-8">

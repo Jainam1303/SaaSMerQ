@@ -195,6 +195,7 @@ export function webPageJsonLd({
     name: title,
     description,
     url,
+    inLanguage: siteConfig.locale.replace("_", "-"),
     isPartOf: {
       "@type": "WebSite",
       name: siteConfig.brandName,
@@ -260,6 +261,7 @@ export function collectionPageJsonLd({
     name: title,
     description,
     url,
+    inLanguage: siteConfig.locale.replace("_", "-"),
     isPartOf: {
       "@type": "WebSite",
       name: siteConfig.brandName,

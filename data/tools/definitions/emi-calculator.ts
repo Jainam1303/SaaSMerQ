@@ -52,5 +52,20 @@ export const emiCalculator: ToolMeta = {
       answer:
         "An amortization schedule shows how each EMI is split between principal repayment and interest. Early months have higher interest; later months repay more principal.",
     },
+    {
+      question: "What is the EMI formula with an example?",
+      answer:
+        "EMI = P × r × (1+r)^n / ((1+r)^n − 1). For a ₹10,00,000 loan at 9% annual interest over 20 years (n = 240 months, r = 0.0075), the EMI works out to about ₹8,997 per month, with roughly ₹11.6 lakh paid as total interest.",
+    },
+    {
+      question: "What is the difference between reducing balance and flat rate EMI?",
+      answer:
+        "Reducing balance charges interest only on the outstanding principal, so interest falls each month — this is what most Indian home, car and personal loans use. A flat rate charges interest on the full original amount for the whole tenure, making the effective rate almost double. This calculator uses the reducing-balance method.",
+    },
+    {
+      question: "How can I lower my total interest?",
+      answer:
+        "Choose a shorter tenure, make a larger down payment to reduce principal, or prepay lump sums when possible. Even one extra EMI a year can cut years off a long home loan and save significant interest.",
+    },
   ],
 };

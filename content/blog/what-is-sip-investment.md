@@ -9,12 +9,20 @@ keywords:
   - mutual fund sip
   - sip calculator
 toolSlug: sip-calculator
+relatedToolSlugs:
+  - ppf-calculator
+  - fd-calculator
+  - profit-margin-calculator
 relatedSlugs:
   - how-to-calculate-emi
   - percentage-calculation-guide
+  - ppf-calculator-guide
+  - fd-calculator-guide
 ---
 
 A Systematic Investment Plan (SIP) lets you invest a fixed amount in a mutual fund at regular intervals — usually monthly. It is one of the most popular ways Indians build long-term wealth without timing the market.
+
+> **Quick answer:** A SIP invests a fixed sum (say ₹5,000) into a mutual fund every month. You buy more units when prices fall and fewer when they rise — rupee-cost averaging — while compounding grows your returns. A ₹5,000 monthly SIP at 12% for 10 years (₹6 lakh invested) can grow to about ₹11.6 lakh.
 
 ## How SIP works
 

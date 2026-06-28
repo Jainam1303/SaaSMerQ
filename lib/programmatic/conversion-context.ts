@@ -1271,3 +1271,39 @@ export function buildUnitHistory(
     { name: toEeat.name, system: toEeat.system, text: toEeat.history },
   ];
 }
+
+function answerNumber(value: number): string {
+  if (!Number.isFinite(value)) return "0";
+  const abs = Math.abs(value);
+  if (abs !== 0 && (abs < 0.001 || abs >= 1e7)) {
+    return value.toExponential(3);
+  }
+  return Number(value.toPrecision(6)).toString();
+}
+
+/**
+ * 40–60 word "quick answer" block engineered for Google featured snippets and
+ * the People-Also-Ask box. Leads with the 1-unit equivalence, states the
+ * operation, gives one worked value and notes the inverse for entity coverage.
+ */
+export function buildQuickAnswer(opts: {
+  category: ConversionCategory;
+  fromUnit: string;
+  toUnit: string;
+  fromShort: string;
+  toShort: string;
+  formula: string;
+}): string {
+  const { category, fromUnit, toUnit, fromShort, toShort, formula } = opts;
+
+  if (category === "temperature") {
+    const sample = 20;
+    const out = convertUnits(category, fromUnit, toUnit, sample);
+    return `To convert ${fromShort} to ${toShort}, apply ${formula}. The two scales differ by both a multiplier and an offset, so you cannot simply multiply. For example, ${sample}${fromShort} = ${answerNumber(out)}${toShort}. The reverse calculation, ${toShort} to ${fromShort}, uses the inverse of the same formula.`;
+  }
+
+  const one = convertUnits(category, fromUnit, toUnit, 1);
+  const ten = convertUnits(category, fromUnit, toUnit, 10);
+  const factor = answerNumber(one);
+  return `1 ${fromShort} equals ${factor} ${toShort}. To convert ${fromShort} to ${toShort}, multiply the ${fromShort} value by ${factor} — so 10 ${fromShort} = ${answerNumber(ten)} ${toShort}. This factor is exact, and the reverse conversion (${toShort} to ${fromShort}) simply divides by ${factor} instead of multiplying.`;
+}

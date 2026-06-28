@@ -50,5 +50,20 @@ export const profitMarginCalculator: ToolMeta = {
       answer:
         "Varies by industry — retail may target 20–50% gross margin, SaaS often higher. Compare against competitors and ensure net margin covers rent, salaries and taxes.",
     },
+    {
+      question: "How do I price a product for a target margin?",
+      answer:
+        "Selling price = Cost ÷ (1 − target margin). For a ₹100 cost item and a 40% target margin, the selling price is ₹100 ÷ 0.60 = ₹166.67. Setting price by margin (not markup) guarantees the profit share you want on revenue.",
+    },
+    {
+      question: "How do I convert markup to margin?",
+      answer:
+        "Margin = markup ÷ (1 + markup). A 50% markup equals a 33.3% margin, and a 100% markup equals a 50% margin. They describe the same profit from different bases — cost for markup, selling price for margin.",
+    },
+    {
+      question: "What is the difference between gross and net profit margin?",
+      answer:
+        "Gross margin counts only the direct cost of goods sold. Net profit margin subtracts every expense — operating costs, salaries, rent, interest and tax — so it reflects the true bottom-line profit per rupee of revenue.",
+    },
   ],
 };

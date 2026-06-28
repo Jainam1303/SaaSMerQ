@@ -12,6 +12,7 @@ import {
   buildConversionIntro,
   buildConversionWhatIs,
   buildHowCalculated,
+  buildQuickAnswer,
   buildRealWorldUses,
   buildUnitHistory,
   buildUseCases,
@@ -226,6 +227,89 @@ function pickRelated(
     .map((p) => p.slug);
 }
 
+/**
+ * CTR-optimized title/description overrides for the highest-demand conversion
+ * leaves (Sprint 12 Phase 2). These pages already earn impressions around SERP
+ * positions 11–30; sharper titles with the exact factor and intent-specific
+ * descriptions lift click-through without changing the page or its schema.
+ * Any slug not listed keeps the generic generated metadata.
+ */
+const CONVERSION_CTR: Record<
+  string,
+  { seoTitle: string; metaDescription: string }
+> = {
+  "km-to-miles": {
+    seoTitle: "Km to Miles Converter — 1 km = 0.621 Miles | MerQPrime",
+    metaDescription:
+      "Convert kilometres to miles instantly. 1 km = 0.621371 miles. Free km to miles calculator with formula and chart for road trips, running and GPS distances.",
+  },
+  "miles-to-km": {
+    seoTitle: "Miles to Km Converter — 1 Mile = 1.609 Km | MerQPrime",
+    metaDescription:
+      "Convert miles to kilometres instantly. 1 mile = 1.60934 km. Free miles to km calculator with formula and chart for metric, science and study work.",
+  },
+  "kg-to-lbs": {
+    seoTitle: "Kg to Lbs Converter — 1 kg = 2.205 Pounds | MerQPrime",
+    metaDescription:
+      "Convert kilograms to pounds instantly. 1 kg = 2.20462 lb. Free kg to lbs calculator with formula and weight chart for fitness, shipping and recipes.",
+  },
+  "lbs-to-kg": {
+    seoTitle: "Lbs to Kg Converter — 1 Pound = 0.454 Kg | MerQPrime",
+    metaDescription:
+      "Convert pounds to kilograms instantly. 1 lb = 0.453592 kg. Free lbs to kg calculator with formula and chart for body weight, gym plates and parcels.",
+  },
+  "cm-to-inches": {
+    seoTitle: "Cm to Inches Converter — 1 cm = 0.394 in | MerQPrime",
+    metaDescription:
+      "Convert centimetres to inches instantly. 1 cm = 0.393701 in. Free cm to inches calculator with formula and chart for height, screens and clothing sizes.",
+  },
+  "inches-to-cm": {
+    seoTitle: "Inches to Cm Converter — 1 inch = 2.54 cm | MerQPrime",
+    metaDescription:
+      "Convert inches to centimetres instantly. 1 inch = 2.54 cm exactly. Free inches to cm calculator with formula and chart for height, TVs and DIY measurements.",
+  },
+  "celsius-to-fahrenheit": {
+    seoTitle: "Celsius to Fahrenheit — °C to °F Formula & Chart | MerQPrime",
+    metaDescription:
+      "Convert Celsius to Fahrenheit instantly. °F = (°C × 9/5) + 32, so 37°C = 98.6°F. Free °C to °F calculator with formula and temperature chart.",
+  },
+  "fahrenheit-to-celsius": {
+    seoTitle: "Fahrenheit to Celsius — °F to °C Formula & Chart | MerQPrime",
+    metaDescription:
+      "Convert Fahrenheit to Celsius instantly. °C = (°F − 32) × 5/9, so 98.6°F = 37°C. Free °F to °C calculator with formula and temperature chart.",
+  },
+  "meters-to-feet": {
+    seoTitle: "Meters to Feet Converter — 1 m = 3.281 ft | MerQPrime",
+    metaDescription:
+      "Convert metres to feet instantly. 1 m = 3.28084 ft. Free meters to feet calculator with formula and chart for height, rooms and construction plans.",
+  },
+  "feet-to-meters": {
+    seoTitle: "Feet to Meters Converter — 1 ft = 0.305 m | MerQPrime",
+    metaDescription:
+      "Convert feet to metres instantly. 1 ft = 0.3048 m exactly. Free feet to meters calculator with formula and chart for height, land and building plans.",
+  },
+  "ml-to-cups": {
+    seoTitle: "ML to Cups Converter — Kitchen Measurement Chart | MerQPrime",
+    metaDescription:
+      "Convert millilitres to US cups instantly. 240 ml is about 1 cup. Free ml to cups calculator with formula and chart for recipes, baking and cooking.",
+  },
+  "cups-to-ml": {
+    seoTitle: "Cups to ML Converter — 1 US Cup = 236.6 ml | MerQPrime",
+    metaDescription:
+      "Convert US cups to millilitres instantly. 1 cup = 236.588 ml. Free cups to ml calculator with formula and chart for recipes, baking and cooking.",
+  },
+  "liters-to-gallons": {
+    seoTitle: "Liters to Gallons — 1 L = 0.264 US Gallon | MerQPrime",
+    metaDescription:
+      "Convert litres to US gallons instantly. 1 L = 0.264172 gallon. Free liters to gallons calculator with formula and chart for fuel, water and tanks.",
+  },
+  "acres-to-square-km": {
+    seoTitle: "Acres to Square Km Converter — Land Area Chart | MerQPrime",
+    metaDescription:
+      "Convert acres to square kilometres instantly. 1 acre = 0.00404686 km². Free acres to sq km calculator with formula and chart for land and farm area.",
+  },
+};
+
 function buildPage(
   category: ConversionPage["category"],
   from: (typeof CONVERSION_CATEGORIES)[ConversionCategory]["units"][0],
@@ -240,6 +324,7 @@ function buildPage(
   const toEeat = getUnitEeat(category, to.id, to.short);
   const title = `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter`;
   const description = `Convert ${from.short} to ${to.short} instantly. Free ${from.short} to ${to.short} calculator with formula, examples and FAQs.`;
+  const ctr = CONVERSION_CTR[slug];
   return {
     slug,
     path: `/conversions/${slug}`,
@@ -252,9 +337,13 @@ function buildPage(
     fromShort: from.short,
     toShort: to.short,
     title,
-    seoTitle: `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter (Instant & Free) | MerQPrime`,
+    seoTitle:
+      ctr?.seoTitle ??
+      `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter (Instant & Free) | MerQPrime`,
     description,
-    metaDescription: `Convert ${from.short} to ${to.short} instantly — free online converter with formula, examples and FAQs. Private, browser-based tool on MerQPrime.`,
+    metaDescription:
+      ctr?.metaDescription ??
+      `Convert ${from.short} to ${to.short} instantly — free online converter with formula, examples and FAQs. Private, browser-based tool on MerQPrime.`,
     keywords: [
       `${from.short} to ${to.short}`,
       `convert ${from.short} to ${to.short}`,
@@ -316,6 +405,14 @@ function buildPage(
       formula,
     }),
     unitHistory: buildUnitHistory(fromEeat, toEeat),
+    quickAnswer: buildQuickAnswer({
+      category,
+      fromUnit: from.id,
+      toUnit: to.id,
+      fromShort: from.short,
+      toShort: to.short,
+      formula,
+    }),
   };
 }
 

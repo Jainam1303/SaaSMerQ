@@ -493,6 +493,8 @@ content/tools/{slug}.md
   - **History of these units** — origin notes per unit from `UNIT_EEAT.history`.
   - **Related measurement guides** — parent category hub + related guides/articles/tools (from `getRelatedContentForConversion`); replaced the generic `RelatedContentSection` on this page.
   - **FAQ** — 6–7 unique conversion-specific FAQs (`buildFaqs`); only these feed `faqJsonLd`.
+- **Quick-answer block (Sprint 12 Phase 2)** — `buildQuickAnswer()` emits a 40–60 word featured-snippet answer (1-unit equivalence + operation + worked value + inverse note) rendered as a highlighted box directly under the H1, before the calculator. Temperature uses an offset-aware variant. Engineered for the Google answer/PAA box.
+- **Conversion CTR overrides (Sprint 12 Phase 2)** — `CONVERSION_CTR` map in `conversions.ts` provides intent-specific `seoTitle`/`metaDescription` (with the exact factor) for ~14 highest-demand leaves (km↔miles, kg↔lbs, cm/inches, °C/°F, m/feet, ml/cups, liters→gallons, acres→sq km). Unlisted slugs keep the generic generated metadata. This mirrors the tool `ctr-metadata.ts` pattern for programmatic pages.
 
 ### GSC / admin
 
@@ -852,6 +854,7 @@ RelatedContentSection (per page type)
 - [x] Sprint 11: 100 long-tail quantity pages ("N units to X") from proven queries
 - [x] 493 routes (build)
 - [x] Sprint 12 Phase 1: conversion page E-E-A-T upgrade (real-world uses, derivation, quick reference table, common questions, unit history, related guides, richer FAQs)
+- [x] Sprint 12 Phase 2: ranking optimization — `audit:ranking` report, conversion quick-answer snippet blocks + CTR overrides, enriched finance-tool FAQs, blog snippet leads, schema `inLanguage`, fixed Base64 CTR key
 
 ### In progress / next sprint
 
@@ -880,7 +883,9 @@ RelatedContentSection (per page type)
 
 - Internal links from ranking blogs to conversion hubs
 - FAQ rich results on conversion hubs (schema already present)
-- CTR metadata for top conversion pages (like tools have in `ctr-metadata.ts`)
+- Programmatic guides (`generate-programmatic-guides.mjs`) still ship templated FAQs and short (~115 char) descriptions — a generator-quality pass would lift ~50 `/guides/*` pages (regenerate, don't hand-edit the `.md` artifacts)
+- Tool body prose averages ~180–230 words (interactive tool is the primary content); high-opportunity tools could gain a unique 100-word supporting section
+- Feed live Search Console position 11–30 data into `scripts/ranking-opportunity-report.mjs` `DEMAND` map (currently seeded from documented GSC themes)
 
 ### Performance opportunities
 
@@ -930,6 +935,17 @@ Use private runbooks or local notes for host access — do not store SSH keys, I
 ---
 
 # 20. Recent Changes Log
+
+### 2026-06-28 — Sprint 12 Phase 2: ranking optimization (positions 11–30 → top 10)
+
+- **Ranking + technical audit:** new `scripts/ranking-opportunity-report.mjs` (`npm run audit:ranking`) scores tools, calculators, blogs, guides and the highest-demand conversion leaves by `demand × CTR-gap × content-readiness`, and runs a static technical audit (duplicate titles/descriptions, title/description length, thin pages, missing CTR overrides). Output: `reports/ranking-opportunity-report.json`. Demand weights are seeded from documented GSC themes (swap for live position 11–30 data via `/admin/seo`).
+- **Featured-snippet answer boxes (all 194 conversion leaves):** `buildQuickAnswer()` in `conversion-context.ts` produces a 40–60 word answer (1-unit equivalence + operation + worked value + inverse); rendered as a highlighted "Quick answer" box directly under the H1. New `ConversionPage.quickAnswer` field.
+- **Conversion CTR overrides:** `CONVERSION_CTR` map in `conversions.ts` gives ~14 top leaves intent-specific titles/descriptions carrying the exact factor (km↔miles, kg↔lbs, cm/inches, °C/°F, m/feet, ml/cups, liters→gallons, acres→sq km). Falls back to generated metadata otherwise.
+- **Enriched finance-tool FAQs (Tasks 3/4/7):** `emi-calculator`, `gst-calculator`, `sip-calculator`, `profit-margin-calculator` each grew from 3 → 6 FAQs with formula callouts, worked examples and entity coverage (reverse GST, IGST vs CGST/SGST, SIP FV formula, step-up SIP, markup↔margin, target-margin pricing). Feeds `faqJsonLd`.
+- **Blog snippet leads + internal links:** added `> Quick answer:` blocks to `gst-calculation-guide`, `how-to-calculate-emi`, `what-is-sip-investment`; added `relatedToolSlugs`/`relatedSlugs` (PPF, FD, profit-margin) to the SIP post.
+- **Schema (Task 6):** added `inLanguage` (BCP-47 `en-IN`) to `webPageJsonLd` and `collectionPageJsonLd`; audited — no duplicate `FAQPage`/schema.
+- **Technical fix:** `ctr-metadata.ts` Base64 key corrected `base64` → `base64-encoder-decoder` (override now actually applies). Audit confirms 0 duplicate titles/descriptions, 0 tools missing CTR override.
+- Validation: `audit:ranking` ✓, `tsc --noEmit` ✓, `next build` ✓ (493 routes, only pre-existing `lib/hubs` `_` lint warning). Not deployed.
 
 ### 2026-06-28 — Sprint 12 Phase 1: conversion page E-E-A-T upgrade
 

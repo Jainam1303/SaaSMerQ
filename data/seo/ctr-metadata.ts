@@ -28,7 +28,7 @@ export const toolCtrMetadata: Record<string, CtrMetadata> = {
     metaDescription:
       "Format, validate and minify JSON online. Fix syntax errors, prettify payloads and copy clean output — free and instant.",
   },
-  base64: {
+  "base64-encoder-decoder": {
     seoTitle: "Base64 Encoder & Decoder (Instant & Free) | MerQPrime",
     metaDescription:
       "Encode and decode Base64 text or files in your browser. Free, fast and private — no uploads to any server.",

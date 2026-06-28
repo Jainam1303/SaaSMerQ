@@ -21,6 +21,8 @@ relatedSlugs:
 
 Goods and Services Tax (GST) unified many indirect taxes in India. Businesses and consumers still need to calculate tax on invoices, reverse tax from gross prices and split CGST/SGST or IGST correctly.
 
+> **Quick answer:** To add GST, multiply the base price by the rate (₹1,000 × 18% = ₹180 tax, ₹1,180 total). To remove GST from an inclusive price, divide by (1 + rate ÷ 100): ₹1,180 ÷ 1.18 = ₹1,000 base. Within a state, split the tax equally into CGST and SGST; across states, charge it all as IGST.
+
 ## Adding GST to a base amount
 
 **Tax = Base × (Rate ÷ 100)**

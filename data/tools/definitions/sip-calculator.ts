@@ -51,5 +51,20 @@ export const sipCalculator: ToolMeta = {
       answer:
         "No. The estimate is pre-tax and does not account for fund fees, STT or exit loads. Use it for planning, not exact forecasting.",
     },
+    {
+      question: "What is the SIP future value formula?",
+      answer:
+        "FV = P × [((1 + i)^n − 1) ÷ i] × (1 + i), where P is the monthly amount, i is the monthly return (annual ÷ 12) and n is the number of months. A ₹5,000 monthly SIP at 12% for 10 years (₹6,00,000 invested) grows to roughly ₹11.6 lakh through compounding.",
+    },
+    {
+      question: "Is SIP better than a lumpsum investment?",
+      answer:
+        "A SIP spreads investments over time, averaging your purchase cost (rupee-cost averaging) and removing the need to time the market. A lumpsum can outperform when invested at a market low, but SIPs suit salaried investors building wealth steadily.",
+    },
+    {
+      question: "What is a step-up SIP?",
+      answer:
+        "A step-up (or top-up) SIP increases your monthly contribution by a fixed percentage each year — for example 10% annually — so your investing keeps pace with rising income and significantly boosts the final corpus.",
+    },
   ],
 };
