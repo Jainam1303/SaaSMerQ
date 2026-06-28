@@ -3,7 +3,7 @@
 > Internal engineering memory for AI agents and developers.
 > **Not user documentation.** Read this first before scanning the repo.
 >
-> **Last updated:** 2026-06-27
+> **Last updated:** 2026-06-28
 
 ---
 
@@ -166,7 +166,7 @@ tailwind.config.ts      # Design tokens extension
 | `data/programmatic/calculators.ts` | 30 calculator landing defs | `calculatorPages`, getters | `app/calculators/[slug]` |
 | `data/seo/ctr-metadata.ts` | SERP title/description overrides | `toolCtrMetadata` | Tool metadata merge |
 | `lib/programmatic/conversions.ts` | 194 conversion page generator | `conversionPages`, getters | `app/conversions/[slug]` |
-| `lib/programmatic/conversion-context.ts` | Per-unit editorial context (use cases, audiences, examples) → differentiates reverse pairs | `UNIT_CONTEXT`, `getUnitContext`, `buildConversionIntro/WhatIs/UseCases` | `conversions.ts` |
+| `lib/programmatic/conversion-context.ts` | Per-unit editorial context (use cases, audiences, examples) + E-E-A-T data (`UNIT_EEAT`: unit name, system, who-uses-it, history) + category common-questions/precision → differentiates reverse pairs and powers EEAT sections | `UNIT_CONTEXT`, `UNIT_EEAT`, `getUnitContext`, `getUnitEeat`, `getCategoryQuestions`, `buildConversionIntro/WhatIs/UseCases/RealWorldUses/HowCalculated/UnitHistory` | `conversions.ts` |
 | `lib/programmatic/quantity-conversions.ts` | 100 long-tail "N units to X" page generator (proven-query seeds) | `quantityConversionPages`, getters | `app/conversions/[slug]` |
 | `lib/programmatic/conversion-hubs.ts` | 8 category hub definitions | `CONVERSION_HUBS`, getters | Hub pages |
 | `lib/programmatic/units.ts` | Unit defs + convert math | `CONVERSION_CATEGORIES`, `convertUnits` | Conversions |
@@ -485,6 +485,14 @@ content/tools/{slug}.md
 - **Examples:** Computed from `convertUnits()` at build time
 - **Enriched leaf content:** intro, whatIs, use cases, formula, examples, conversion table, common mistakes
 - **Reverse-pair differentiation (`conversion-context.ts`):** intro, whatIs, use cases, examples and FAQs are driven by the **FROM unit's** editorial context (audience, real-world scenarios, example values) plus a deterministic per-slug variant index. This means `km-to-miles` and `miles-to-km` read very differently (different audience, examples, FAQs) — reducing duplicate-content risk on inverse pairs.
+- **E-E-A-T sections (Sprint 12) on every leaf converter:**
+  - **Real-world uses** — direction-aware "why convert" paragraph, use-case bullets, and a "Who uses this conversion?" role list (merged from `UNIT_EEAT.whoUsesIt` of both units).
+  - **How the conversion is calculated** — formula + numbered derivation from the shared base unit (`unitToBaseFactor` / `getBaseUnitName`) + a category precision note. Temperature uses an offset-aware derivation.
+  - **Quick reference table** — fixed ladder `[10,25,50,100,250,500,1000,2500,5000,10000]`, auto-calculated (`buildQuickReference`).
+  - **Common questions** — category-level conceptual Q&A (`CATEGORY_QUESTIONS`): is it exact, why results differ, metric vs imperial, can I round. Rendered as plain content (NOT in FAQ JSON-LD) to avoid a duplicate `FAQPage`.
+  - **History of these units** — origin notes per unit from `UNIT_EEAT.history`.
+  - **Related measurement guides** — parent category hub + related guides/articles/tools (from `getRelatedContentForConversion`); replaced the generic `RelatedContentSection` on this page.
+  - **FAQ** — 6–7 unique conversion-specific FAQs (`buildFaqs`); only these feed `faqJsonLd`.
 
 ### GSC / admin
 
@@ -843,6 +851,7 @@ RelatedContentSection (per page type)
 - [x] Sprint 11: reverse-pair differentiation via `conversion-context.ts`
 - [x] Sprint 11: 100 long-tail quantity pages ("N units to X") from proven queries
 - [x] 493 routes (build)
+- [x] Sprint 12 Phase 1: conversion page E-E-A-T upgrade (real-world uses, derivation, quick reference table, common questions, unit history, related guides, richer FAQs)
 
 ### In progress / next sprint
 
@@ -921,6 +930,22 @@ Use private runbooks or local notes for host access — do not store SSH keys, I
 ---
 
 # 20. Recent Changes Log
+
+### 2026-06-28 — Sprint 12 Phase 1: conversion page E-E-A-T upgrade
+
+- Every leaf conversion page now carries substantially more value than a bare calculator. New sections (all build-time, hydration-safe, server-rendered):
+  - **Real-world uses** (why + use cases + "who uses this" roles)
+  - **How the conversion is calculated** (formula + numbered base-unit derivation + precision note)
+  - **Quick reference table** — 10-row ladder `[10…10000]`, replaced the old 5–10 value table
+  - **Common questions** — category-level conceptual Q&A (rendered as content, not FAQ schema)
+  - **History of these units** — per-unit origin notes
+  - **Related measurement guides** — hub + guides + articles + tools (replaced generic `RelatedContentSection` on this page)
+  - **FAQ** improved to 6–7 unique conversion-specific entries
+- New data + builders in `lib/programmatic/conversion-context.ts`: `UNIT_EEAT` (name, system, who-uses-it, history for all 42 units), `CATEGORY_QUESTIONS`, `PRECISION_NOTE`, and `buildRealWorldUses` / `buildHowCalculated` / `buildUnitHistory` / `getCategoryQuestions`.
+- New exports in `lib/programmatic/units.ts`: `getBaseUnitName`, `unitToBaseFactor` (power the derivation steps).
+- `ConversionPage` type extended: `realWorldUses`, `quickReference`, `commonQuestions`, `howCalculated`, `unitHistory`.
+- Duplicate-content safeguards: conceptual "Common questions" are category-level and excluded from `faqJsonLd`; only conversion-specific FAQs feed the single `FAQPage`.
+- Validation: `tsc --noEmit` clean; `next build` clean (493 routes, only pre-existing `lib/hubs` `_` lint warning). Not deployed.
 
 ### 2026-06-27 — Sprint 11: topical authority & long-tail SEO
 

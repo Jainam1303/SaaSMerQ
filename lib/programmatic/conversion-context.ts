@@ -1,4 +1,10 @@
+import type { FaqItem } from "@/data/tools/types";
 import type { ConversionCategory } from "./types";
+import {
+  convertUnits,
+  getBaseUnitName,
+  unitToBaseFactor,
+} from "./units";
 
 /**
  * Per-unit editorial context used to differentiate conversion pages.
@@ -608,4 +614,660 @@ export function buildUseCases(opts: {
 
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Sprint 12 — E-E-A-T upgrade
+ *
+ * Per-unit authority content (name, measurement system, audience roles,
+ * history) and per-category conceptual content (common questions, precision
+ * notes). All deterministic and build-time — no client state, so the rendered
+ * sections are hydration-safe.
+ * ------------------------------------------------------------------ */
+
+export interface UnitEeat {
+  /** Full singular noun, e.g. "kilometre", "acre", "US gallon". */
+  name: string;
+  /** Measurement system label shown to the reader. */
+  system: string;
+  /** Roles/people who commonly work in this unit (Real World Uses). */
+  whoUsesIt: string[];
+  /** Two-to-three sentence origin/history of the unit. */
+  history: string;
+}
+
+const UNIT_EEAT: Record<string, UnitEeat> = {
+  // ---- Length ----
+  "length:km": {
+    name: "kilometre",
+    system: "metric",
+    whoUsesIt: ["Drivers", "Runners", "Cartographers", "Logistics planners", "Students"],
+    history:
+      "The kilometre arrived with the metric system in 1790s France as 1,000 metres, the metre itself first defined as one ten-millionth of the distance from the equator to the North Pole. It is now the standard unit for road distance across most of the world.",
+  },
+  "length:mi": {
+    name: "mile",
+    system: "imperial / US customary",
+    whoUsesIt: ["US & UK drivers", "Athletes", "Aviators", "Surveyors", "Students"],
+    history:
+      "The mile descends from the Roman mille passus — 'a thousand paces', roughly 1,480 metres. The modern international mile was fixed at exactly 1,609.344 metres in 1959 and remains standard for road distance in the US and UK.",
+  },
+  "length:m": {
+    name: "metre",
+    system: "metric (SI base unit)",
+    whoUsesIt: ["Engineers", "Builders", "Architects", "Athletes", "Scientists"],
+    history:
+      "The metre is the SI base unit of length. First defined in 1793 from the Earth's meridian, it is today defined by the distance light travels in a vacuum in 1/299,792,458 of a second.",
+  },
+  "length:ft": {
+    name: "foot",
+    system: "imperial / US customary",
+    whoUsesIt: ["Builders", "Architects", "Pilots", "Tradespeople", "Students"],
+    history:
+      "The foot has roots in the length of a human foot and varied widely before standardisation. The international foot is now exactly 0.3048 metres and stays common in US construction and aviation altitude.",
+  },
+  "length:cm": {
+    name: "centimetre",
+    system: "metric",
+    whoUsesIt: ["Tailors", "Designers", "Students", "Healthcare workers", "Shoppers"],
+    history:
+      "The centimetre — one-hundredth of a metre — is part of the metric system formalised after the French Revolution. It is the everyday unit for body measurements, stationery and small objects in most of the world.",
+  },
+  "length:in": {
+    name: "inch",
+    system: "imperial / US customary",
+    whoUsesIt: ["Carpenters", "Manufacturers", "Screen makers", "Shoppers", "Engineers"],
+    history:
+      "The inch traditionally matched the width of a thumb and was later set at 1/12 of a foot. Since 1959 it is exactly 25.4 millimetres and remains common for screen sizes, hardware and US dimensions.",
+  },
+  "length:mm": {
+    name: "millimetre",
+    system: "metric",
+    whoUsesIt: ["Engineers", "Machinists", "Jewellers", "Designers", "Manufacturers"],
+    history:
+      "The millimetre is one-thousandth of a metre. As metric precision spread through engineering in the 19th and 20th centuries, it became the default unit for technical drawings and machined tolerances.",
+  },
+  "length:yd": {
+    name: "yard",
+    system: "imperial / US customary",
+    whoUsesIt: ["Tailors", "Groundskeepers", "Football fans", "Landscapers", "Builders"],
+    history:
+      "The yard has medieval English origins linked to a standard rod and to the length from nose to fingertip. It is now defined as exactly 0.9144 metres and survives in textiles, landscaping and American football.",
+  },
+
+  // ---- Weight ----
+  "weight:kg": {
+    name: "kilogram",
+    system: "metric (SI base unit)",
+    whoUsesIt: ["Scientists", "Shippers", "Athletes", "Doctors", "Shoppers"],
+    history:
+      "The kilogram is the SI base unit of mass. Once defined by a physical platinum-iridium cylinder near Paris, it was redefined in 2019 in terms of the Planck constant for permanent stability.",
+  },
+  "weight:lb": {
+    name: "pound",
+    system: "imperial / US customary",
+    whoUsesIt: ["Shoppers", "Dieticians", "Shippers", "Athletes", "Cooks"],
+    history:
+      "The pound traces back to the Roman libra, which is why its symbol is 'lb'. The international avoirdupois pound is now defined as exactly 0.45359237 kilograms and is standard for body weight and groceries in the US.",
+  },
+  "weight:g": {
+    name: "gram",
+    system: "metric",
+    whoUsesIt: ["Cooks", "Pharmacists", "Jewellers", "Scientists", "Shippers"],
+    history:
+      "The gram was originally defined as the mass of one cubic centimetre of water. It became the base of the metric mass system and is the everyday unit for food, medicine and small quantities.",
+  },
+  "weight:oz": {
+    name: "ounce",
+    system: "imperial / US customary",
+    whoUsesIt: ["Cooks", "Bakers", "Jewellers", "Shippers", "Shoppers"],
+    history:
+      "The ounce comes from the Roman uncia, one-twelfth of a pound. The avoirdupois ounce is now 1/16 of a pound — about 28.35 grams — and is common in US recipes and postage.",
+  },
+  "weight:st": {
+    name: "stone",
+    system: "imperial",
+    whoUsesIt: ["UK adults", "Fitness trackers", "Doctors", "Slimming groups", "Athletes"],
+    history:
+      "The stone was historically used for trade weights and varied by commodity before being fixed at 14 pounds. It remains an everyday unit for body weight in the UK and Ireland.",
+  },
+
+  // ---- Temperature ----
+  "temperature:c": {
+    name: "degree Celsius",
+    system: "metric",
+    whoUsesIt: ["Meteorologists", "Cooks", "Students", "Doctors", "Travellers"],
+    history:
+      "The Celsius scale was proposed by Anders Celsius in 1742 — originally inverted — with 0 and 100 fixed to water's freezing and boiling points. It is the standard temperature scale across most of the world.",
+  },
+  "temperature:f": {
+    name: "degree Fahrenheit",
+    system: "imperial / US customary",
+    whoUsesIt: ["US residents", "Cooks", "HVAC technicians", "Meteorologists", "Students"],
+    history:
+      "Daniel Gabriel Fahrenheit devised his scale in 1724 using a brine mixture and body temperature as reference points. It remains the everyday temperature scale in the United States.",
+  },
+  "temperature:k": {
+    name: "kelvin",
+    system: "metric (SI base unit)",
+    whoUsesIt: ["Physicists", "Chemists", "Engineers", "Astronomers", "Students"],
+    history:
+      "The kelvin, named after Lord Kelvin, sets zero at absolute zero — the coldest temperature possible. It is the SI base unit of temperature and shares its degree size with Celsius.",
+  },
+
+  // ---- Volume ----
+  "volume:l": {
+    name: "litre",
+    system: "metric",
+    whoUsesIt: ["Drivers", "Cooks", "Scientists", "Brewers", "Shoppers"],
+    history:
+      "The litre was introduced in France in 1795 as the volume of one kilogram of water. It is the standard metric unit for liquids worldwide, from fuel to beverages.",
+  },
+  "volume:gal": {
+    name: "US gallon",
+    system: "US customary",
+    whoUsesIt: ["US drivers", "Farmers", "Brewers", "Painters", "Shippers"],
+    history:
+      "The US gallon derives from the English wine gallon of 231 cubic inches, fixed at about 3.785 litres. It is standard for fuel and large liquid volumes in the United States.",
+  },
+  "volume:ml": {
+    name: "millilitre",
+    system: "metric",
+    whoUsesIt: ["Cooks", "Pharmacists", "Bartenders", "Lab technicians", "Parents"],
+    history:
+      "The millilitre is one-thousandth of a litre and equal to one cubic centimetre. It is the everyday unit for medicine doses, recipes and small liquid measures.",
+  },
+  "volume:m3": {
+    name: "cubic metre",
+    system: "metric (SI derived)",
+    whoUsesIt: ["Engineers", "Builders", "Utilities", "Logisticians", "Scientists"],
+    history:
+      "The cubic metre is the SI derived unit of volume — the space inside a cube one metre on each side. It is used for water, gas, concrete and freight volumes.",
+  },
+  "volume:cup": {
+    name: "US cup",
+    system: "US customary",
+    whoUsesIt: ["Home cooks", "Bakers", "Recipe writers", "Students", "Parents"],
+    history:
+      "The US customary cup was standardised at 8 US fluid ounces — about 236.6 ml — for cooking. It is the dominant volume measure in American recipes.",
+  },
+
+  // ---- Area ----
+  "area:sqft": {
+    name: "square foot",
+    system: "imperial / US customary",
+    whoUsesIt: ["Realtors", "Architects", "Renovators", "Flooring fitters", "Tenants"],
+    history:
+      "The square foot is the area of a one-foot square. As the foot standardised to 0.3048 m, the square foot followed, and it remains the dominant unit for floor area in the US and India.",
+  },
+  "area:sqm": {
+    name: "square metre",
+    system: "metric (SI derived)",
+    whoUsesIt: ["Architects", "Planners", "Realtors", "Builders", "Students"],
+    history:
+      "The square metre is the SI derived unit of area — a one-metre square. It is the global standard for floor space, land plots and material coverage.",
+  },
+  "area:acre": {
+    name: "acre",
+    system: "imperial / US customary",
+    whoUsesIt: ["Farmers", "Surveyors", "Government bodies", "Realtors", "GIS professionals"],
+    history:
+      "The acre originally represented the area a yoke of oxen could plough in a day, later fixed at 43,560 square feet. It remains a key unit for land and agriculture in the US, UK and India.",
+  },
+  "area:ha": {
+    name: "hectare",
+    system: "metric",
+    whoUsesIt: ["Farmers", "Foresters", "Governments", "Ecologists", "Surveyors"],
+    history:
+      "The hectare — 10,000 square metres — was introduced with the metric system for land measurement. It is the international standard for agricultural and forestry area.",
+  },
+  "area:sqkm": {
+    name: "square kilometre",
+    system: "metric",
+    whoUsesIt: ["Geographers", "Governments", "Urban planners", "Ecologists", "Statisticians"],
+    history:
+      "The square kilometre — one million square metres — became standard for measuring regions, cities and countries as metric mapping spread worldwide.",
+  },
+
+  // ---- Speed ----
+  "speed:kmh": {
+    name: "kilometre per hour",
+    system: "metric",
+    whoUsesIt: ["Drivers", "Cyclists", "Meteorologists", "Engineers", "Students"],
+    history:
+      "Kilometres per hour became the standard road-speed unit as the metric system and motoring spread in the 20th century. It appears on most of the world's speed limits and speedometers.",
+  },
+  "speed:mph": {
+    name: "mile per hour",
+    system: "imperial / US customary",
+    whoUsesIt: ["US & UK drivers", "Athletes", "Meteorologists", "Engineers", "Students"],
+    history:
+      "Miles per hour grew out of railway and early road travel in Britain and America. It remains the legal speed unit on US and UK roads.",
+  },
+  "speed:ms": {
+    name: "metre per second",
+    system: "metric (SI coherent)",
+    whoUsesIt: ["Physicists", "Engineers", "Athletes", "Meteorologists", "Students"],
+    history:
+      "The metre per second is the SI coherent unit of speed, central to physics since the metric system's adoption. It is used in science, engineering and athletics timing.",
+  },
+  "speed:knot": {
+    name: "knot",
+    system: "nautical",
+    whoUsesIt: ["Sailors", "Pilots", "Meteorologists", "Navigators", "Coast guards"],
+    history:
+      "The knot — one nautical mile per hour — comes from sailors counting knots on a log line trailed behind a ship to gauge speed. It is still standard in marine and air navigation.",
+  },
+
+  // ---- Time ----
+  "time:ms": {
+    name: "millisecond",
+    system: "metric (SI-derived)",
+    whoUsesIt: ["Developers", "Engineers", "Gamers", "Scientists", "Network admins"],
+    history:
+      "The millisecond — one-thousandth of a second — gained importance with electronics and computing, where fast events must be timed. It is the default unit for latency and response times.",
+  },
+  "time:s": {
+    name: "second",
+    system: "metric (SI base unit)",
+    whoUsesIt: ["Scientists", "Developers", "Athletes", "Engineers", "Everyone"],
+    history:
+      "The second is the SI base unit of time. Once defined as a fraction of a day, it is now defined by 9,192,631,770 oscillations of a caesium-133 atom.",
+  },
+  "time:min": {
+    name: "minute",
+    system: "sexagesimal time",
+    whoUsesIt: ["Planners", "Cooks", "Commuters", "Teachers", "Everyone"],
+    history:
+      "The minute as 1/60 of an hour descends from the Babylonian base-60 system passed down through Greek and Islamic astronomy. It remains a universal unit for short durations.",
+  },
+  "time:hr": {
+    name: "hour",
+    system: "sexagesimal time",
+    whoUsesIt: ["Workers", "Planners", "Travellers", "Freelancers", "Everyone"],
+    history:
+      "The hour as 1/24 of a day comes from ancient Egyptian timekeeping that split day and night into twelve parts each. It is the backbone of schedules and pay.",
+  },
+  "time:day": {
+    name: "day",
+    system: "calendar time",
+    whoUsesIt: ["Planners", "Schedulers", "Travellers", "Project managers", "Everyone"],
+    history:
+      "The day reflects one rotation of the Earth and is humanity's oldest natural time unit. It anchors calendars, billing and scheduling everywhere.",
+  },
+  "time:week": {
+    name: "week",
+    system: "calendar time",
+    whoUsesIt: ["Project managers", "Schedulers", "Students", "Planners", "Everyone"],
+    history:
+      "The seven-day week has ancient Babylonian and Judaic roots tied to lunar phases and creation narratives. It is the standard cycle for work and planning worldwide.",
+  },
+
+  // ---- Data ----
+  "data:bit": {
+    name: "bit",
+    system: "digital information",
+    whoUsesIt: ["Developers", "Network engineers", "Cryptographers", "Students", "Hardware designers"],
+    history:
+      "The bit — a single binary digit — was named by statistician John Tukey and popularised by Claude Shannon's 1948 information theory. It is the smallest unit of digital information.",
+  },
+  "data:byte": {
+    name: "byte",
+    system: "digital information",
+    whoUsesIt: ["Developers", "IT admins", "Storage vendors", "Students", "Engineers"],
+    history:
+      "The byte, standardised at 8 bits, emerged with early computers as the space needed for one character. It is the foundation of file and memory sizing.",
+  },
+  "data:kb": {
+    name: "kilobyte",
+    system: "digital information",
+    whoUsesIt: ["Developers", "Web builders", "IT admins", "Students", "Designers"],
+    history:
+      "The kilobyte — 1,000 bytes in SI terms — was once ample for a whole program. It now measures small files such as documents and icons.",
+  },
+  "data:mb": {
+    name: "megabyte",
+    system: "digital information",
+    whoUsesIt: ["Everyday users", "Developers", "Photographers", "IT admins", "Students"],
+    history:
+      "The megabyte — one million bytes — defined storage in the floppy-disk and early-CD era. It is still used for photos, songs and app sizes.",
+  },
+  "data:gb": {
+    name: "gigabyte",
+    system: "digital information",
+    whoUsesIt: ["Shoppers", "IT admins", "Gamers", "Photographers", "Developers"],
+    history:
+      "The gigabyte — one billion bytes — became the standard storage and memory unit as hard drives and RAM grew. Data plans and devices are commonly quoted in GB.",
+  },
+  "data:tb": {
+    name: "terabyte",
+    system: "digital information",
+    whoUsesIt: ["IT admins", "Creators", "Data engineers", "Gamers", "Businesses"],
+    history:
+      "The terabyte — one trillion bytes — arrived as consumer hard drives crossed the gigabyte ceiling in the 2000s. It now measures drives, backups and large media libraries.",
+  },
+};
+
+function eeatFallback(unitShort: string): UnitEeat {
+  return {
+    name: unitShort,
+    system: "standard measurement",
+    whoUsesIt: ["Engineers", "Students", "Professionals", "Everyday users"],
+    history: `The ${unitShort} is a widely used unit of measurement, applied consistently across science, industry and everyday life through internationally agreed definitions.`,
+  };
+}
+
+export function getUnitEeat(
+  category: ConversionCategory,
+  unitId: string,
+  unitShort: string,
+): UnitEeat {
+  return UNIT_EEAT[ctxKey(category, unitId)] ?? eeatFallback(unitShort);
+}
+
+/** Category-level conceptual Q&A ("Common Questions" — unique per category). */
+const CATEGORY_QUESTIONS: Record<ConversionCategory, FaqItem[]> = {
+  length: [
+    {
+      question: "Is this length conversion exact?",
+      answer:
+        "Yes. Factors such as 1 inch = 25.4 mm and 1 mile = 1,609.344 m are exact by international agreement, so the only rounding is in how many decimals we display.",
+    },
+    {
+      question: "Why do my results differ slightly from another tool?",
+      answer:
+        "Almost always because the other tool rounds the factor (e.g. 0.62 instead of 0.621371) or rounds partway through. We keep full precision and round only the final value.",
+    },
+    {
+      question: "Metric or imperial — which should I use?",
+      answer:
+        "Use metric (m, cm, km) for science and most countries, and imperial (ft, in, miles) for US and UK everyday distances. This page bridges the two exactly.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes. For everyday use one or two decimals is plenty; engineering and science may need more. Round only at the end to avoid cumulative error.",
+    },
+  ],
+  weight: [
+    {
+      question: "Is this weight conversion exact?",
+      answer:
+        "Yes. Mass definitions such as 1 lb = 0.45359237 kg and 1 oz = 28.349523 g are exact, so results are precise to the decimals shown.",
+    },
+    {
+      question: "Why do my results differ slightly?",
+      answer:
+        "Usually because of a rounded factor (2.2 instead of 2.204623) or mixing mass with force. We use the full-precision international factors.",
+    },
+    {
+      question: "Metric or imperial for weight?",
+      answer:
+        "Metric (kg, g) dominates science and most of the world; imperial (lb, oz, stone) is common for US and UK body weight and cooking. Convert exactly here rather than estimating.",
+    },
+    {
+      question: "Can I round the result?",
+      answer:
+        "Yes — kitchen and body-weight values rarely need more than one decimal. Keep more precision for lab or trade use and round last.",
+    },
+  ],
+  temperature: [
+    {
+      question: "Is this temperature conversion exact?",
+      answer:
+        "Yes. The Celsius, Fahrenheit and Kelvin relationships are exact formulas, not approximations; only the displayed decimals are rounded.",
+    },
+    {
+      question: "Why do my results differ?",
+      answer:
+        "Most errors come from dropping the offset (the +32 or 273.15 term) or rounding too early. Temperature is not a simple ratio, so the offset matters.",
+    },
+    {
+      question: "Celsius, Fahrenheit or Kelvin — which is standard?",
+      answer:
+        "Celsius is used almost everywhere, Kelvin in science, and Fahrenheit mainly in the US. This converter applies the exact formula for whichever pair you need.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes. Weather and cooking need only whole degrees; scientific work may keep decimals. Rounding the display never changes the underlying formula.",
+    },
+  ],
+  volume: [
+    {
+      question: "Is this volume conversion exact?",
+      answer:
+        "Yes for defined units — 1 US gallon = 3.785411784 L and 1 US cup = 236.5882365 ml are exact. Just note that US and imperial gallons and cups are different sizes.",
+    },
+    {
+      question: "Why do my results differ?",
+      answer:
+        "The biggest cause is confusing US, imperial and metric measures, or using a rounded factor. We apply the exact US definitions throughout.",
+    },
+    {
+      question: "Metric or US units for volume?",
+      answer:
+        "Metric (litres, ml) is global; US customary (gallons, cups) is American. Always check whether a recipe means a US cup or a metric cup.",
+    },
+    {
+      question: "Can I round the result?",
+      answer:
+        "Yes — cooking tolerates rounding to whole ml or a fraction of a cup. Fuel and laboratory volumes may need more precision.",
+    },
+  ],
+  area: [
+    {
+      question: "Is this area conversion exact?",
+      answer:
+        "Yes. Area factors derive from exact length definitions — for example 1 acre = 43,560 ft² exactly — so conversions are precise to the decimals shown.",
+    },
+    {
+      question: "Why do my results differ slightly?",
+      answer:
+        "Usually from squaring a rounded length factor or mixing local land units. We square the exact factors so nothing drifts.",
+    },
+    {
+      question: "Metric or imperial for area?",
+      answer:
+        "Metric (m², hectares, km²) is the global standard; imperial (ft², acres) persists in US, UK and Indian real estate. This page converts both exactly.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes. Property listings round to whole units; surveying and legal documents may keep more decimals. Round only at the end.",
+    },
+  ],
+  speed: [
+    {
+      question: "Is this speed conversion exact?",
+      answer:
+        "Yes. Speed factors such as 1 mph = 1.609344 km/h and 1 knot = 1.852 km/h are exact definitions.",
+    },
+    {
+      question: "Why do my results differ?",
+      answer:
+        "A common error is assuming km/h and m/s differ by 1,000; they differ by 3.6. Using rounded factors also causes small drift.",
+    },
+    {
+      question: "Which speed unit is standard?",
+      answer:
+        "km/h is used on most roads, mph in the US and UK, m/s in physics, and knots at sea and in the air. Pick the unit your context expects.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes — speedometers and forecasts use whole units. Keep decimals for physics or precise engineering work.",
+    },
+  ],
+  time: [
+    {
+      question: "Is this time conversion exact?",
+      answer:
+        "Yes for fixed units: 1 minute = 60 s, 1 hour = 3,600 s and 1 day = 86,400 s. Calendar months and years vary, so we convert through seconds.",
+    },
+    {
+      question: "Why do my results differ?",
+      answer:
+        "Differences appear when months or years are assumed to be a fixed length, or with leap seconds. For sub-day units the conversions are exact.",
+    },
+    {
+      question: "Do time units have a metric or imperial version?",
+      answer:
+        "No — time units are shared worldwide with no metric/imperial split. The second is the SI base unit; minutes, hours and days build on it.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes. Everyday scheduling rounds to whole minutes or hours; performance work may keep milliseconds. Round only the final value.",
+    },
+  ],
+  data: [
+    {
+      question: "Is this data conversion exact?",
+      answer:
+        "Yes, using the SI (decimal) convention where 1 KB = 1,000 bytes. Some systems use the binary convention (1 KiB = 1,024 bytes), which gives slightly different numbers.",
+    },
+    {
+      question: "Why do my results differ from my operating system?",
+      answer:
+        "Because of decimal (1,000) versus binary (1,024) units — drive makers use decimal while operating systems often display binary. This page uses the decimal convention.",
+    },
+    {
+      question: "Are data units metric or imperial?",
+      answer:
+        "Neither — the real choice is decimal (KB, MB, GB) versus binary (KiB, MiB, GiB). We use the decimal SI convention here.",
+    },
+    {
+      question: "Can I round the answer?",
+      answer:
+        "Yes — file and storage sizes are routinely rounded to one or two decimals. Keep more precision when totalling many small files.",
+    },
+  ],
+};
+
+const PRECISION_NOTE: Record<ConversionCategory, string> = {
+  length:
+    "The conversion factor is exact by international definition, so the result is an exact rational number. We display it rounded to four decimal places (or four significant figures for very small values).",
+  weight:
+    "Mass factors are exact by definition, so no precision is lost in the maths. The displayed value is rounded to four decimal places for readability.",
+  temperature:
+    "The formula is exact; only the displayed result is rounded to four decimal places. No precision is lost in the underlying calculation.",
+  volume:
+    "The US unit definitions used here are exact, so the result is exact. We round the displayed figure to four decimal places.",
+  area:
+    "Area factors are exact (they are squared length definitions), so the result carries no approximation beyond the four-decimal display rounding.",
+  speed:
+    "The speed factor is exact by definition, so the result is exact and only the displayed value is rounded to four decimal places.",
+  time:
+    "Sub-day factors (seconds, minutes, hours, days, weeks) are exact integers, so results carry no approximation. We round only for display.",
+  data:
+    "Using the decimal SI convention the factors are exact powers of ten, so the result is exact and rounded only for display.",
+};
+
+export function getCategoryQuestions(category: ConversionCategory): FaqItem[] {
+  return CATEGORY_QUESTIONS[category];
+}
+
+export interface RealWorldUses {
+  why: string;
+  whoUsesIt: string[];
+}
+
+/** "Real World Uses" — direction-aware reason + merged audience roles. */
+export function buildRealWorldUses(opts: {
+  slug: string;
+  fromShort: string;
+  toShort: string;
+  fromCtx: UnitContext;
+  toCtx: UnitContext;
+  fromEeat: UnitEeat;
+  toEeat: UnitEeat;
+}): RealWorldUses {
+  const { slug, fromShort, toShort, fromCtx, toCtx, fromEeat, toEeat } = opts;
+  const reasonA = fromCtx.useCases[variantIndex(slug + "r", fromCtx.useCases.length)];
+  const reasonB = toCtx.useCases[variantIndex(slug + "r2", toCtx.useCases.length)];
+  const why = `Converting ${fromShort} to ${toShort} bridges two ways of measuring the same thing. People do it most often when ${reasonA}, and on the receiving side when ${reasonB}. Having the exact value — not a rough estimate — prevents costly mistakes in paperwork, purchases and planning.`;
+
+  const seen = new Set<string>();
+  const whoUsesIt: string[] = [];
+  for (const role of [...fromEeat.whoUsesIt, ...toEeat.whoUsesIt]) {
+    const key = role.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    whoUsesIt.push(role);
+    if (whoUsesIt.length >= 6) break;
+  }
+  return { why, whoUsesIt };
+}
+
+export interface HowCalculated {
+  steps: string[];
+  precision: string;
+}
+
+/** "How it's calculated" — formula, derivation steps and precision note. */
+export function buildHowCalculated(opts: {
+  category: ConversionCategory;
+  fromUnit: string;
+  toUnit: string;
+  fromShort: string;
+  toShort: string;
+  formula: string;
+}): HowCalculated {
+  const { category, fromUnit, toUnit, fromShort, toShort, formula } = opts;
+
+  if (category === "temperature") {
+    return {
+      steps: [
+        "Celsius is the reference scale, and Fahrenheit and Kelvin are defined relative to it.",
+        "The conversion is not a simple ratio — it includes an offset (a fixed term) as well as a scale factor, which is why you cannot just multiply.",
+        `Applying the exact relationship gives the formula: ${formula}.`,
+        `Substitute any ${fromShort} value into that formula to get the ${toShort} result.`,
+      ],
+      precision: PRECISION_NOTE[category],
+    };
+  }
+
+  const base = getBaseUnitName(category);
+  const fromFactor = unitToBaseFactor(category, fromUnit);
+  const toFactor = unitToBaseFactor(category, toUnit);
+  const factor = convertUnits(category, fromUnit, toUnit, 1);
+  const factorText =
+    factor >= 0.0001 && factor < 1e7
+      ? Number(factor.toPrecision(7)).toString()
+      : factor.toExponential(4);
+
+  return {
+    steps: [
+      `Both ${fromShort} and ${toShort} are defined in terms of the same base unit, the ${base}.`,
+      `1 ${fromShort} = ${trimFactor(fromFactor)} ${base}, and 1 ${toShort} = ${trimFactor(toFactor)} ${base}.`,
+      `Divide one definition by the other to get the conversion factor: ${trimFactor(fromFactor)} ÷ ${trimFactor(toFactor)} = ${factorText}.`,
+      `So ${formula}. Multiply any ${fromShort} value by ${factorText} to get the result in ${toShort}.`,
+    ],
+    precision: PRECISION_NOTE[category],
+  };
+}
+
+function trimFactor(value: number): string {
+  if (value >= 0.0001 && value < 1e7) {
+    return Number(value.toPrecision(8)).toString();
+  }
+  return value.toExponential(4);
+}
+
+export interface UnitHistoryEntry {
+  name: string;
+  system: string;
+  text: string;
+}
+
+/** "History" — origin notes for both units involved in the conversion. */
+export function buildUnitHistory(
+  fromEeat: UnitEeat,
+  toEeat: UnitEeat,
+): UnitHistoryEntry[] {
+  return [
+    { name: fromEeat.name, system: fromEeat.system, text: fromEeat.history },
+    { name: toEeat.name, system: toEeat.system, text: toEeat.history },
+  ];
 }

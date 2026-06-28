@@ -11,8 +11,13 @@ import {
 import {
   buildConversionIntro,
   buildConversionWhatIs,
+  buildHowCalculated,
+  buildRealWorldUses,
+  buildUnitHistory,
   buildUseCases,
+  getCategoryQuestions,
   getUnitContext,
+  getUnitEeat,
   variantIndex,
   type UnitContext,
 } from "./conversion-context";
@@ -48,6 +53,25 @@ function buildConversionTable(
   toId: string,
 ): ConversionTableRow[] {
   return tableInputs(category).map((input) => ({
+    input,
+    output: roundSmart(convertUnits(category, fromId, toId, input)),
+  }));
+}
+
+/**
+ * Quick reference ladder (Sprint 12). A consistent set of round inputs so every
+ * conversion page carries a substantial, auto-calculated lookup table.
+ */
+const QUICK_REFERENCE_INPUTS = [
+  10, 25, 50, 100, 250, 500, 1000, 2500, 5000, 10000,
+];
+
+function buildQuickReference(
+  category: ConversionCategory,
+  fromId: string,
+  toId: string,
+): ConversionTableRow[] {
+  return QUICK_REFERENCE_INPUTS.map((input) => ({
     input,
     output: roundSmart(convertUnits(category, fromId, toId, input)),
   }));
@@ -93,22 +117,30 @@ function buildCommonMistakes(
   ];
 }
 
-function buildFaqs(
-  fromShort: string,
-  toShort: string,
-  formula: string,
-  slug: string,
-  fromCtx: UnitContext,
-): ConversionPage["faqs"] {
+function buildFaqs(opts: {
+  category: ConversionCategory;
+  fromId: string;
+  toId: string;
+  fromShort: string;
+  toShort: string;
+  formula: string;
+  slug: string;
+  fromCtx: UnitContext;
+}): ConversionPage["faqs"] {
+  const { category, fromId, toId, fromShort, toShort, formula, slug, fromCtx } =
+    opts;
   const useCase = fromCtx.useCases[variantIndex(slug, fromCtx.useCases.length)];
+  const one = roundSmart(convertUnits(category, fromId, toId, 1));
+  const ten = roundSmart(convertUnits(category, fromId, toId, 10));
+
   const faqs: ConversionPage["faqs"] = [
     {
       question: `How do I convert ${fromShort} to ${toShort}?`,
-      answer: `Multiply your ${fromShort} value by the conversion factor, or use the formula: ${formula}. The calculator above applies this instantly in your browser.`,
+      answer: `Multiply your ${fromShort} value by the conversion factor, or use the formula ${formula}. The calculator above applies this instantly in your browser.`,
     },
     {
-      question: `What is the formula for ${fromShort} to ${toShort}?`,
-      answer: `The standard conversion is: ${formula}. Enter any ${fromShort} value above and the calculator returns the equivalent in ${toShort} immediately.`,
+      question: `What is 1 ${fromShort} in ${toShort}?`,
+      answer: `1 ${fromShort} equals ${one} ${toShort}, and 10 ${fromShort} equals ${ten} ${toShort}. Scale linearly for any other amount, or type a value into the calculator.`,
     },
   ];
 
@@ -118,16 +150,20 @@ function buildFaqs(
   faqs.push(
     {
       question: `How do I convert ${toShort} back to ${fromShort}?`,
-      answer: `Swap the units in the calculator, or open our dedicated ${toShort}-to-${fromShort} page for the inverse formula, examples and table.`,
+      answer: `Swap the units in the calculator, or open our dedicated ${toShort}-to-${fromShort} page for the inverse formula, worked examples and a reference table.`,
     },
     {
       question: `When would I need to convert ${fromShort} to ${toShort}?`,
-      answer: `A common situation is ${useCase}. It also helps ${fromCtx.audience}. Bookmark this page for quick ${fromShort} to ${toShort} lookups.`,
+      answer: `A common situation is ${useCase}. It is especially useful for ${fromCtx.audience}. Bookmark this page for quick ${fromShort} to ${toShort} lookups.`,
     },
     {
-      question: `Is this ${fromShort} to ${toShort} converter accurate, and is my data private?`,
+      question: `Is the ${fromShort} to ${toShort} factor exact?`,
+      answer: `Yes — it is based on the internationally agreed definition of each unit, so results are precise to the decimals shown. See "How the conversion is calculated" above for the full derivation.`,
+    },
+    {
+      question: `Is my data private when I use this ${fromShort} to ${toShort} converter?`,
       answer:
-        "Yes on both counts. Conversions use standard international factors and precise floating-point math, and everything runs locally in your browser — nothing you type is uploaded.",
+        "Completely. The conversion runs locally in your browser on MerQPrime — nothing you type is uploaded or stored.",
     },
   );
 
@@ -200,6 +236,8 @@ function buildPage(
   const categoryLabel = CONVERSION_CATEGORIES[category].label;
   const fromCtx = getUnitContext(category, from.id);
   const toCtx = getUnitContext(category, to.id);
+  const fromEeat = getUnitEeat(category, from.id, from.short);
+  const toEeat = getUnitEeat(category, to.id, to.short);
   const title = `${from.label.split(" (")[0]} to ${to.label.split(" (")[0]} Converter`;
   const description = `Convert ${from.short} to ${to.short} instantly. Free ${from.short} to ${to.short} calculator with formula, examples and FAQs.`;
   return {
@@ -239,7 +277,16 @@ function buildPage(
     examples: buildExamples(category, from.id, to.id, from.short, to.short, fromCtx),
     conversionTable: buildConversionTable(category, from.id, to.id),
     commonMistakes: buildCommonMistakes(category, from.short, to.short, slug),
-    faqs: buildFaqs(from.short, to.short, formula, slug, fromCtx),
+    faqs: buildFaqs({
+      category,
+      fromId: from.id,
+      toId: to.id,
+      fromShort: from.short,
+      toShort: to.short,
+      formula,
+      slug,
+      fromCtx,
+    }),
     relatedSlugs: [],
     toolSlugs: categoryTools(category),
     hubSlug: categoryHub(),
@@ -249,6 +296,26 @@ function buildPage(
       toShort: to.short,
       fromCtx,
     }),
+    realWorldUses: buildRealWorldUses({
+      slug,
+      fromShort: from.short,
+      toShort: to.short,
+      fromCtx,
+      toCtx,
+      fromEeat,
+      toEeat,
+    }),
+    quickReference: buildQuickReference(category, from.id, to.id),
+    commonQuestions: getCategoryQuestions(category),
+    howCalculated: buildHowCalculated({
+      category,
+      fromUnit: from.id,
+      toUnit: to.id,
+      fromShort: from.short,
+      toShort: to.short,
+      formula,
+    }),
+    unitHistory: buildUnitHistory(fromEeat, toEeat),
   };
 }
 

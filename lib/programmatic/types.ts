@@ -42,6 +42,12 @@ export interface ConversionPage {
   toolSlugs: [string, string];
   hubSlug: string;
   intro: string;
+  // Sprint 12 — E-E-A-T upgrade
+  realWorldUses: { why: string; whoUsesIt: string[] };
+  quickReference: ConversionTableRow[];
+  commonQuestions: FaqItem[];
+  howCalculated: { steps: string[]; precision: string };
+  unitHistory: { name: string; system: string; text: string }[];
 }
 
 /**

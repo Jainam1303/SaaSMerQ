@@ -37,7 +37,6 @@ import { JsonLd } from "@/components/json-ld";
 import { ProgrammaticLinks } from "@/components/programmatic/programmatic-links";
 import { AdSlot } from "@/components/ads/ad-slot";
 import { getRelatedContentForConversion } from "@/lib/related-content";
-import { RelatedContentSection } from "@/components/seo/related-content-section";
 import { EditorialMeta } from "@/components/editorial/editorial-meta";
 import { ConversionTool } from "@/components/programmatic/conversion-tool";
 import {
@@ -177,11 +176,14 @@ export default async function ConversionPage({
           <p className="leading-relaxed text-muted-foreground">{page.whatIs}</p>
         </section>
 
-        {page.useCases.length > 0 && (
-          <section className="max-w-3xl space-y-4">
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Where you&apos;ll use {page.fromShort} to {page.toShort}
-            </h2>
+        <section className="max-w-3xl space-y-5">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Real-world uses: why convert {page.fromShort} to {page.toShort}?
+          </h2>
+          <p className="leading-relaxed text-muted-foreground">
+            {page.realWorldUses.why}
+          </p>
+          {page.useCases.length > 0 && (
             <ul className="space-y-2 text-muted-foreground">
               {page.useCases.map((useCase) => (
                 <li key={useCase} className="flex gap-2">
@@ -190,13 +192,47 @@ export default async function ConversionPage({
                 </li>
               ))}
             </ul>
-          </section>
-        )}
+          )}
+          {page.realWorldUses.whoUsesIt.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <h3 className="text-sm font-semibold">
+                Who uses this conversion?
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {page.realWorldUses.whoUsesIt.map((role) => (
+                  <span
+                    key={role}
+                    className="rounded-full border border-border/70 bg-muted/30 px-3 py-1 text-sm text-muted-foreground"
+                  >
+                    {role}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
 
         <section className="max-w-3xl space-y-4">
-          <h2 className="text-2xl font-semibold tracking-tight">Formula</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            How the {page.fromShort} to {page.toShort} conversion is calculated
+          </h2>
+          <p className="leading-relaxed text-muted-foreground">
+            This is the same arithmetic that calculators and search engines use
+            — no rounded shortcuts.
+          </p>
           <p className="rounded-lg border border-border bg-muted/30 px-4 py-3 font-mono text-sm">
             {page.formula}
+          </p>
+          <ol className="list-decimal space-y-2 pl-5 text-muted-foreground">
+            {page.howCalculated.steps.map((step) => (
+              <li key={step} className="pl-1 leading-relaxed">
+                {step}
+              </li>
+            ))}
+          </ol>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            <span className="font-medium text-foreground">Precision:</span>{" "}
+            {page.howCalculated.precision}
           </p>
         </section>
 
@@ -216,8 +252,12 @@ export default async function ConversionPage({
 
         <section className="space-y-4">
           <h2 className="text-2xl font-semibold tracking-tight">
-            {page.fromShort} to {page.toShort} conversion table
+            {page.fromShort} to {page.toShort} quick reference table
           </h2>
+          <p className="max-w-2xl text-muted-foreground">
+            Common {page.fromShort} values converted to {page.toShort}, each
+            calculated with the exact factor.
+          </p>
           <div className="max-w-md overflow-hidden rounded-lg border border-border">
             <table className="w-full text-sm">
               <thead>
@@ -227,7 +267,7 @@ export default async function ConversionPage({
                 </tr>
               </thead>
               <tbody>
-                {page.conversionTable.map((row) => (
+                {page.quickReference.map((row) => (
                   <tr
                     key={row.input}
                     className="border-b border-border/60 last:border-0"
@@ -256,6 +296,51 @@ export default async function ConversionPage({
             ))}
           </ul>
         </section>
+
+        <section className="max-w-3xl space-y-4">
+          <h2 className="text-2xl font-semibold tracking-tight">
+            Common questions about {page.categoryLabel.toLowerCase()} conversions
+          </h2>
+          <div className="space-y-3">
+            {page.commonQuestions.map((q) => (
+              <div
+                key={q.question}
+                className="rounded-lg border border-border/70 bg-muted/20 p-4"
+              >
+                <p className="font-medium">{q.question}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  {q.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {page.unitHistory.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              History of these units
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {page.unitHistory.map((h) => (
+                <div
+                  key={h.name}
+                  className="rounded-lg border border-border/70 p-5"
+                >
+                  <h3 className="text-base font-semibold capitalize">
+                    History of the {h.name}
+                  </h3>
+                  <p className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+                    {h.system}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    {h.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {quantityPages.length > 0 && (
           <section>
@@ -343,12 +428,95 @@ export default async function ConversionPage({
 
         <FaqSection faqs={page.faqs} />
 
+        <section
+          aria-label="Related measurement guides"
+          className="rounded-2xl border border-border/80 bg-card p-6 shadow-sm md:p-8"
+        >
+          <p className="section-eyebrow">Learn more</p>
+          <h2 className="mb-6 text-xl font-semibold tracking-tight">
+            Related measurement guides
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <h3 className="mb-3 text-sm font-semibold">Conversion hub</h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <Link
+                    href={categoryPath}
+                    className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                  >
+                    All {page.categoryLabel.toLowerCase()} converters
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/conversions"
+                    className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                  >
+                    All conversion categories
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {relatedContent.guides.length > 0 && (
+              <div>
+                <h3 className="mb-3 text-sm font-semibold">Guides</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  {relatedContent.guides.map((g) => (
+                    <li key={g.path}>
+                      <Link
+                        href={g.path}
+                        className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                      >
+                        {g.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {relatedContent.blogs.length > 0 && (
+              <div>
+                <h3 className="mb-3 text-sm font-semibold">Articles</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  {relatedContent.blogs.map((b) => (
+                    <li key={b.path}>
+                      <Link
+                        href={b.path}
+                        className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                      >
+                        {b.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {relatedContent.tools.length > 0 && (
+              <div>
+                <h3 className="mb-3 text-sm font-semibold">Related tools</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  {relatedContent.tools.map((t) => (
+                    <li key={t.path}>
+                      <Link
+                        href={t.path}
+                        className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
+                      >
+                        {t.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </section>
+
         <ProgrammaticLinks
           relatedPages={related.map((r) => ({ path: r.path, title: r.title }))}
           toolSlugs={page.toolSlugs}
           hubSlug={page.hubSlug}
         />
-        <RelatedContentSection bundle={relatedContent} />
       </div>
     </article>
   );

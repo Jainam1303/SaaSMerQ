@@ -299,6 +299,34 @@ export function convertUnits(
   return fromBase(category, toUnit, toBase(category, fromUnit, value));
 }
 
+const BASE_UNIT_NAME: Record<ConversionCategory, string> = {
+  length: "metre",
+  weight: "gram",
+  temperature: "degree Celsius",
+  volume: "litre",
+  area: "square metre",
+  speed: "metre per second",
+  time: "second",
+  data: "byte",
+};
+
+/** Human name of the base unit each category is internally normalised to. */
+export function getBaseUnitName(category: ConversionCategory): string {
+  return BASE_UNIT_NAME[category];
+}
+
+/**
+ * Value of 1 `unitId` expressed in the category base unit. Meaningful for the
+ * linear categories (length, weight, volume, area, speed, time, data); not
+ * used for temperature, which has an offset rather than a pure factor.
+ */
+export function unitToBaseFactor(
+  category: ConversionCategory,
+  unitId: string,
+): number {
+  return toBase(category, unitId, 1);
+}
+
 export function getConversionFormula(
   category: ConversionCategory,
   from: UnitDef,
