@@ -112,7 +112,7 @@ if (fs.existsSync(GRAPH_FILE)) {
 }
 
 // --- Action Engine ---
-export function analyzePage(pageData: any, gscRow: any): any {
+export function analyzePage(pageData: any, gscRow: any, benchmarks: any): any {
   const tasks = [];
   let problem = "";
   let reason = "";
@@ -133,31 +133,31 @@ export function analyzePage(pageData: any, gscRow: any): any {
   const evidences = [];
 
   // Title Checks
-  if (title.length > 0 && (title.length < 30 || title.length > 60)) {
-    evidences.push(`Current title: ${title.length} characters\nRecommended: 55–60`);
-    tasks.push({ action: 'Rewrite title', time: '5 min', impact: 'High', confidence: 95 });
+  if (title.length > 0 && Math.abs(title.length - benchmarks.titleLength) > 15) {
+    evidences.push(`Current title: ${title.length} characters\nRecommended: ~${benchmarks.titleLength} (Avg of High CTR pages)`);
+    tasks.push({ action: 'Rewrite title to match high CTR pages', time: '5 min', impact: 'High', confidence: 95 });
   }
 
   // Quick Answer Checks (Only applicable for conversions/quantity pages)
   if (['conversion', 'quantity'].includes(pageData?.type)) {
     if (qaWords === 0) {
-      evidences.push(`Quick Answer: Missing\nRecommended: 40-60 words directly under H1`);
+      evidences.push(`Quick Answer: Missing\nRecommended: ~${benchmarks.qaWords} words directly under H1 (Avg of Top pages)`);
       tasks.push({ action: 'Add Quick Answer block', time: '15 min', impact: 'High', confidence: 90 });
-    } else if (qaWords > 70) {
-      evidences.push(`Quick Answer: ${qaWords} words\nRecommended: 40–60 words`);
-      tasks.push({ action: 'Reduce Quick Answer to 40–60 words', time: '10 min', impact: 'Medium', confidence: 85 });
+    } else if (qaWords > benchmarks.qaWords + 20) {
+      evidences.push(`Quick Answer: ${qaWords} words\nRecommended: ~${benchmarks.qaWords} words (Avg of Top pages)`);
+      tasks.push({ action: `Reduce Quick Answer closer to ~${benchmarks.qaWords} words`, time: '10 min', impact: 'Medium', confidence: 85 });
     }
   }
 
   // FAQ Checks
-  if (faqCount < 4) {
-    evidences.push(`Current FAQ count: ${faqCount}\nRecommended: >= 4`);
+  if (faqCount < benchmarks.faqCount) {
+    evidences.push(`Current FAQ count: ${faqCount}\nRecommended: >= ${benchmarks.faqCount} (Avg of Top pages)`);
     tasks.push({ action: 'Expand FAQ coverage', time: '30 min', impact: 'Medium', confidence: 80 });
   }
 
   // Link Checks
-  if (inLinks < 3) {
-    evidences.push(`Current incoming links: ${inLinks}\nRecommended: >= 5`);
+  if (inLinks < benchmarks.internalLinks) {
+    evidences.push(`Current incoming links: ${inLinks}\nRecommended: >= ${benchmarks.internalLinks} (Avg of Top pages)`);
     tasks.push({ action: 'Add internal links from related hubs/blogs', time: '15 min', impact: 'High', confidence: 95 });
   }
 
@@ -183,6 +183,14 @@ export function analyzePage(pageData: any, gscRow: any): any {
   if (!problem) problem = "Suboptimal on-page signals reducing ranking potential.";
   if (!reason) reason = "Specific technical or content thresholds are not met based on repository data.";
 
+  // Calculate Expected Click Gain
+  let expectedImpact = primaryTask.impact;
+  if (primaryTask.confidence >= 80 && imp > 100) {
+    // Assume fixing a high-confidence issue on a page with impressions could yield a 3-5% CTR bump or ranking bump
+    const estimatedGain = Math.ceil(imp * 0.04);
+    expectedImpact = `+${estimatedGain} clicks/mo`;
+  }
+
   return {
     page: gscRow.page,
     query: gscRow.query,
@@ -194,7 +202,7 @@ export function analyzePage(pageData: any, gscRow: any): any {
     evidence: evidences.join('\n\n----------------------------------------------------------\n\n'),
     tasks: sortedTasks.map(t => t.action),
     estimatedTime: primaryTask.time,
-    expectedImpact: primaryTask.impact,
+    expectedImpact,
     confidenceScore: primaryTask.confidence
   };
 }
@@ -230,22 +238,77 @@ for (const row of rows) {
 const actionPlan: any[] = [];
 const todos: any[] = [];
 
+// Calculate Benchmarks from Top 20 Pages (Performance)
+const topPages = Array.from(pageMap.values())
+  .sort((a, b) => b.clicks - a.clicks || a.position - b.position)
+  .slice(0, 20);
+
+// Calculate Benchmarks from High CTR Pages
+const highCtrPages = Array.from(pageMap.values())
+  .filter(p => p.impressions > 50)
+  .sort((a, b) => (b.clicks / b.impressions) - (a.clicks / a.impressions))
+  .slice(0, 20);
+
+let totalFaq = 0, totalLinks = 0, totalQaWords = 0;
+let qaCount = 0;
+let validTopPages = 0;
+
+for (const stats of topPages) {
+  const localData = PROJECT_PAGES.get(stats.page);
+  if (localData) {
+    validTopPages++;
+    totalFaq += localData.faqCount ?? 0;
+    totalLinks += linkCounts.get(stats.page) ?? 0;
+    if (localData.quickAnswerWords > 0) {
+      totalQaWords += localData.quickAnswerWords;
+      qaCount++;
+    }
+  }
+}
+
+let totalTitle = 0, totalDesc = 0;
+let validCtrPages = 0;
+for (const stats of highCtrPages) {
+  const localData = PROJECT_PAGES.get(stats.page);
+  if (localData) {
+    validCtrPages++;
+    totalTitle += (localData.seoTitle ?? '').length;
+    totalDesc += (localData.metaDescription ?? '').length;
+  }
+}
+
+const nPerf = validTopPages || 1;
+const nCtr = validCtrPages || 1;
+
+const benchmarks = {
+  faqCount: Math.ceil(totalFaq / nPerf) || 4,
+  internalLinks: Math.ceil(totalLinks / nPerf) || 5,
+  titleLength: Math.round(totalTitle / nCtr) || 55,
+  descLength: Math.round(totalDesc / nCtr) || 150,
+  qaWords: qaCount > 0 ? Math.round(totalQaWords / qaCount) : 50
+};
+
 for (const [pageUrl, stats] of pageMap.entries()) {
   stats.position = stats.position / stats.count; // avg
   const localData = PROJECT_PAGES.get(pageUrl);
   
   // We only run action engine on pages we have in the repo
   if (localData) {
-    const action = analyzePage(localData, { ...stats, query: stats.topQuery });
+    const action = analyzePage(localData, { ...stats, query: stats.topQuery }, benchmarks);
     if (action) {
-      // Calculate a priority score
+      // Calculate a priority score (0-100)
       let priorityScore = 0;
-      if (stats.impressions > 1000) priorityScore += 50;
-      if (stats.position >= 4 && stats.position <= 20) priorityScore += 30;
-      if (action.expectedImpact === 'Very High') priorityScore += 40;
-      if (action.expectedImpact === 'High') priorityScore += 20;
+      if (stats.impressions > 5000) priorityScore += 40;
+      else if (stats.impressions > 1000) priorityScore += 25;
+      else if (stats.impressions > 500) priorityScore += 10;
       
-      action.priorityScore = priorityScore;
+      if (stats.position >= 4 && stats.position <= 15) priorityScore += 30;
+      else if (stats.position > 15 && stats.position <= 30) priorityScore += 15;
+      
+      if (action.confidenceScore >= 90) priorityScore += 30;
+      else if (action.confidenceScore >= 80) priorityScore += 15;
+      
+      action.priorityScore = Math.min(100, priorityScore);
       actionPlan.push(action);
     }
   }
@@ -255,9 +318,9 @@ for (const [pageUrl, stats] of pageMap.entries()) {
 actionPlan.sort((a, b) => b.priorityScore - a.priorityScore || b.currentImpressions - a.currentImpressions || a.page.localeCompare(b.page));
 
 // Format for output
-const finalActionPlan = actionPlan.map((a, i) => {
+const finalActionPlan = actionPlan.map(a => {
   const res = {
-    Priority: `#${i + 1}`,
+    PriorityScore: a.priorityScore,
     Page: a.page,
     Keyword: a.query || 'N/A',
     CurrentPosition: a.currentPosition,
@@ -273,7 +336,7 @@ const finalActionPlan = actionPlan.map((a, i) => {
   };
   
   todos.push({
-    priority: i + 1,
+    priorityScore: a.priorityScore,
     page: a.page,
     estimatedTime: a.estimatedTime,
     impact: a.expectedImpact,
