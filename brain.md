@@ -841,6 +841,14 @@ RelatedContentSection (per page type)
 
 # 18. Future Roadmap
 
+**Current Strategy Shift (2026-07-04):** Based on real Google Search Console data, the focus has shifted from *scale* to *optimization*. Google has indexed >400 pages.
+**New Priority Order:**
+1. Increase clicks.
+2. Improve rankings of pages already receiving impressions.
+3. Win featured snippets.
+4. Improve CTR.
+5. Expand only after optimization (generation of new pages is secondary).
+
 ### Completed
 
 - [x] Premium SaaS UI redesign (dark/light)
@@ -856,17 +864,18 @@ RelatedContentSection (per page type)
 - [x] Sprint 12 Phase 1: conversion page E-E-A-T upgrade (real-world uses, derivation, quick reference table, common questions, unit history, related guides, richer FAQs)
 - [x] Sprint 12 Phase 2: ranking optimization — `audit:ranking` report, conversion quick-answer snippet blocks + CTR overrides, enriched finance-tool FAQs, blog snippet leads, schema `inLanguage`, fixed Base64 CTR key
 
-### In progress / next sprint
+### In progress / next sprint (Optimization Focus)
 
-- [ ] Homepage + `/tools` prominent links to `/conversions`
-- [ ] Category-specific guides for time/data
-- [ ] Expand units (fluid oz, nautical miles, metric tons)
-- [ ] Expand quantity seeds to more proven GSC queries (temperature, speed, time)
-- [ ] Add unit-context entries for any future categories (avoid generic fallback)
-- [ ] GSC monitoring for new quantity-page + hub indexing
+- [ ] **Rankings & CTR**: Analyze GSC for pages receiving impressions but low clicks, and implement CTR overrides.
+- [ ] **Featured Snippets**: Identify queries where we can win featured snippets and adjust quick-answer blocks.
+- [ ] **Internal Linking**: Homepage + `/tools` prominent links to `/conversions` to distribute pagerank.
+- [ ] GSC monitoring for indexing and impression growth.
 
-### Future ideas
+### Future ideas (Deprioritized - scale phase)
 
+- Expand units (fluid oz, nautical miles, metric tons)
+- Expand quantity seeds to more proven GSC queries (temperature, speed, time)
+- Category-specific guides for time/data
 - Hindi locale / hreflang for India SEO
 - User-saved calculator presets (localStorage)
 - More authority hubs (conversion-tools hub?)
@@ -897,6 +906,8 @@ RelatedContentSection (per page type)
 # 19. AI Working Rules
 
 **Bootstrap (every Cursor session):** Read `.cursor/AGENT.md` first, then relevant sections of this file. An always-apply rule lives at `.cursor/rules/merqprime-agent-bootstrap.mdc`.
+
+**SEO Rule #1:** Every new SEO task must be justified with expected ROI. If optimizing an existing page is likely to produce more clicks than creating a new page, optimization takes priority.
 
 **DO:**
 
@@ -935,6 +946,19 @@ Use private runbooks or local notes for host access — do not store SSH keys, I
 ---
 
 # 20. Recent Changes Log
+
+### 2026-07-04 — Sprint 13.5: SEO Action Engine
+- **Hybrid Action Engine:** Converted the reporting system into an Action Engine (`scripts/seo-action-engine.ts`) that runs via `npx tsx`.
+- **Real Project Data:** Natively imports Next.js TypeScript files (`lib/programmatic/conversions.ts`, `lib/programmatic/quantity-conversions.ts`) to read actual Quick Answer content and lengths dynamically. Reads `internal-link-graph.json` for exact link counts.
+- **Heuristic Fallbacks:** Analyzes GSC position and CTR against on-page realities to recommend precise actions (e.g. "Add computed answer directly to SEO Title", "Reduce Quick Answer to 40–60 words").
+- **Output:** Generates `reports/action-plan.json` containing detailed, evidence-backed recommendations (answering Priority, Problem, Reason, Tasks, Estimated Time, Expected Impact, and Confidence Score) and `reports/todo.json` for weekly execution.
+- Validation: `npx tsx scripts/seo-action-engine.ts`, `npm run typecheck`, and `npm run build` clean.
+
+### 2026-07-04 — Sprint 13: SEO Operating System
+- **SEO Data Layer:** Added `lib/seo/search-console/csv-importer.ts` and `analyzer.ts` for GSC parsing, keyword clustering, content gap, CTR analysis, and snippet recommendations.
+- **Reporting Scripts:** Built `scripts/seo-opportunity-engine.mjs`, `scripts/ranking-history.mjs`, and `scripts/internal-link-intelligence.mjs` to output deterministic JSON reports.
+- **Reports (Single Source of Truth):** Outputs `reports/seo-opportunities.json`, `reports/page-opportunities.json`, `reports/internal-link-opportunities.json`, and `reports/ranking-trends.json`.
+- **Documentation:** Added `docs/seo-workflow.md` outlining the weekly SEO workflow.
 
 ### 2026-06-28 — Sprint 12 Phase 2: ranking optimization (positions 11–30 → top 10)
 

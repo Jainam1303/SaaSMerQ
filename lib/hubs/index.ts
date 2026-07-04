@@ -61,6 +61,7 @@ export function getHubBySlug(slug: string): Hub | undefined {
 
 export function getAllHubs(): HubMeta[] {
   return getAllHubSlugs().map((slug) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { content: _, ...meta } = parseHub(slug);
     return meta;
   });
