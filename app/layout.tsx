@@ -113,6 +113,11 @@ export default async function RootLayout({
         {gaEnabled ? (
           <GoogleAnalyticsScripts gaId={gaId} nonce={nonce} />
         ) : null}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6751863860005349"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={websiteJsonLd()} />
