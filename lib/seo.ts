@@ -86,6 +86,12 @@ export function organizationJsonLd() {
     name: siteConfig.brandName,
     url: siteConfig.url,
     logo: siteConfig.logo.url,
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "merqprime@gmail.com",
+      contactType: "customer support",
+      url: absoluteUrl("/contact"),
+    },
   };
 }
 

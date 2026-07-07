@@ -7,6 +7,8 @@ import { siteConfig } from "@/lib/site";
 
 const legalLinks = [
   { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
+  { href: "/disclaimer", label: "Disclaimer" },
   { href: "/editorial-policy", label: "Editorial Policy" },
   { href: "/methodology", label: "Methodology" },
   { href: "/sitemap.xml", label: "Sitemap" },
@@ -23,6 +25,7 @@ const resourceLinks = [
   { href: "/developer-tools", label: "Developer Tools" },
   { href: "/seo-tools", label: "SEO Tools" },
   { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function SiteFooter() {

@@ -1,101 +1,63 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { buildMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/tool/breadcrumbs";
-import { EditorialMeta } from "@/components/editorial/editorial-meta";
-import { getAllHubs } from "@/lib/hubs";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About MerQPrime — Free Online Tools & Calculators",
-  description: `Learn about ${siteConfig.brandName}: India-first free online tools, calculators and guides reviewed by the MerQPrime Editorial Team.`,
+  title: "About Us",
+  description: `Learn about ${siteConfig.name}, our mission, and our commitment to providing fast, privacy-first, in-browser tools.`,
   path: "/about",
 });
 
 export default function AboutPage() {
-  const hubs = getAllHubs();
-
   return (
-    <div className="container max-w-3xl space-y-8 py-8 md:py-12">
+    <div className="container max-w-3xl space-y-6 py-8 md:py-12">
       <Breadcrumbs
         items={[
           { name: "Home", href: "/" },
           { name: "About", href: "/about" },
         ]}
       />
-      <header className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-          About {siteConfig.brandName}
-        </h1>
-        <EditorialMeta />
-      </header>
-      <div className="space-y-4 leading-relaxed text-muted-foreground">
-        <p>
-          {siteConfig.brandName} is a growing collection of fast, free and secure
-          online tools designed for developers, businesses, investors and
-          creators in India and beyond. Our mission is to provide reliable
-          everyday utilities that respect your privacy and your time.
-        </p>
-        <p>
-          Wherever possible, our tools run entirely in your browser. Text, files
-          and images you work with never leave your device — making the platform
-          both private and remarkably fast.
-        </p>
-        <p>
-          Content on {siteConfig.domain} is researched and reviewed by the{" "}
-          <strong className="text-foreground">MerQPrime Editorial Team</strong>
-          . We focus on accurate formulas, India-specific tax and finance
-          conventions, and practical examples you can verify with our embedded
-          calculators.
-        </p>
-        <p>
-          The platform includes {siteConfig.brandName} tools, programmatic
-          calculators, unit conversion pages and in-depth guides — all designed
-          for mobile-first access across India.
-        </p>
+      <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+        About {siteConfig.name}
+      </h1>
+      <div className="space-y-6 leading-relaxed text-muted-foreground">
+        <section className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">Our Mission</h2>
+          <p>
+            At {siteConfig.name}, our mission is to provide high-quality, 
+            lightning-fast, and completely free online tools for developers, 
+            students, and professionals. We believe that everyday utilities 
+            should not require you to sign up, pay subscriptions, or sacrifice 
+            your privacy.
+          </p>
+        </section>
+        
+        <section className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            Privacy-First Technology
+          </h2>
+          <p>
+            Unlike many online tool suites that upload your data to remote 
+            servers for processing, {siteConfig.name} is engineered to perform 
+            calculations, conversions, and data generation entirely within your 
+            browser. This means your text, files, and images remain completely 
+            private and never touch our servers.
+          </p>
+        </section>
+
+        <section className="space-y-2">
+          <h2 className="text-xl font-semibold text-foreground">
+            Commitment to Quality
+          </h2>
+          <p>
+            Every tool on our platform is carefully crafted to be accurate, 
+            responsive, and accessible. From complex financial calculators to 
+            simple text utilities, we prioritize a clean user experience free 
+            from deceptive navigation or intrusive layouts.
+          </p>
+        </section>
       </div>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Authority hubs</h2>
-        <ul className="grid gap-2 sm:grid-cols-2">
-          {hubs.map((hub) => (
-            <li key={hub.slug}>
-              <Link
-                href={hub.path}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {hub.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold">Trust &amp; transparency</h2>
-        <ul className="space-y-2 text-sm text-muted-foreground">
-          <li>
-            <Link href="/editorial-policy" className="hover:text-foreground">
-              Editorial policy
-            </Link>
-          </li>
-          <li>
-            <Link href="/methodology" className="hover:text-foreground">
-              Methodology
-            </Link>
-          </li>
-          <li>
-            <Link href="/privacy" className="hover:text-foreground">
-              Privacy policy
-            </Link>
-          </li>
-          <li>
-            <Link href="/free-online-tools" className="hover:text-foreground">
-              Free online tools directory
-            </Link>
-          </li>
-        </ul>
-      </section>
     </div>
   );
 }
