@@ -1036,3 +1036,7 @@ Use private runbooks or local notes for host access — do not store SSH keys, I
 ---
 
 *End of brain.md — update affected sections when the architecture changes.*
+
+
+## SEO Optimization Rule
+No future SEO optimization should be performed without a fresh Google Search Console CSV. All optimization beyond Sprint 15 changes must be driven by actual impressions, CTR, positions, and queries rather than estimated demand.

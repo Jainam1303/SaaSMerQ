@@ -308,6 +308,21 @@ const CONVERSION_CTR: Record<
     metaDescription:
       "Convert acres to square kilometres instantly. 1 acre = 0.00404686 km². Free acres to sq km calculator with formula and chart for land and farm area.",
   },
+  "square-feet-to-acres": {
+    seoTitle: "Square Feet to Acres — 1 sq ft = 0.000023 Acres | MerQPrime",
+    metaDescription:
+      "Convert square feet to acres instantly. 1 sq ft = 0.000023 acres. Free sq ft to acres calculator with formula and chart for land and real estate measurements.",
+  },
+  "acres-to-square-feet": {
+    seoTitle: "Acres to Square Feet — 1 Acre = 43,560 sq ft | MerQPrime",
+    metaDescription:
+      "Convert acres to square feet instantly. 1 acre = 43,560 sq ft. Free acres to sq ft calculator with formula and chart for land, plots and real estate planning.",
+  },
+  "square-feet-to-square-meters": {
+    seoTitle: "Square Feet to Square Meters — 1 sq ft = 0.0929 m² | MerQPrime",
+    metaDescription:
+      "Convert square feet to square meters instantly. 1 sq ft = 0.0929 m². Free sq ft to m² calculator with formula and chart for apartments and floor plans.",
+  },
 };
 
 function buildPage(

@@ -139,3 +139,7 @@ Optionally update this `AGENT.md` if bootstrap rules change.
 ---
 
 *Canonical project memory: `brain.md` · Bootstrap: `.cursor/AGENT.md` · Last aligned: 2026-06-27*
+
+
+## SEO Optimization Rule
+No future SEO optimization should be performed without a fresh Google Search Console CSV. All optimization beyond Sprint 15 changes must be driven by actual impressions, CTR, positions, and queries rather than estimated demand.
